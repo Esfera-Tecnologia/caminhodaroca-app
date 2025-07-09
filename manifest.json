@@ -1,6 +1,6 @@
 {
     "name": "Caminho da Roça",
-    "short_name": "Caminho",
+    "short_name": "Caminho da Roça",
     "description": "Aplicativo para explorar propriedades rurais",
     "start_url": "./index.html",
     "display": "standalone",
