@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes da Propriedade</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      margin: 0;
+      padding-bottom: 80px;
+    }
+    .top-bar {
+      background-color: #006d60;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .cover-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .property-card {
+      background: white;
+      border-radius: 20px;
+      margin: -60px 16px 16px 16px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      position: relative;
+      z-index: 10;
+    }
+    .property-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ccc;
+    }
+    .rating i {
+      color: #ffc107;
+    }
+    .property-buttons .btn {
+      border-radius: 14px;
+      font-size: 14px;
+      width: 100%;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 60px;
+      background-color: white;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 99999;
+    }
+    .bottom-nav a {
+      text-align: center;
+      color: #666;
+      text-decoration: none;
+      font-size: 12px;
+    }
+    .bottom-nav a.active {
+      color: #006d60;
+    }
+    .bottom-nav i {
+      font-size: 18px;
+      display: block;
+    }
+    .section-title {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .info-box {
+      background: #f8f8f8;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+    }
+    .gallery-thumb {
+      height: 100px;
+      width: 130px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+    .gallery-container {
+      border-top: 1px solid #eee;
+    }
+    .modal-content {
+      background-color: rgba(0,0,0,0.95);
+      border: none;
+      box-shadow: none;
+    }
+    .modal-body img {
+      max-height: 80vh;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">Detalhes da Propriedade</div>
+  <img src="assets/capa.jpg" class="cover-img" alt="Imagem da propriedade" />
+ 
+  <div class="property-card">
+    <div class="d-flex align-items-center mb-2">
+      <img src="assets/logo1.png" class="property-logo me-3" alt="Logo">
+      <div>
+        <h5 class="mb-0 fw-bold">Fazenda Boa Vista</h5>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <i class="far fa-star"></i>
+        </div>
+      </div>
+    </div>
+
+    <p class="mb-1 text-muted"><i class="fas fa-map-marker-alt me-1"></i> Pedra de Guaratiba, Rio de Janeiro</p>
+    <p class="mb-2 text-muted"><i class="fas fa-route me-1"></i> 12 km de distância</p>
+    <p class="mb-1">Categoria: <strong>Hospedagem Rural</strong></p>
+    <p class="mb-2">Subcategoria: <strong>Cabana</strong></p>
+
+    <p class="text-muted">
+      A Fazenda Boa Vista oferece uma experiência autêntica no campo, com acomodações rústicas, gastronomia local e belas paisagens naturais.
+    </p>
+
+    <h6 class="section-title">Horários de Funcionamento</h6>
+    <div class="info-box">
+      Segunda a Sexta: 08:00 às 18:00<br>
+      Sábado e Domingo: 09:00 às 17:00
+    </div>
+
+    <h6 class="section-title">Produtos Disponíveis</h6>
+    <div class="info-box">
+      Queijos artesanais, doces caseiros, ovos caipiras, hortaliças orgânicas.
+    </div>
+
+    <h6 class="section-title">Acessibilidade</h6>
+    <div class="info-box">
+      Acesso para cadeirantes, estacionamento com vaga prioritária, banheiro adaptado.
+    </div>
+
+    <h6 class="section-title">Política Pet Friendly</h6>
+    <div class="info-box">
+      Permitida a entrada de animais de pequeno e médio porte. Levar guia obrigatória.
+    </div>
+
+    <h5 class="mt-4 mb-2 px-3">Galeria de Fotos</h5>
+    <div class="gallery-container px-3 pb-3">
+      <div class="d-flex overflow-auto gap-3">
+        <img src="assets/galeria/foto1.jpg" class="gallery-thumb img-thumbnail" alt="Imagem da propriedade">
+        <img src="assets/galeria/foto2.jpg" class="gallery-thumb img-thumbnail" alt="Imagem da propriedade">
+        <img src="assets/galeria/foto3.jpg" class="gallery-thumb img-thumbnail" alt="Imagem da propriedade">
+        <img src="assets/galeria/foto4.jpg" class="gallery-thumb img-thumbnail" alt="Imagem da propriedade">
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
+      <!-- Ver no Mapa -->
+      <a href="https://www.google.com/maps?q=-22.9083,-43.1964" target="_blank"
+         class="btn btn-outline-success d-flex align-items-center px-3">
+        <i class="fas fa-map-location-dot me-2"></i> Ver no Mapa
+      </a>
+
+      <!-- Favoritar -->
+      <button class="btn btn-outline-secondary d-flex align-items-center px-3" id="btn-favoritar">
+        <i class="fas fa-heart me-2" id="icon-fav" style="color: gray;"></i> Favoritar
+      </button>
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/5541988455315" target="_blank"
+         class="btn btn-outline-success d-flex align-items-center px-3">
+        <i class="fab fa-whatsapp me-2"></i> Contato
+      </a>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION BAR (colar aqui antes do </body>) -->
+  <div class="bottom-nav">
+    <a href="home.html">
+      <i class="fas fa-home"></i>
+      Início
+    </a>
+    <a href="mapa.html">
+      <i class="fas fa-map-marked-alt"></i>
+      Mapa
+    </a>
+    <a href="meus-dados.html">
+      <i class="fas fa-user"></i>
+      Minha Conta
+    </a>
+  </div>
+
+  <!-- Modal de visualização de imagem -->
+  <div class="modal fade" id="imagemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-dark border-0">
+        <div class="modal-body p-0">
+          <img id="imagemExpandida" src="" class="img-fluid rounded w-100" alt="Imagem ampliada">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS obrigatório para modal funcionar -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Scripts personalizados -->
+  <script>
+    const favBtn = document.getElementById('btn-favoritar');
+    const favIcon = document.getElementById('icon-fav');
+
+    favBtn.addEventListener('click', function () {
+      favIcon.style.color = (favIcon.style.color === 'red') ? 'gray' : 'red';
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const thumbs = document.querySelectorAll('.gallery-thumb');
+      thumbs.forEach(function (thumb) {
+        thumb.addEventListener('click', function () {
+          const src = this.getAttribute('src');
+          const imgModal = document.getElementById('imagemExpandida');
+          imgModal.setAttribute('src', src);
+
+          const modal = new bootstrap.Modal(document.getElementById('imagemModal'));
+          modal.show();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

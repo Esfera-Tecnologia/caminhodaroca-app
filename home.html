@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home | Caminho da Roça</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Inserir isso no <head> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+  <style>
+    body {
+      background-color: #f5f5f5;
+    }
+
+    .header {
+      background-color: #006D60;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h5 {
+      margin: 0;
+    }
+
+    .welcome-message {
+      padding: 15px;
+      font-size: 1rem;
+      color: #333;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .property-card {
+      background-color: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .property-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 15px;
+    }
+
+    .property-info h5 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #006D60;
+    }
+
+    .property-info small {
+      color: #666;
+    }
+
+    .btn-map {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #006D60;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 25px;
+      z-index: 1000;
+    }
+
+    .btn-map:hover {
+      background-color: #62B55A;
+    }
+
+    .filter-icon {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.4rem;
+    }
+
+    .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    background-color: #ffffff;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 999;
+  }
+
+  .bottom-nav a {
+    text-decoration: none;
+    color: #888;
+    font-size: 12px;
+    text-align: center;
+    flex: 1;
+    transition: color 0.2s;
+  }
+
+  .bottom-nav a.active {
+    color: #006D60;
+    font-weight: 600;
+  }
+
+  .bottom-nav i {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 4px;
+    transition: transform 0.2s;
+  }
+
+  .bottom-nav a.active i {
+    transform: scale(1.2);
+  }
+
+  .input-group .form-control::placeholder {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.input-group-text i {
+  font-size: 16px;
+}
+
+#btnFiltroAvancado:hover {
+  background-color: #005348;
+}
+.input-group input::placeholder {
+  color: #aaa;
+}
+
+/* Modal slide-in right */
+.modal.right .modal-dialog {
+  position: fixed;
+  right: 0;
+  margin: 0;
+  height: 100%;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.right.show .modal-dialog {
+  transform: translateX(0);
+}
+
+.modal-content {
+  border-radius: 0;
+}
+
+.modal.right .modal-dialog-slideout {
+  position: fixed;
+  right: 0;
+  margin: 0;
+  height: 100%;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.right.show .modal-dialog-slideout {
+  transform: translateX(0);
+}
+
+.modal-dialog-slideout {
+  margin: 0;
+  max-width: 100%;
+}
+.modal-backdrop.show {
+  z-index: 1050;
+}
+.modal.show {
+  z-index: 1100;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <nav class="navbar header text-white px-3 py-2" style="max-height: 60px;">
+      <h1 class="navbar-brand mb-0 h5 text-white text-center w-100">
+        <img src="assets/logo-caminho.png" alt="Caminho da Roça" style="margin-top: -30px;height: 100px;">
+      </h1>
+  </nav>
+
+  <!-- BOAS VINDAS -->
+  <div class="welcome-message">
+    👋 Bem-vindo! <strong>Denys Rodrigues!</strong><br>
+    Encontramos propriedades próximas à sua localização: <strong>Rio de Janeiro</strong>.
+  </div>
+
+  <!-- Campo de busca -->
+<div class="d-flex align-items-center px-3 mt-3">
+    <div class="input-group rounded shadow-sm w-100">
+      <span class="input-group-text bg-white border-0">
+        <i class="fas fa-search text-muted"></i>
+      </span>
+      <input type="text" class="form-control border-0" placeholder="Buscar por palavra-chave...">
+    </div>
+
+    <button class="btn btn-outline-success ms-2 rounded-circle" data-bs-toggle="offcanvas" data-bs-target="#filtroOffcanvas">
+        <i class="fas fa-sliders-h"></i>
+      </button>
+  </div>
+  
+
+<!-- Título da seção -->
+<div class="px-3 mt-4 mb-2">
+    <p class="mb-0 text-muted fw-semibold small">
+      <i class="fas fa-leaf me-1 text-success"></i>
+      Encontramos <strong>3 propriedades</strong> próximas da sua localização.
+    </p>
+  </div>
+    
+  <!-- CONTAINER PRINCIPAL -->
+  <div class="container py-3">
+   
+      
+
+
+    <!-- LISTA DE PROPRIEDADES COM VISUAL MELHORADO -->
+    <!-- CARDS DE PROPRIEDADES COM ESTRELAS -->
+        <div id="lista-propriedades">
+
+            <a href="propriedade.html" class="text-decoration-none text-reset">
+            <div class="card shadow-sm mb-3 position-relative" style="border-left: 5px solid #006D60;">
+                <div class="row g-0 align-items-center">
+                <div class="col-4">
+                    <img src="assets/logo1.png" class="img-fluid rounded-start" alt="Fazenda Boa Vista">
+                </div>
+                <div class="col-8">
+                    <div class="card-body p-2 pe-4">
+                        <span class="badge bg-success position-absolute top-0 end-0 m-2">Cabana</span>
+
+                    <h5 class="card-title mb-1 text-success">Fazenda Boa Vista</h5>
+                    <div class="mb-1 text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <p class="card-text mb-0">
+                        <small><i class="fas fa-map-marker-alt me-1"></i> Pedra de Guaratiba</small><br>
+                        <small><i class="fas fa-route me-1"></i> 12 km de distância</small>
+                    </p>
+                    </div>
+                </div>
+                </div>
+                <div class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted">
+                <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            </a>
+        
+            <a href="propriedade.html" class="text-decoration-none text-reset">
+            <div class="card shadow-sm mb-3 position-relative" style="border-left: 5px solid #006D60;">
+                <div class="row g-0 align-items-center">
+                <div class="col-4">
+                    <img src="assets/logo2.png" class="img-fluid rounded-start" alt="Sítio Vale Verde">
+                </div>
+                <div class="col-8">
+                    <div class="card-body p-2 pe-4">
+                        <span class="badge bg-success position-absolute top-0 end-0 m-2">Cabana</span>
+                    <h5 class="card-title mb-1 text-success">Sítio Vale Verde</h5>
+                    <div class="mb-1 text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <p class="card-text mb-0">
+                        <small><i class="fas fa-map-marker-alt me-1"></i> Vargem Grande</small><br>
+                        <small><i class="fas fa-route me-1"></i> 18 km de distância</small>
+                    </p>
+                    </div>
+                </div>
+                </div>
+                <div class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted">
+                <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            </a>
+        
+            <a href="propriedade.html" class="text-decoration-none text-reset">
+            <div class="card shadow-sm mb-3 position-relative" style="border-left: 5px solid #006D60;">
+                <div class="row g-0 align-items-center">
+                <div class="col-4">
+                    <img src="assets/logo3.png" class="img-fluid rounded-start" alt="Chácara do Sol">
+                </div>
+                <div class="col-8">
+                    <div class="card-body p-2 pe-4">
+                        <span class="badge bg-success position-absolute top-0 end-0 m-2">Cabana</span>
+                    <h5 class="card-title mb-1 text-success">Chácara do Sol</h5>
+                    <div class="mb-1 text-warning">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <p class="card-text mb-0">
+                        <small><i class="fas fa-map-marker-alt me-1"></i> Campo Grande</small><br>
+                        <small><i class="fas fa-route me-1"></i> 25 km de distância</small>
+                    </p>
+                    </div>
+                </div>
+                </div>
+                <div class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted">
+                <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            </a>
+        
+        </div>
+  
+  </div>
+
+  <!-- BOTTOM NAVIGATION BAR (colar aqui antes do </body>) -->
+  <div class="bottom-nav">
+    <a href="home.html">
+      <i class="fas fa-home"></i>
+      Início
+    </a>
+    <a href="mapa.html">
+      <i class="fas fa-map-marked-alt"></i>
+      Mapa
+    </a>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#modalMinhaConta">
+      <i class="fas fa-user"></i>
+      Minha Conta
+    </a>
+  </div>
+
+  <!-- OFFCANVAS DE FILTROS -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="filtroOffcanvas">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Filtros</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form>
+        <div class="mb-3">
+          <label for="localAtual" class="form-label">Localização Atual</label>
+          <select id="localAtual" class="form-select">
+            <option>Selecionar</option>
+            <option>Minha localização</option>
+            <option>Rio de Janeiro</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="localPropriedade" class="form-label">Localização da Propriedade</label>
+          <select id="localPropriedade" class="form-select">
+            <option>Selecionar</option>
+            <option>Zona Oeste</option>
+            <option>Zona Rural</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="palavra" class="form-label">Palavra-chave</label>
+          <input type="text" id="palavra" class="form-control" placeholder="Ex: queijos, passeios...">
+        </div>
+        <div class="mb-3">
+          <label for="categoria" class="form-label">Categoria</label>
+          <select id="categoria" class="form-select">
+            <option>Selecionar</option>
+            <option>Hospedagem</option>
+            <option>Produtos</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="subcategoria" class="form-label">Subcategoria</label>
+          <select id="subcategoria" class="form-select">
+            <option>Selecionar</option>
+            <option>Orgânicos</option>
+            <option>Eventos</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="favoritos" class="form-label">Favoritos</label>
+          <select id="favoritos" class="form-select">
+            <option>Todos</option>
+            <option>Apenas favoritos</option>
+          </select>
+        </div>
+        <button class="btn btn-success w-100" type="submit">Aplicar filtros</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Minha Conta -->
+<div class="modal fade" id="modalMinhaConta" tabindex="-1" aria-labelledby="modalMinhaContaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between align-items-center">
+          <h5 class="modal-title fw-bold" id="modalMinhaContaLabel">Minha Conta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body text-center">
+            <img src="https://i.pravatar.cc/150?img=1" alt="Foto do usuário" class="rounded-circle mb-2" width="100" height="100">
+            <h6 class="fw-bold">João da Silva</h6>
+          
+            <div class="list-group mt-4">
+                <a href="cadastro.html" class="list-group-item list-group-item-action border-0 border-bottom d-flex align-items-center py-3 px-4 bg-white" style="border-color: #eee;">
+                  <i class="fas fa-user text-success me-3 fs-5"></i>
+                  <span class="fw-medium">Meus Dados</span>
+                </a>
+                <a href="termodeuso.html" class="list-group-item list-group-item-action border-0 border-bottom d-flex align-items-center py-3 px-4 bg-white" style="border-color: #eee;">
+                  <i class="fas fa-file-alt text-success me-3 fs-5"></i>
+                  <span class="fw-medium">Termo de Uso</span>
+                </a>
+                <a href="index.html" class="list-group-item list-group-item-action border-0 d-flex align-items-center py-3 px-4 text-danger bg-white">
+                  <i class="fas fa-sign-out-alt me-3 fs-5"></i>
+                  <span class="fw-medium">Sair</span>
+                </a>
+              </div>
+              
+          
+            <p class="text-muted mt-5 small">Versão 1.0.0</p>
+          </div>
+          
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const links = document.querySelectorAll('.bottom-nav a');
+    const currentPage = location.pathname.split('/').pop();
+  
+    links.forEach(link => {
+      const linkPage = link.getAttribute('href');
+      if (linkPage === currentPage) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>
