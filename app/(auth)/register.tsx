@@ -9,6 +9,7 @@ import { globalStyles } from "@/styles/global";
 import { emailSchema, optionalStringSchema, stringSchema } from "@/validation/schemas";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -52,7 +53,7 @@ export default function Register() {
     mode: "onChange",
   });
 
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(0);
 
 
   const nextStep = async () => {
@@ -77,7 +78,7 @@ export default function Register() {
   return (
     <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
       <View style={[globalStyles.row, globalStyles.flexCenter, {marginVertical: 40}]}>
-        <Pressable style={styles.back}>
+        <Pressable style={styles.back} onPress={() => router.back()}>
           <FontAwesome6 name="arrow-left-long" size={16} color="#fff" />
         </Pressable>
         <Text style={styles.title}>Criar Conta</Text>
