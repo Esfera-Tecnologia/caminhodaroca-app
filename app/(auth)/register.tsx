@@ -6,7 +6,7 @@ import RegistrationFirstStep from "@/modules/auth/register/RegistrationFirstStep
 import RegistrationSecondStep from "@/modules/auth/register/RegistrationSecondStep";
 import RegistrationThirdStep from "@/modules/auth/register/RegistrationThirdStep";
 import { globalStyles } from "@/styles/global";
-import { emailSchema, optionalStringSchema, stringSchema } from "@/validation/schemas";
+import { registrationSchema } from "@/validation/schemas";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
@@ -15,31 +15,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { z } from "zod";
 
-const step1Schema = z.object({
-  name: stringSchema,
-  email: emailSchema,
-  password: stringSchema.min(6, 'A senha deve ter ao menos 6 caracteres'),
-  state: stringSchema,
-  ageRange: stringSchema,
-  travelWith: optionalStringSchema,
-});
-
-const step2Schema = z.object({
-  age: z
-    .number()
-    .min(18, "Você deve ter pelo menos 18 anos"),
-  country: z.string().min(1, "Selecione um país"),
-});
-
-const step3Schema = z.object({
-  terms: z.boolean(),
-});
-
-const formSchema = step1Schema
-  .merge(step2Schema)
-  .merge(step3Schema);
-
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<typeof registrationSchema>;
 
 const steps = [
   <RegistrationFirstStep key="step-1" />,
@@ -49,7 +25,7 @@ const steps = [
 
 export default function Register() {
   const methods = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(registrationSchema),
     mode: "onChange",
   });
 

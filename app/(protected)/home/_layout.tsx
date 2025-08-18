@@ -1,14 +1,13 @@
 import AppVersion from "@/components/AppVersion";
-import { globalStyles } from "@/styles/global";
+import Avatar from "@/components/Avatar";
 import { theme } from "@/theme";
 import { Feather, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 import { Image } from "expo-image";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
-const avatar = require('@/assets/images/avatar.jpg');
 
 function LogoTitle() {
   return (
@@ -22,6 +21,10 @@ function LogoTitle() {
 export default function TabLayout() {
   const [modalVisible, setModalVisible] = useState(false);
 
+  const onMenuPress = (handlePress: () => void) => {
+    handlePress();
+    setModalVisible(false);
+  }
   return (
     <>
       <Tabs
@@ -88,14 +91,11 @@ export default function TabLayout() {
           </Pressable>
         </View>
         <View style={styles.body}>
-          <View style={globalStyles.itemsCenter}>
-            <Image source={avatar} style={styles.avatar} />
-            <Text style={styles.name}>João da Silva</Text>
-          </View>
-          <View style={styles.menuItem}>
+          <Avatar />
+          <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.push('/home/profile'))}>
             <FontAwesome5 size={21} name="user-alt" color={theme.colors.success} style={styles.menuIcon} />
             <Text style={styles.menuText}>Meus Dados</Text>
-          </View>
+          </Pressable>
           <View style={styles.menuItem}>
             <Ionicons name="document-text" size={21} color={theme.colors.success} style={styles.menuIcon} />
             <Text style={styles.menuText}>Termos de Uso</Text>
@@ -122,19 +122,6 @@ const styles = StyleSheet.create({
   },
   body: {
     paddingVertical: 16,
-  },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 8
-  },
-  name: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: 700,
-    color: theme.colors.body,
-    marginBottom: 24,
   },
   title: {
     fontSize: 20,

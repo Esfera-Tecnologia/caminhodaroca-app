@@ -2,11 +2,12 @@ import { StyleSheet, Text, View } from "react-native";
 
 type StepsProps = {
   current: number;
+  length?: number;
 }
-export default function Steps({current}: StepsProps) {
+export default function Steps({length = 3 , current = 0}: StepsProps) {
   return (
     <View style={styles.stepIndicator}>
-      {[0, 1, 2].map((step) => (
+      {Array(length).fill(null).map((_, step) => (
         <View
           key={step}
           style={[styles.stepCircle, current === step && styles.activeStep]}

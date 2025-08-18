@@ -1,9 +1,12 @@
 import { PropsWithChildren } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-export default function Card({children}: PropsWithChildren) {
+interface CardProps extends PropsWithChildren {
+  style?: StyleProp<ViewStyle>
+}
+export default function Card({style, children}: CardProps) {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, style]}>
       {children}
     </View>
   )
