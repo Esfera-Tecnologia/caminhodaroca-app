@@ -63,7 +63,7 @@ export default function Select({
 
 const styles = StyleSheet.create({
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#BCBCBD",
   },
   dropdownContainerStyle: {

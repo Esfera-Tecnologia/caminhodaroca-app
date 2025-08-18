@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 8,
-    fontSize: 16,
+    fontSize: 14,
     color: "#212529",
   },
   icon: {

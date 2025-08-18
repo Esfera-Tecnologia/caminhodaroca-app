@@ -51,8 +51,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     height: 40,
     paddingHorizontal: 12,
-    fontSize: 16,
+    paddingVertical: 0, // garante centralização
+    fontSize: 14,
     borderRadius: 6,
+    textAlignVertical: "center",
   },
   filled: {
     borderColor: "#008FDB",

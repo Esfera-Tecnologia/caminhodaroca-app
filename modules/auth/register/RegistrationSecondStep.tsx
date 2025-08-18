@@ -28,7 +28,7 @@ export default function RegistrationSecondStep()  {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 22,
+    fontSize: 20,
     color: '#00473c',
     fontWeight: 'bold',
     marginBottom: 24,
