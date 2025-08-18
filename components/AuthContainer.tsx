@@ -3,15 +3,20 @@ import { Image } from "expo-image";
 import React, { PropsWithChildren } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AppVersion from "./AppVersion";
+import BackButton from "./BackButton";
 
 const logo = require("@/assets/images/logo.png");
 
 interface AuthContainerProps extends PropsWithChildren {
   title: string;
+  withBackButton?: boolean
 }
-export default function AuthContainer({title, children}: AuthContainerProps) {
+export default function AuthContainer({title, children, withBackButton = false}: AuthContainerProps) {
   return (
     <View style={styles.container}>
+      {withBackButton && (
+        <BackButton style={{position: 'absolute', top: 48, left: 12}}/>
+      )}
       <Image style={styles.logo} source={logo} contentFit="contain" />
       <Text style={styles.title}>
         {title}

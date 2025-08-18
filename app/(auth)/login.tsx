@@ -9,7 +9,7 @@ import { StyleSheet } from "react-native";
 
 export default function Login() {
   return (
-    <AuthContainer title="Entrar com Login">
+    <AuthContainer title="Entrar com Login" withBackButton={true}>
       <Card>
         <InputGroup label="E-mail">
           <Input placeholder="Digite seu e-mail" />
@@ -27,7 +27,7 @@ export default function Login() {
 const styles = StyleSheet.create({
   link: {
     color: "rgba(33, 37, 41, 0.75)",
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center'
   }
 })

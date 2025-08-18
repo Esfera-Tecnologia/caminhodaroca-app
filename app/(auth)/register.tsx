@@ -1,4 +1,5 @@
 import AppVersion from "@/components/AppVersion";
+import BackButton from "@/components/BackButton";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import Steps from "@/components/Steps";
@@ -7,12 +8,10 @@ import RegistrationSecondStep from "@/modules/auth/register/RegistrationSecondSt
 import RegistrationThirdStep from "@/modules/auth/register/RegistrationThirdStep";
 import { globalStyles } from "@/styles/global";
 import { registrationSchema } from "@/validation/schemas";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router } from "expo-router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { z } from "zod";
 
 type FormData = z.infer<typeof registrationSchema>;
@@ -54,9 +53,7 @@ export default function Register() {
   return (
     <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
       <View style={[globalStyles.row, globalStyles.flexCenter, {marginVertical: 40}]}>
-        <Pressable style={styles.back} onPress={() => router.back()}>
-          <FontAwesome6 name="arrow-left-long" size={16} color="#fff" />
-        </Pressable>
+        <BackButton style={{position: 'absolute', left: 0}}/>
         <Text style={styles.title}>Criar Conta</Text>
       </View>
       <FormProvider {...methods}>
@@ -100,9 +97,4 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 500,
   },
-  back: {
-    position: 'absolute',
-    left: 0, 
-    padding: 4,
-  }
 })
