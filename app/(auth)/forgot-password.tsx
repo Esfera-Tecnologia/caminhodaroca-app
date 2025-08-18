@@ -8,7 +8,7 @@ import { Link } from 'expo-router';
 import React from "react";
 import { StyleSheet, Text } from "react-native";
 
-export default function Login() {
+export default function ForgotPassword() {
   return (
     <AuthContainer title="Recuperar senha" withBackButton={true}>
       <Card>

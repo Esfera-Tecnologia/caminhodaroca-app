@@ -18,7 +18,7 @@ export default function Login() {
           <Input placeholder="Digite sua senha"/>
         </InputGroup>
         <PrimaryButton label="Entrar" style={{marginBottom: 12}}/>
-        <Link href="/forgot-password" style={styles.link}>Esqueci minha senha</Link>
+        <Link href="/reset-password" style={styles.link}>Esqueci minha senha</Link>
       </Card>
     </AuthContainer>
   );
