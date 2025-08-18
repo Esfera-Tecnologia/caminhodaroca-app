@@ -1,0 +1,49 @@
+import React, { PropsWithChildren, useState } from "react";
+import { Modal, ScrollView, StyleSheet, View } from "react-native";
+
+
+interface DefaultModalProps extends PropsWithChildren {
+  visible: boolean
+}
+export default function DefaultModal({visible, children}: DefaultModalProps) {
+  const [modalVisible, setModalVisible] = useState(visible);
+
+  return (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => setModalVisible(false)}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <ScrollView>
+            {children}
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+// Styles
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f2f2f2",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 16,
+    maxHeight: "80%",
+  },
+});
