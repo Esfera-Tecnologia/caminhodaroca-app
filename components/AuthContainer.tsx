@@ -1,7 +1,7 @@
 import { theme } from "@/theme";
 import { Image } from "expo-image";
 import React, { PropsWithChildren } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text } from "react-native";
 import AppVersion from "./AppVersion";
 import BackButton from "./BackButton";
 
@@ -13,7 +13,7 @@ interface AuthContainerProps extends PropsWithChildren {
 }
 export default function AuthContainer({title, children, withBackButton = false}: AuthContainerProps) {
   return (
-    <View style={styles.container}>
+    <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
       {withBackButton && (
         <BackButton style={{position: 'absolute', top: 48, left: 12}}/>
       )}
@@ -23,7 +23,7 @@ export default function AuthContainer({title, children, withBackButton = false}:
       </Text>
       {children}
       <AppVersion /> 
-    </View>
+    </ScrollView>
   );
 }
 

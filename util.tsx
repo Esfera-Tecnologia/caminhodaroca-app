@@ -128,8 +128,8 @@ export function handleRequestError<T>({
   setError,
   fallbackField,
 }: HandleRequestErrorOptions<T>) {
-  if (typeof response?.message === 'object' && response?.message !== null) {
-    Object.entries(response.message).forEach(([field, message]) => {
+  if (typeof response?.errors === 'object' && response?.errors !== null) {
+    Object.entries(response.errors).forEach(([field, message]) => {
       setError(field as keyof T, {
         type: 'manual',
         message: Array.isArray(message) ? message[0] : message,

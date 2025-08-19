@@ -1,3 +1,4 @@
+import { theme } from "@/theme";
 import { useState } from "react";
 import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
 
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "#fff",
+    color: theme.colors.body,
     height: 40,
     paddingHorizontal: 12,
     paddingVertical: 0, // garante centralização
