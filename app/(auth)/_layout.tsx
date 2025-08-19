@@ -1,6 +1,16 @@
-import { Stack } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
+import { Stack, router } from "expo-router";
+import { useEffect } from "react";
 
-export default function Layout() {
+export default function AuthLayout() {
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      router.replace("/home/property");
+    }
+  }, [user]);
+
   return (
     <Stack
       screenOptions={{
