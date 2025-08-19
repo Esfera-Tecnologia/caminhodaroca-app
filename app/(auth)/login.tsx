@@ -3,11 +3,10 @@ import Card from '@/components/Card';
 import Input from '@/components/controls/Input';
 import InputGroup from '@/components/controls/InputGroup';
 import PrimaryButton from '@/components/PrimaryButton';
-import env from "@/config.json";
+import { useAuth } from '@/context/AuthContext';
 import { handleRequestError } from '@/util';
 import { emailSchema, stringSchema } from '@/validation/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from "axios";
 import { Link } from 'expo-router';
 import React from "react";
 import { Controller, useForm } from 'react-hook-form';
@@ -22,6 +21,7 @@ const schema = z.object({
 type Inputs = z.infer<typeof schema>;
 
 export default function Login() {
+  const { onLogin } = useAuth();
   const {
     control,
     setError,
@@ -30,19 +30,15 @@ export default function Login() {
   } = useForm<Inputs>({
     resolver: zodResolver(schema),
   })
-
   const onSubmit = async (data: Inputs) => {
-    try {
-      const response = await axios.post(`${env.API_URL}/login`, data);
-    } catch (e) {
-      const error = (e as any);
+    onLogin(data.email, data.password, (error) => {
       handleRequestError<Inputs>({
         status: error.response.status,
         response: error.response.data,
         setError,
         fallbackField: 'email',
-      });
-    }
+      })
+    });
   }
   return (
     <AuthContainer title="Entrar com Login" withBackButton={true}>

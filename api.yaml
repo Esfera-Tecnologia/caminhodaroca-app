@@ -3,7 +3,7 @@ info:
   title: API do Projeto
   version: 1.0.0
 paths:
-  /login:
+  /api/login:
     post:
       summary: Realiza login do usuário
       requestBody:

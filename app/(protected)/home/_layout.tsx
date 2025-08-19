@@ -1,12 +1,11 @@
 import AppVersion from "@/components/AppVersion";
 import Avatar from "@/components/Avatar";
-import { useAuth } from "@/context/AuthContext";
 import { theme } from "@/theme";
 import { Feather, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 import { Image } from "expo-image";
 import { router, Tabs } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 
@@ -20,15 +19,7 @@ function LogoTitle() {
   );
 }
 export default function TabLayout() {
-  const { user } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
-
-  useEffect(() => {
-    if (!user) {
-      router.replace("/login");
-    }
-  }, [user]);
-
   const onMenuPress = (handlePress: () => void) => {
     handlePress();
     setModalVisible(false);

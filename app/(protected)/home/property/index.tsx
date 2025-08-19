@@ -1,5 +1,6 @@
 import SearchInput from "@/components/controls/SearchInput";
 import Review from "@/components/Review";
+import { useAuth } from "@/context/AuthContext";
 import HomeFilters from "@/modules/protected/HomeFilters";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
@@ -84,11 +85,12 @@ const PropertiesList = () => {
 
 export default function Home() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const { user } = useAuth();
   return (
     <View style={styles.container}>
       <View style={styles.welcome}>
         <Text style={globalStyles.textBase}>
-          Bem-vindo! <Text style={globalStyles.bold}>Denys Rodrigues! {"\n"}</Text>
+          Bem-vindo! <Text style={globalStyles.bold}>{user?.name || 'Convidado'}! {"\n"}</Text>
           Encontramos propriedades próximas à sua localização:{" "}
           <Text style={globalStyles.bold}>Rio de Janeiro.</Text>
         </Text>
