@@ -110,24 +110,26 @@ export const passwordSchema = z
   });
 
 export const step1Schema = z.object({
-    name: stringSchema,
-    email: emailSchema,
-    password: passwordSchema,
-    state: stringSchema,
-    ageRange: stringSchema,
-    travelWith: optionalStringSchema,
-  });
+  name: stringSchema,
+  email: emailSchema,
+  password: passwordSchema,
+  state: stringSchema,
+  ageRange: stringSchema,
+  travelWith: optionalStringSchema,
+});
   
+const subcategoriesSchema = z.object({
+  value: naturalNumberSchema,
+});
+
 export const step2Schema = z.object({
-    age: z
-      .number()
-      .min(18, "Você deve ter pelo menos 18 anos"),
-    country: z.string().min(1, "Selecione um país"),
-  });
+  category: naturalNumberSchema,
+  subcategories: z.array(subcategoriesSchema).min(1, 'Selecione ao menos uma subcategoria'),
+});
   
 export const step3Schema = z.object({
-    terms: z.boolean(),
-  });
+  terms: z.boolean(),
+});
 
 export const registrationSchema = step1Schema
   .merge(step2Schema)
