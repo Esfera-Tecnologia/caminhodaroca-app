@@ -82,10 +82,37 @@ export const naturalNumberSchema = z
   .int()
   .positive(messages.positive);
 
+const hasUpper = /[A-Z]/;
+const hasLower = /[a-z]/;
+const hasNumber = /[0-9]/;
+const hasSpecial = /[!@#$%&*_\-.,;:()?[\]{}+~=^§/\\|<>]/;
+
+export const passwordSchema = z
+  .string({
+    error: messages.required
+  })
+  .min(8, "A senha deve ter no mínimo 8 caracteres.")
+  .superRefine((value, ctx) => {
+    const checks = [
+      hasUpper.test(value),
+      hasLower.test(value),
+      hasNumber.test(value),
+      hasSpecial.test(value),
+    ];
+    const met = checks.filter(Boolean).length;
+    if (met < 2) {
+      ctx.addIssue({
+        code: 'custom',
+        message:
+          "A senha deve conter ao menos duas das opções: letras maiúsculas, letras minúsculas, números ou caracteres especiais.",
+      });
+    }
+  });
+
 export const step1Schema = z.object({
     name: stringSchema,
     email: emailSchema,
-    password: stringSchema.min(6, 'A senha deve ter ao menos 6 caracteres'),
+    password: passwordSchema,
     state: stringSchema,
     ageRange: stringSchema,
     travelWith: optionalStringSchema,

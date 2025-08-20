@@ -3,12 +3,15 @@ import BackButton from "@/components/BackButton";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import Steps from "@/components/Steps";
+import env from "@/config.json";
 import RegistrationFirstStep from "@/modules/auth/register/RegistrationFirstStep";
 import RegistrationSecondStep from "@/modules/auth/register/RegistrationSecondStep";
 import RegistrationThirdStep from "@/modules/auth/register/RegistrationThirdStep";
 import { globalStyles } from "@/styles/global";
+import { handleRequestError } from "@/util";
 import { registrationSchema } from "@/validation/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
@@ -27,10 +30,8 @@ export default function Register() {
     resolver: zodResolver(registrationSchema),
     mode: "onChange",
   });
-
+  
   const [currentStep, setCurrentStep] = useState(0);
-
-
   const nextStep = async () => {
     const fieldsByStep: Record<number, (keyof FormData)[]> = {
       0: ["name", "email", "password", "state", "ageRange", "travelWith"],
@@ -41,15 +42,32 @@ export default function Register() {
     if (!currentStepFields) return;
 
     const valid = await methods.trigger(currentStepFields);
-    if (valid) setCurrentStep((s) => s + 1);
+    if (! valid) return;
+
+    const data = methods.getValues();
+    const submitted = await onSubmitStep(currentStep, data);
+    if (submitted) setCurrentStep((s) => s + 1);
   };
-
   const prevStep = () => setCurrentStep((s) => s - 1);
+  
+  const onSubmitStep = async (step: number, data: FormData) => {
+    try {
+      await axios.post(`${env.API_URL}/register/step${step + 1}`, data);
+      return true;
+    } catch (e) {
+      const error = (e as any);
+      handleRequestError({
+        error,
+        setError: methods.setError,
+        fallbackField: 'name'
+      })
+      return false;
+    }
+  }
 
-  const onSubmit = (data: FormData) => {
+  const onSubmitForm = async (data: FormData) => {
     console.log("Form final:", data);
   };
-
   return (
     <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
       <View style={[globalStyles.row, globalStyles.flexCenter, {marginVertical: 40}]}>
@@ -74,7 +92,7 @@ export default function Register() {
                 title="Próximo" />
             ) : (
               <Button
-                onPress={methods.handleSubmit(onSubmit)}
+                onPress={methods.handleSubmit(onSubmitForm)}
                 variant="primary"
                 title="Finalizar Cadastro" />
             )}

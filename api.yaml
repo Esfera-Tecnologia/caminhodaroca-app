@@ -106,3 +106,72 @@ paths:
                     type: string
               example:
                 message: "Usuário não encontrado."
+  /api/states:
+    get:
+      summary: Lista de estados
+      responses:
+        '200':
+          description: Lista de estados brasileiros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    label:
+                      type: string
+              example:
+                - value: "AC"
+                  label: "Acre"
+                - value: "AL"
+                  label: "Alagoas"
+                - value: "AM"
+                  label: "Amazonas"
+  /api/register/step1:
+    post:
+      summary: Cadastro - Etapa 1 (Dados básicos)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                state:
+                  type: string
+                ageRange:
+                  type: string
+                travelWith:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+                - state
+                - ageRange
+      responses:
+        '200':
+          description: Etapa 1 concluída
+          content:
+            application/json:
+              example:
+                message: "Etapa 1 concluída com sucesso."
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              example:
+                message: "Os dados informados são inválidos"
+                errors:
+                  email: ["O e-mail informado já está em uso"]
+                  password: ["A senha deve ter no mínimo 8 caracteres."]

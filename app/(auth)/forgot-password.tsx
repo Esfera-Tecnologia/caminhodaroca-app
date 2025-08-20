@@ -34,7 +34,7 @@ export default function ForgotPassword() {
   })
   const onSubmit = async (data: Inputs) => {
     try {
-      const response = await axios.post(`${env.API_URL}/api/password/forgot`, {
+      const response = await axios.post(`${env.API_URL}/password/forgot`, {
         email: data.email,
       });
       setEmailWasSended(true);

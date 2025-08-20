@@ -1,11 +1,15 @@
 import Input from "@/components/controls/Input";
 import InputGroup from "@/components/controls/InputGroup";
 import Select from "@/components/controls/Select";
+import { AgeRange, CompanionType } from "@/enums";
+import { useStates } from "@/hooks/useStates";
+import { formatEnumToOptions } from "@/util";
 import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function RegistrationFirstStep()  {
   const { control, formState: { errors } } = useFormContext();
+  const {states} = useStates();
 
   return (
     <View>
@@ -47,7 +51,10 @@ export default function RegistrationFirstStep()  {
         name="state"
         render={({ field: { onChange, value } }) => (
           <InputGroup label="Estado*" error={errors.state}>
-            <Select options={[]} selectedValue={value} onValueChange={onChange} />
+            <Select 
+              options={states}
+              selectedValue={value}
+              onValueChange={onChange} />
           </InputGroup>
         )}
       />
@@ -57,7 +64,7 @@ export default function RegistrationFirstStep()  {
         render={({ field: { onChange, value } }) => (
           <InputGroup label="Faixa Etária*" error={errors.ageRange}>
             <Select
-              options={[]}
+              options={formatEnumToOptions(AgeRange)}
               selectedValue={value}
               onValueChange={onChange}
             />
@@ -70,7 +77,7 @@ export default function RegistrationFirstStep()  {
         render={({ field: { onChange, value } }) => (
           <InputGroup label="Com quem você viaja">
             <Select
-              options={[]}
+              options={formatEnumToOptions(CompanionType)}
               selectedValue={value}
               onValueChange={onChange}
             />

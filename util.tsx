@@ -128,7 +128,7 @@ export function handleRequestError<T>({
 }: HandleRequestErrorOptions<T>) {
   const status = error.response.status;
   const response = error.response.data;
-  
+
   if (typeof response?.errors === 'object' && response?.errors !== null) {
     Object.entries(response.errors).forEach(([field, message]) => {
       setError(field as keyof T, {
@@ -148,4 +148,13 @@ export function handleRequestError<T>({
           : response?.message ?? 'Erro desconhecido',
     });
   }
+}
+
+type EnumLike = { [key: string]: string };
+
+export function formatEnumToOptions<T extends EnumLike>(enumObj: T) {
+  return Object.entries(enumObj).map(([key, value]) => ({
+    value: key as keyof T,
+    label: value
+  }));
 }
