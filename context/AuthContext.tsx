@@ -1,4 +1,3 @@
-import env from "@/config.json";
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import React, { createContext, useContext, useState } from "react";
@@ -10,11 +9,12 @@ export interface User {
   email: string,
   state: string,
   ageRange: string,
+  token: string,
 }
 interface AuthProps {
   user?: User | null,
   setUser: (user: User) => void,
-  onLogin: (email: string, password: string, onError: (e: any) => void) => Promise<any>
+  onLogin: (userData: User) => void
   onLogout: () => Promise<any>
   getToken: () => Promise<any>
 }
@@ -32,16 +32,12 @@ export const AuthContext = createContext<AuthProps>({
 export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const onLogin = async (email: string, password: string, onError: (e: any) => void) => {
-    try {
-      const response = await axios.post(`${env.API_URL}/login`, {email, password});
-      setUser(response.data);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-      await SecureStore.setItemAsync('AuthToken', response.data.token);
-    } catch (e) {
-      onError(e as any);
-    }
+  const onLogin = async (userData: User) => {
+    await SecureStore.setItemAsync('AuthToken', userData.token);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+    setUser({...userData, token: ''});
   };
+
   const onLogout = async () => {
     await SecureStore.deleteItemAsync('AuthToken');
     axios.defaults.headers.common['Authorization'] = '';
