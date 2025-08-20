@@ -33,8 +33,7 @@ export default function Login() {
   const onSubmit = async (data: Inputs) => {
     onLogin(data.email, data.password, (error) => {
       handleRequestError<Inputs>({
-        status: error.response.status,
-        response: error.response.data,
+        error,
         setError,
         fallbackField: 'email',
       })

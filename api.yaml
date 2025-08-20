@@ -64,4 +64,45 @@ paths:
               example:
                 message: "Os dados informados são inválidos."
                 errors:
-                  email: ["As credenciais informadas não foram encontradas nos nossos registros"]
+                  email: ["Usuário não encontrado. Verifique suas credenciais de login e senha."]
+  /api/password/forgot:
+    post:
+      summary: Recuperação de senha
+      description: Envia um e-mail com instruções de recuperação de senha para o usuário, caso o e-mail esteja cadastrado.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+            example:
+              email: "user@email.com"
+      responses:
+        '200':
+          description: E-mail de recuperação enviado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "E-mail de recuperação enviado com sucesso."
+        '404':
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Usuário não encontrado."

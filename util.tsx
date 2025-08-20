@@ -116,18 +116,19 @@ type SetErrorFunction<T> = (
 ) => void;
 
 interface HandleRequestErrorOptions<T> {
-  status: number;
-  response: any;
+  error: any;
   setError: SetErrorFunction<T>;
   fallbackField?: keyof T;
 }
 
 export function handleRequestError<T>({
-  status,
-  response,
+  error,
   setError,
   fallbackField,
 }: HandleRequestErrorOptions<T>) {
+  const status = error.response.status;
+  const response = error.response.data;
+  
   if (typeof response?.errors === 'object' && response?.errors !== null) {
     Object.entries(response.errors).forEach(([field, message]) => {
       setError(field as keyof T, {
