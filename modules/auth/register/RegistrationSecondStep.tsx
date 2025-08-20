@@ -31,7 +31,6 @@ export default function RegistrationSecondStep()  {
     control,
     name: "subcategories",
   });
-  console.log(errors);
   return (
     <View>
       <Text style={styles.title}>Preferências</Text>

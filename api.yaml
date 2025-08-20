@@ -130,6 +130,63 @@ paths:
                   label: "Alagoas"
                 - value: "AM"
                   label: "Amazonas"
+  /api/categories:
+    get:
+      summary: Lista de categorias
+      responses:
+        '200':
+          description: Lista de categorias disponíveis
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    value:
+                      type: integer
+                    label:
+                      type: string
+              example:
+                - value: 1
+                  label: "Tecnologia"
+                - value: 2
+                  label: "Saúde"
+                - value: 3
+                  label: "Finanças"
+                - value: 4
+                  label: "Educação"
+  /api/categories/{categoryId}/subcategories:
+    get:
+      summary: Lista de subcategorias de uma categoria
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: integer
+          description: ID da categoria para listar as subcategorias
+      responses:
+        '200':
+          description: Lista de subcategorias para a categoria especificada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    value:
+                      type: integer
+                    label:
+                      type: string
+              example:
+                - value: 1
+                  label: "Smartphones"
+                - value: 2
+                  label: "Computadores"
+                - value: 3
+                  label: "Tablets"
   /api/register/step1:
     post:
       summary: Cadastro - Etapa 1 (Dados básicos)
@@ -175,3 +232,116 @@ paths:
                 errors:
                   email: ["O e-mail informado já está em uso"]
                   password: ["A senha deve ter no mínimo 8 caracteres."]
+  /api/register/step2:
+    post:
+      summary: Cadastro - Etapa 2 (Categoria/Subcategorias)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category:
+                  type: number
+                  description: "ID da categoria selecionada"
+                subcategories:
+                  type: array
+                  items:
+                    type: number
+                    description: "IDs das subcategorias selecionadas"
+              required:
+                - category
+      responses:
+        '200':
+          description: Etapa 2 concluída
+          content:
+            application/json:
+              example:
+                message: "Etapa 2 concluída com sucesso."
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              example:
+                message: "Os dados informados são inválidos"
+                errors:
+                  category: ["O campo categoria é obrigatório."]
+                  subcategories: ["O campo subcategorias é obrigatório."]
+  /api/register/finish:
+    post:
+      summary: Cadastro final - Recebe todos os dados e cria o usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                # Etapa 1
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                state:
+                  type: string
+                ageRange:
+                  type: string
+                travelWith:
+                  type: string
+                # Etapa 2
+                category:
+                  type: number
+                  description: "ID da categoria selecionada"
+                subcategories:
+                  type: array
+                  items:
+                    type: number
+                    description: "IDs das subcategorias selecionadas"
+                # Etapa 3
+                terms:
+                  type: boolean
+                  description: "Aceite dos termos de uso"
+              required:
+                - name
+                - email
+                - password
+                - state
+                - ageRange
+                - category
+                - terms
+      responses:
+        '201':
+          description: Usuário cadastrado com sucesso
+          content:
+            application/json:
+              example:
+                id: 1
+                name: "Alice"
+                avatar: "https://picsum.photos/200/300"
+                email: "alice@email.com"
+                state: "SP"
+                ageRange: "18 a 29 anos"
+                travelWith: "Amigos"
+                category: 3
+                subcategories: [5, 6]
+                token: '9f4e3c2a1b6d8e0f3c4d5a6b7e8f9a0b'
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              example:
+                message: "Os dados informados são inválidos"
+                errors:
+                  name: ["O campo nome é obrigatório."]
+                  email: ["O e-mail informado já está em uso"]
+                  password: ["A senha deve ter no mínimo 8 caracteres."]
+                  category: ["O campo categoria é obrigatório."]
+                  subcategories: ["Selecione ao menos uma subcategoria."]
+                  termsAccepted: ["Você deve aceitar os termos para continuar."]
+
+
+

@@ -1,11 +1,14 @@
-import CheckboxGroup from "@/components/CheckboxGroup";
+import CheckboxGroup from "@/components/controls/CheckboxGroup";
 import InputGroup from "@/components/controls/InputGroup";
 import { globalStyles } from "@/styles/global";
 import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function RegistrationThirdStep() {
-  const { control, formState: { errors } } = useFormContext();
+  const {
+    control,
+    formState: { errors }
+  } = useFormContext();
 
   return (
     <View>
@@ -15,14 +18,13 @@ export default function RegistrationThirdStep() {
       </Text>
       <InputGroup
         error={errors.terms}
-        margin={0}>
+        margin={16}>
         <Controller
           control={control}
           name="terms"
           render={({ field: { onChange, value } }) => (
             <CheckboxGroup 
               size="md"
-              margin={16}
               value={value}
               onValueChange={onChange}
               label="Li e concordo com o termo de uso" />

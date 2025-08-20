@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import Card from "@/components/Card";
 import Steps from "@/components/Steps";
 import env from "@/config.json";
+import { useAuth } from "@/context/AuthContext";
 import RegistrationFirstStep from "@/modules/auth/register/RegistrationFirstStep";
 import RegistrationSecondStep from "@/modules/auth/register/RegistrationSecondStep";
 import RegistrationThirdStep from "@/modules/auth/register/RegistrationThirdStep";
@@ -26,16 +27,16 @@ const steps = [
 ];
 
 export default function Register() {
+  const { onLogin } = useAuth();
   const methods = useForm<FormData>({
     resolver: zodResolver(registrationSchema),
     mode: "onChange",
   });
-  
   const [currentStep, setCurrentStep] = useState(0);
   const nextStep = async () => {
     const fieldsByStep: Record<number, (keyof FormData)[]> = {
       0: ["name", "email", "password", "state", "ageRange", "travelWith"],
-      1: ["age", "country"],
+      1: ["category", "subcategories"],
       2: ["terms"]
     };
     const currentStepFields = fieldsByStep[currentStep];
@@ -52,7 +53,7 @@ export default function Register() {
   
   const onSubmitStep = async (step: number, data: FormData) => {
     try {
-      await axios.post(`${env.API_URL}/register/step${step + 1}`, data);
+      await axios.post(`${env.API_URL}/register/step${step + 1}`, prepareDataToSubmission(data));
       return true;
     } catch (e) {
       const error = (e as any);
@@ -66,8 +67,25 @@ export default function Register() {
   }
 
   const onSubmitForm = async (data: FormData) => {
-    console.log("Form final:", data);
+    try {
+      const response = await axios.post(`${env.API_URL}/register/finish`, prepareDataToSubmission(data));
+      onLogin(response.data);
+    } catch (e) {
+      const error = (e as any);
+      handleRequestError({
+        error,
+        setError: methods.setError,
+        fallbackField: 'name'
+      })
+    }
   };
+
+  const prepareDataToSubmission = (data: FormData) => {
+    return {
+      ...data,
+      subcategories: data.subcategories?.map(sub => sub.value)
+    }
+  }
   return (
     <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
       <View style={[globalStyles.row, globalStyles.flexCenter, {marginVertical: 40}]}>

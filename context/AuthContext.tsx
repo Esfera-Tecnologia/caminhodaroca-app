@@ -9,6 +9,9 @@ export interface User {
   email: string,
   state: string,
   ageRange: string,
+  travelWith: string,
+  category: number,
+  subcategories: number[],
   token: string,
 }
 interface AuthProps {

@@ -128,7 +128,7 @@ export const step2Schema = z.object({
 });
   
 export const step3Schema = z.object({
-  terms: z.boolean(),
+  terms: z.boolean({error: 'O aceite dos termos de uso é obrigatório'}),
 });
 
 export const registrationSchema = step1Schema
