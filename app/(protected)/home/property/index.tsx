@@ -1,57 +1,19 @@
 import SearchInput from "@/components/controls/SearchInput";
 import Review from "@/components/Review";
 import { useAuth } from "@/context/AuthContext";
-import HomeFilters from "@/modules/protected/HomeFilters";
+import { PropertyItemType, useProperties } from "@/hooks/useProperties";
+import HomeFilters, { PropertyFilters } from "@/modules/protected/HomeFilters";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { FlatList, Image, ImageSourcePropType, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-type PropertyItemType = {
-  id: number;
-  name: string;
-  rating: number;
-  type: string;
-  location: string;
-  distance: string;
-  image: ImageSourcePropType | undefined;
-}
-const properties: PropertyItemType[] =  [
-  {
-    id: 1,
-    name: "Fazenda Boa Vista",
-    rating: 4,
-    type: "Cabana",
-    location: "Pedra de Guaratiba",
-    distance: "12 km de distância",
-    image: require("@/assets/images/farm1.png"),
-  },
-  {
-    id: 2,
-    name: "Sítio Vale Verde",
-    rating: 3,
-    type: "Cabana",
-    location: "Vargem Grande",
-    distance: "18 km de distância",
-    image: require("@/assets/images/farm1.png"),
-  },
-  {
-    id: 3,
-    name: "Chácara do Sol",
-    rating: 3,
-    type: "Cabana",
-    location: "Campo Grande",
-    distance: "25 km de distância",
-    image: require("@/assets/images/farm1.png"),
-  },
-];
+import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const PropertyItem = ({property}: {property: PropertyItemType}) => {
   return (
     <Pressable style={styles.card} onPress={() => router.push({pathname: '/home/property/[property]', params: {property: 1}})}>
-      <Image source={property.image} style={styles.image} />
+      <Image source={{uri: property.logo}} style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.name}>{property.name}</Text>
         <View style={styles.badge}>
@@ -60,11 +22,11 @@ const PropertyItem = ({property}: {property: PropertyItemType}) => {
         <Review length={5} review={property.rating}/>
         <View style={[globalStyles.row, globalStyles.itemsCenter]}>
           <FontAwesome6 name="location-dot" size={12} color={theme.colors.body} style={{marginStart: 2}} />
-          <Text style={[styles.details, {marginStart: 6}]}>{property.location}</Text>
+          <Text style={[styles.details, {marginStart: 6}]}>{property.location.city}</Text>
         </View>
         <View style={[globalStyles.row, globalStyles.itemsCenter]}>
           <FontAwesome6 name="route" size={12} color={theme.colors.body} />
-          <Text style={styles.details}>{property.distance}</Text>
+          <Text style={styles.details}>12 km</Text>
         </View>
       </View>
       <FontAwesome6 name="chevron-right" size={16} color={theme.colors.secondary} style={{marginEnd: 12}} />
@@ -72,19 +34,47 @@ const PropertyItem = ({property}: {property: PropertyItemType}) => {
   )
 }
 
-const PropertiesList = () => {
+const EmptyPropertyList = () => {
   return (
-    <FlatList
-      style={{paddingHorizontal: 16}}
-      data={properties}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => ( <PropertyItem property={item} /> )}
-    />
+    <View style={[styles.card, {padding: 16, borderColor: theme.colors.warning}]}>
+      <FontAwesome6 
+        name="question-circle"
+        size={24}
+        color={theme.colors.warning}
+        style={{marginEnd: 12}} />
+      <Text style={{color: theme.colors.secondary}}>
+        Infelizmente, não pudemos encontrar nenhuma propriedade
+        próxima a sua localização no momento
+      </Text>
+    </View>
+  )
+}
+
+const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
+  const { data } = useProperties(filters);
+  return (
+    <View>
+      {data.length ? (
+        <View style={styles.content}>
+          <Text style={styles.results}>
+            Encontramos <Text style={globalStyles.extraBold}>{data.length} propriedades</Text> próximas da sua localização.
+          </Text>
+        </View>
+      ) : undefined}
+      <FlatList
+        style={{paddingHorizontal: 16}}
+        data={data}
+        ListEmptyComponent={<EmptyPropertyList />}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => ( <PropertyItem property={item} /> )}
+      />
+    </View>
   )
 }
 
 export default function Home() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [filters, setFilters] =  useState<PropertyFilters>();
   const { user } = useAuth();
   return (
     <View style={styles.container}>
@@ -102,14 +92,12 @@ export default function Home() {
             <Ionicons name="options-outline" size={22} color="#00796B" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.results}>
-          Encontramos <Text style={globalStyles.extraBold}>3 propriedades</Text> próximas da sua localização.
-        </Text>
       </View>
-      <PropertiesList />
+      <PropertiesList filters={filters} />
       <HomeFilters 
         isOpen={isFiltersOpen}
-        onClose={() => setIsFiltersOpen(false)} 
+        onClose={() => setIsFiltersOpen(false)}
+        onApply={setFilters}
         title="Filtros"
         direction="right" />
     </View>
