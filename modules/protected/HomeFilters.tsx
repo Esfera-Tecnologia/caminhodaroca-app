@@ -4,6 +4,8 @@ import InputGroup from "@/components/controls/InputGroup";
 import Select from "@/components/controls/Select";
 import Offcanvas, { OffcanvasProps } from "@/components/Offcanvas";
 import { useCategories } from "@/hooks/useCategories";
+import { useCities } from "@/hooks/useCities";
+import { useSubcategories } from "@/hooks/useSubcategories";
 import { useState } from "react";
 import { View } from "react-native";
 
@@ -27,6 +29,8 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
   });
 
   const { categories } = useCategories();
+  const { subcategories } = useSubcategories(filters.categories);
+  const { cities } = useCities();
 
   const handleChange = (key: keyof PropertyFilters, value: any) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -43,27 +47,22 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
         <InputGroup label="Localização Atual">
           <Select
             options={[
-              { label: "Sim", value: "true" },
-              { label: "Não", value: "false" },
+              { label: "Sim", value: true },
+              { label: "Não", value: false },
             ]}
-            selectedValue={filters.useCurrentLocation ? "true" : "false"}
+            selectedValue={filters.useCurrentLocation}
             onValueChange={(value) =>
-              handleChange("useCurrentLocation", value === "true")
+              handleChange("useCurrentLocation", value)
             }
           />
         </InputGroup>
-
         <InputGroup label="Localização da Propriedade">
           <Select
-            options={[
-              { label: "Rio de Janeiro", value: 10 },
-              { label: "São Paulo", value: 20 },
-            ]}
+            options={cities}
             selectedValue={filters.propertyLocationId}
             onValueChange={(value) => handleChange("propertyLocationId", Number(value))}
           />
         </InputGroup>
-
         <InputGroup label="Palavra-chave">
           <Input
             placeholder="Ex: queijos, passeios..."
@@ -71,7 +70,6 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
             onChangeText={(text) => handleChange("keyword", text)}
           />
         </InputGroup>
-
         <InputGroup label="Categoria">
           <Select
             isMultiple
@@ -79,24 +77,17 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
             selectedValue={filters.categories}
             onValueChange={(values) =>
               handleChange("categories", Array.isArray(values) ? values?.map(Number) : [Number(values)])
-            }
-          />
+            } />
         </InputGroup>
-
         <InputGroup label="Subcategoria">
           <Select
             isMultiple
-            options={[
-              { label: "Cabana", value: 5 },
-              { label: "Casa de Campo", value: 6 },
-            ]}
-            selectedValue={filters.subcategories?.[0]}
-            onValueChange={(value) =>
-              handleChange("subcategories", [Number(value)])
-            }
-          />
+            options={subcategories}
+            selectedValue={filters.subcategories}
+            onValueChange={(values) =>
+              handleChange("subcategories", Array.isArray(values) ? values?.map(Number) : [Number(values)])
+            } />
         </InputGroup>
-
         <Button
           variant="primary"
           title="Aplicar filtros"

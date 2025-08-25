@@ -8,11 +8,14 @@ import { theme } from "@/theme";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const PropertyItem = ({property}: {property: PropertyItemType}) => {
   return (
-    <Pressable style={styles.card} onPress={() => router.push({pathname: '/home/property/[property]', params: {property: 1}})}>
+    <Pressable style={styles.card} onPress={() => router.push({
+      pathname: '/home/property/[property]',
+      params: {property: property.id
+    }})}>
       <Image source={{uri: property.logo}} style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.name}>{property.name}</Text>
@@ -50,8 +53,23 @@ const EmptyPropertyList = () => {
   )
 }
 
+const LoadingPropertyList = () => {
+  return (
+    <View style={[styles.card, {marginHorizontal: 16, padding: 16, borderColor: theme.colors.primary}]}>
+      <ActivityIndicator
+        size="small"
+        color={theme.colors.primary}
+        style={{marginEnd: 8}}/>
+      <Text style={{color: theme.colors.primary}}>
+        Carregando lista de propriedades...
+      </Text>
+    </View>
+  )
+}
+
 const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
-  const { data } = useProperties(filters);
+  console.log(filters);
+  const { data, loading } = useProperties(filters);
   return (
     <View>
       {data.length ? (
@@ -61,13 +79,17 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
           </Text>
         </View>
       ) : undefined}
-      <FlatList
-        style={{paddingHorizontal: 16}}
-        data={data}
-        ListEmptyComponent={<EmptyPropertyList />}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => ( <PropertyItem property={item} /> )}
-      />
+      {! loading ? (
+        <FlatList
+          style={{paddingHorizontal: 16}}
+          data={data}
+          ListEmptyComponent={<EmptyPropertyList />}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => ( <PropertyItem property={item} /> )}
+        />
+      ) : (
+        <LoadingPropertyList />
+      )}
     </View>
   )
 }
