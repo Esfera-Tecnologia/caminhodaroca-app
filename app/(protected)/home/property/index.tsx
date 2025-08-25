@@ -12,13 +12,13 @@ import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, Toucha
 
 const PropertyItem = ({property}: {property: PropertyItemType}) => {
   return (
-    <Pressable style={styles.card} onPress={() => router.push({
+    <Pressable style={[styles.card, globalStyles.shadowSm]} onPress={() => router.push({
       pathname: '/home/property/[property]',
       params: {property: property.id
     }})}>
       <Image source={{uri: property.logo}} style={styles.image} />
       <View style={styles.info}>
-        <Text style={styles.name}>{property.name}</Text>
+        <Text style={styles.name} numberOfLines={2}>{property.name}</Text>
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{property.type}</Text>
         </View>
@@ -154,11 +154,11 @@ const styles = StyleSheet.create({
     borderRightColor: "#0000002D",
     borderBottomColor: "#0000002D",
     borderLeftColor: theme.colors.primary,
-    elevation: 2,
   },
   image: { 
     width: 120,
-    height: 120,
+    height: '100%',
+    minHeight: 120,
   },
   info: {
     flex: 1,
