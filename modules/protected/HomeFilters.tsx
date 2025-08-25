@@ -30,7 +30,7 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
 
   const { categories } = useCategories();
   const { subcategories } = useSubcategories(filters.categories);
-  const { cities } = useCities();
+  const { cities } = useCities('RJ');
 
   const handleChange = (key: keyof PropertyFilters, value: any) => {
     setFilters((prev) => ({ ...prev, [key]: value }));

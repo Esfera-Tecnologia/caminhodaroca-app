@@ -68,7 +68,6 @@ const LoadingPropertyList = () => {
 }
 
 const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
-  console.log(filters);
   const { data, loading } = useProperties(filters);
   return (
     <View>

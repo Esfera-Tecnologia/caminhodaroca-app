@@ -52,8 +52,16 @@ export default function Register() {
   const prevStep = () => setCurrentStep((s) => s - 1);
   
   const onSubmitStep = async (step: number, data: FormData) => {
+    if(step + 1 > steps.length) return;
+    let route;
+    switch(step) {
+      case 1:
+        route = 'categories'
+      default:
+        route = 'personal-data'
+    };
     try {
-      await axios.post(`${env.API_URL}/register/step${step + 1}`, prepareDataToSubmission(data));
+      await axios.post(`${env.API_URL}/register/${route}`, prepareDataToSubmission(data));
       return true;
     } catch (e) {
       const error = (e as any);
