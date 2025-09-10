@@ -1,5 +1,7 @@
 import AppVersion from "@/components/AppVersion";
 import Avatar from "@/components/Avatar";
+import PrimaryButton from "@/components/PrimaryButton";
+import { useAuth } from "@/context/AuthContext";
 import { theme } from "@/theme";
 import { Feather, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
@@ -20,6 +22,7 @@ function LogoTitle() {
 }
 export default function TabLayout() {
   const [modalVisible, setModalVisible] = useState(false);
+  const { user } = useAuth();
   const onMenuPress = (handlePress: () => void) => {
     handlePress();
     setModalVisible(false);
@@ -90,20 +93,38 @@ export default function TabLayout() {
           </Pressable>
         </View>
         <View style={styles.body}>
-          <Avatar />
-          <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.push('/home/profile'))}>
-            <FontAwesome5 size={21} name="user-alt" color={theme.colors.success} style={styles.menuIcon} />
-            <Text style={styles.menuText}>Meus Dados</Text>
-          </Pressable>
-          <View style={styles.menuItem}>
-            <Ionicons name="document-text" size={21} color={theme.colors.success} style={styles.menuIcon} />
-            <Text style={styles.menuText}>Termos de Uso</Text>
-          </View>
-          <View style={[styles.menuItem, {borderBottomWidth: 0}]}>
-            <FontAwesome6 size={21} name="arrow-right-from-bracket" color={theme.colors.danger} style={styles.menuIcon} />
-            <Text style={[styles.menuText, {color: theme.colors.danger}]}>Sair</Text>
-          </View>
-          <AppVersion theme="light" />
+          {user ? (
+            <View>
+              <Avatar />
+              <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.push('/home/profile'))}>
+                <FontAwesome5 size={21} name="user-alt" color={theme.colors.success} style={styles.menuIcon} />
+                <Text style={styles.menuText}>Meus Dados</Text>
+              </Pressable>
+              <View style={styles.menuItem}>
+                <Ionicons name="document-text" size={21} color={theme.colors.success} style={styles.menuIcon} />
+                <Text style={styles.menuText}>Termos de Uso</Text>
+              </View>
+              <View style={[styles.menuItem, {borderBottomWidth: 0}]}>
+                <FontAwesome6 size={21} name="arrow-right-from-bracket" color={theme.colors.danger} style={styles.menuIcon} />
+                <Text style={[styles.menuText, {color: theme.colors.danger}]}>Sair</Text>
+              </View>
+              <AppVersion theme="light" />
+            </View>
+          ) : (
+            <View style={{paddingHorizontal: 20, paddingTop: 40}}>
+              <Image
+                source={require("@/assets/images/farm1.png")}
+                style={{ width: 'auto', height: 100 }}
+                contentFit='contain'
+              />
+              <Text style={[styles.title]}>Bem-vindo ao Caminho da Roça</Text>
+              <Text style={{marginBottom: 16}}>
+                Faça login ou crie uma conta para desfrutar de todas as
+                funcionalidades do aplicativo.
+              </Text>
+              <PrimaryButton label="Ir para o login" onPress={() => router.push('/login')} />
+            </View>
+          )}
         </View>
       </Modal>
     </>
