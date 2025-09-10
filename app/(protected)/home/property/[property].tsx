@@ -1,36 +1,121 @@
 import Button from '@/components/Button';
 import Review from '@/components/Review';
+import env from "@/config.json";
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
 import { FontAwesome6, Foundation } from '@expo/vector-icons';
+import axios from 'axios';
+import * as Clipboard from "expo-clipboard";
 import { Image } from 'expo-image';
-import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router/build/hooks';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Linking, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Toast } from 'toastify-react-native';
 
 const propertyBackground = require('@/assets/images/property.jpg');
-const propertyLogo = require("@/assets/images/farm1.png");
+
+interface Property {
+  id: number;
+  name: string;
+  logo: string;
+  rating: number;
+  type: string;
+  phone: string;
+  location: {
+    city: string;
+    state: string;
+    coordinates: {
+      lat: number;
+      lng: number;
+    };
+  };
+  description: string;
+  category: string;
+  subcategory: string;
+  openingHours: {
+    weekdays: string;
+    weekend: string;
+  };
+  products: string;
+  accessibility: string;
+  petPolicy: string;
+  gallery: string[];
+}
+
+
+const contactProperty = async (phone: string, message?: string) => {
+  const formattedPhone = phone.replace(/\D/g, ''); // só dígitos
+  const whatsappUrl = `https://wa.me/${formattedPhone}${message ? `?text=${encodeURIComponent(message)}` : ''}`;
+  const telUrl = `tel:${formattedPhone}`;
+
+  try {
+    await Linking.openURL(whatsappUrl);
+  } catch {
+    try {
+      await Linking.openURL(telUrl);
+    } catch {
+      await Clipboard.setStringAsync(formattedPhone);
+      Toast.info("Número copiado para a área de transferência");
+    }
+  }
+};
+
 
 export default function PropertyDetails() {
+  const { property: propertyId } = useLocalSearchParams();
+  const [property, setProperty] = useState<Property | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const response = await axios.get(`${env.API_URL}/properties/${propertyId}`);
+        setProperty(response.data);
+      } catch (error) {
+        console.log('Erro ao buscar propriedade:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperty();
+  }, [propertyId]);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </SafeAreaView>
+    );
+  }
+
+  if (!property) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Propriedade não encontrada</Text>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         <Image
-          source={propertyBackground}
+          source={property.gallery[0] ? { uri: property.gallery[0] } : propertyBackground}
           style={styles.headerImage}
           contentFit="cover"
         />
         <View style={styles.card}>
           <View style={styles.titleRow}>
-            <Image source={propertyLogo} style={styles.logo} contentFit="cover" />
+            <Image source={{ uri: property.logo }} style={styles.logo} contentFit="cover" />
             <View>
-              <Text style={styles.propertyName}>Fazenda Boa Vista</Text>
-              <Review length={5} review={3}/>
+              <Text style={styles.propertyName}>{property.name}</Text>
+              <Review length={5} review={property.rating} />
             </View>
           </View>
           <View style={styles.infoRow}>
             <FontAwesome6 name="location-dot" size={12} color={theme.colors.secondary} style={{marginStart: 2}} />
             <Text style={[styles.infoText, {marginStart: 6}]}>
-              Pedra de Guaratiba, Rio de Janeiro
+              {property.location.city}, {property.location.state}
             </Text>
           </View>
           <View style={[styles.infoRow, {marginBottom: 8}]}>
@@ -40,40 +125,45 @@ export default function PropertyDetails() {
             </Text>
           </View>
           <Text style={styles.label}>
-            Categoria: <Text style={styles.value}>Hospedagem Rural</Text>
+            Categoria: <Text style={styles.value}>{property.category}</Text>
           </Text>
           <Text style={[styles.label, {marginBottom: 8}]}>
-            Subcategoria: <Text style={styles.value}>Cabana</Text>
+            Subcategoria: <Text style={styles.value}>{property.subcategory}</Text>
           </Text>
           <Text style={[globalStyles.textBase, styles.description]}>
-            A Fazenda Boa Vista oferece uma experiência autêntica no campo, com acomodações
-            rústicas, gastronomia local e belas paisagens naturais.
+            {property.description}
           </Text>
-          <Text style={[styles.sectionTitle]}>Horários de Funcionamento</Text>
+
+          <Text style={styles.sectionTitle}>Horários de Funcionamento</Text>
           <View style={styles.box}>
-            <Text>Segunda a Sexta: 08:00 às 18:00</Text>
-            <Text>Sábado e Domingo: 09:00 às 17:00</Text>
+            <Text>Segunda a Sexta: {property.openingHours.weekdays}</Text>
+            <Text>Sábado e Domingo: {property.openingHours.weekend}</Text>
           </View>
-          <Text style={[styles.sectionTitle]}>Produtos Disponíveis</Text>
+
+          <Text style={styles.sectionTitle}>Produtos Disponíveis</Text>
           <View style={styles.box}>
-            <Text>Queijos artesanais, doces caseiros, ovos caipiras, hortaliças orgânicas.</Text>
+            <Text>{property.products}</Text>
           </View>
-          <Text style={[styles.sectionTitle]}>Acessibilidade</Text>
+
+          <Text style={styles.sectionTitle}>Acessibilidade</Text>
           <View style={styles.box}>
-            <Text>Acesso para cadeirantes, estacionamento disponível.</Text>
+            <Text>{property.accessibility}</Text>
           </View>
-          <Text style={[styles.sectionTitle]}>Política Pet Friendly</Text>
+
+          <Text style={styles.sectionTitle}>Política Pet Friendly</Text>
           <View style={styles.box}>
-            <Text>Nosso estabelecimento permite a entrada de animais de estimação</Text>
+            <Text>{property.petPolicy}</Text>
           </View>
-          <Text style={[styles.sectionTitle]}>Galeria de Fotos</Text>
+
+          <Text style={styles.sectionTitle}>Galeria de Fotos</Text>
           <ScrollView horizontal contentContainerStyle={{paddingBottom: 8}} style={{marginBottom: 24}}>
-            {Array(5).fill(null).map((_, i) => (
+            {property.gallery.map((img, i) => (
               <View key={i} style={styles.previewContainer}>
-                <Image source={propertyBackground} style={styles.preview} />
+                <Image source={{ uri: img }} style={styles.preview} />
               </View>
             ))}
           </ScrollView>
+
           <Button 
             variant="success"
             outline={true}
@@ -82,6 +172,7 @@ export default function PropertyDetails() {
             startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success} />} />
           <View style={globalStyles.row}>
             <Button
+              onPress={() => contactProperty(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
               variant="success"
               outline={true}
               style={{marginEnd: 8, flex: 1}}
