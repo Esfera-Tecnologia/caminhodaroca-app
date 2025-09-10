@@ -18,7 +18,8 @@ export function useCategories() {
       try {
         const response = await axios.get(`${env.API_URL}/categories`);
         setCategories(response.data);
-      } catch {
+      } catch (error) {
+        console.log(error);
         Toast.error('Não foi possível obter a lista de categorias no momento');
       } finally {
         setLoading(false);

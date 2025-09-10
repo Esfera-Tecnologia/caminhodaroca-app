@@ -18,7 +18,8 @@ export function useStates() {
       try {
         const response = await axios.get(`${env.API_URL}/states`);
         setStates(response.data);
-      } catch {
+      } catch (error) {
+        console.log(error);
         Toast.error('Não foi possível obter a lista de estados no momento');
       } finally {
         setLoading(false);

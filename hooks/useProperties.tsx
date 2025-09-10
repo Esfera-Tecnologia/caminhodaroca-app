@@ -22,14 +22,14 @@ export type PropertyItemType = {
 export function useProperties(filters: PropertyFilters | undefined) {
   const [data, setData] = useState<PropertyItemType[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
     const fetchData = async () => {
       setLoading(true);
-      setError(null);
+      console.log("API_URL:", env.API_URL);
       try {
+        console.log("API_URL:", env.API_URL);
         const response = await axios.get(`${env.API_URL}/properties`, {
           params: filters || {},
           paramsSerializer: (params) => {
@@ -46,7 +46,8 @@ export function useProperties(filters: PropertyFilters | undefined) {
           signal: controller.signal,
         });
         setData(response.data);
-      } catch {
+      } catch (error) {
+        console.log(error);
         Toast.error('Não foi possível obter a lista de propriedades no momento');
       } finally {
         setLoading(false);
@@ -58,5 +59,5 @@ export function useProperties(filters: PropertyFilters | undefined) {
     };
   }, [filters]);
 
-  return { data, loading, error };
+  return { data, loading };
 }
