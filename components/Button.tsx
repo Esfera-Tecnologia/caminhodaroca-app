@@ -1,8 +1,8 @@
 import { theme } from "@/theme";
 import React from "react";
-import { Pressable, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import { Pressable, PressableProps, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 
-type ButtonProps = {
+interface ButtonProps extends PressableProps {
   title: string;
   variant?: "primary" | "secondary" | "danger" | "success";
   outline?: boolean;
@@ -22,6 +22,7 @@ export default function Button({
   textStyle,
   startIcon,
   endIcon,
+  ...props
 }: ButtonProps) {
   const variantStyle = outline ? styles[`outline_${variant}`] : styles[variant];
   const variantTextStyle = outline
@@ -31,6 +32,7 @@ export default function Button({
   return (
     <Pressable
       onPress={onPress}
+      {...props}
       style={({ pressed }) => [
         styles.base,
         variantStyle,

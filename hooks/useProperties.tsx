@@ -27,9 +27,7 @@ export function useProperties(filters: PropertyFilters | undefined) {
     const controller = new AbortController();
     const fetchData = async () => {
       setLoading(true);
-      console.log("API_URL:", env.API_URL);
       try {
-        console.log("API_URL:", env.API_URL);
         const response = await axios.get(`${env.API_URL}/properties`, {
           params: filters || {},
           paramsSerializer: (params) => {
@@ -47,8 +45,13 @@ export function useProperties(filters: PropertyFilters | undefined) {
         });
         setData(response.data);
       } catch (error) {
-        console.log(error);
-        Toast.error('Não foi possível obter a lista de propriedades no momento');
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 404) {
+            setData([]);
+          } else {
+            Toast.error('Não foi possível obter a lista de propriedades no momento');
+          }
+        }
       } finally {
         setLoading(false);
       }

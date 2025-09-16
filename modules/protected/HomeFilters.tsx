@@ -30,7 +30,7 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
 
   const { categories } = useCategories();
   const { subcategories } = useSubcategories(filters.categories);
-  const { cities } = useCities('RJ');
+  const { cities } = useCities('RJ', true);
 
   const handleChange = (key: keyof PropertyFilters, value: any) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -60,7 +60,7 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
           <Select
             options={cities}
             selectedValue={filters.propertyLocationId}
-            onValueChange={(value) => handleChange("propertyLocationId", Number(value))}
+            onValueChange={(value) => handleChange("propertyLocationId", value)}
           />
         </InputGroup>
         <InputGroup label="Palavra-chave">

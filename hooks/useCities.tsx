@@ -9,7 +9,7 @@ type CityOption = {
   label: string;
 };
 
-export function useCities(uf?: string | null) {
+export function useCities(uf?: string | null, withLabelAsValue = false) {
   const [cities, setCities] = useState<CityOption[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +20,12 @@ export function useCities(uf?: string | null) {
         const response = await axios.get(`${env.API_URL}/cities`, {
           params: uf ? { uf } : {},
         });
-        setCities(response.data);
+        const data = response.data.map((city: any) => {
+          city.value = withLabelAsValue ? city.label : city.value;
+          city.label = city.label;
+          return city;
+        });
+        setCities(data);
       } catch (error) {
         console.log(error);
         Toast.error("Não foi possível obter a lista de cidades no momento");
