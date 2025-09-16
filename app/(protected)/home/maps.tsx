@@ -18,8 +18,8 @@ export default function Maps() {
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
-          latitude: -23.5505,
-          longitude: -46.6333,
+          latitude: -22.9068,
+          longitude: -43.1729,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
