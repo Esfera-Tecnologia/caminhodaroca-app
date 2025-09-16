@@ -1,6 +1,7 @@
 import Button from '@/components/Button';
 import Review from '@/components/Review';
 import env from "@/config.json";
+import { useAuth } from '@/context/AuthContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
 import { FontAwesome6, Foundation } from '@expo/vector-icons';
@@ -9,10 +10,38 @@ import * as Clipboard from "expo-clipboard";
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router/build/hooks';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Linking, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Linking, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Toast } from 'toastify-react-native';
 
 const propertyBackground = require('@/assets/images/property.jpg');
+
+
+const daysMap: Record<string, string> = {
+  monday: "Segunda-feira",
+  tuesday: "Terça-feira",
+  wednesday: "Quarta-feira",
+  thursday: "Quinta-feira",
+  friday: "Sexta-feira",
+  saturday: "Sábado",
+  sunday: "Domingo",
+};
+
+interface OpeningHourDay {
+  open: string | null;
+  close: string | null;
+  lunchBreak: boolean;
+}
+
+interface OpeningHours {
+  monday: OpeningHourDay;
+  tuesday: OpeningHourDay;
+  wednesday: OpeningHourDay;
+  thursday: OpeningHourDay;
+  friday: OpeningHourDay;
+  saturday: OpeningHourDay;
+  sunday: OpeningHourDay;
+  custom?: string | null;
+}
 
 interface Property {
   id: number;
@@ -32,16 +61,12 @@ interface Property {
   description: string;
   category: string;
   subcategory: string;
-  openingHours: {
-    weekdays: string;
-    weekend: string;
-  };
+  openingHours: OpeningHours;
   products: string;
   accessibility: string;
   petPolicy: string;
   gallery: string[];
 }
-
 
 const contactProperty = async (phone: string, message?: string) => {
   const formattedPhone = phone.replace(/\D/g, ''); // só dígitos
@@ -60,11 +85,77 @@ const contactProperty = async (phone: string, message?: string) => {
   }
 };
 
+function OpeningDays({openingHours}: {openingHours: OpeningHours})
+{
+  if(openingHours.custom) {
+    return <Text>{openingHours.custom}</Text>
+  }
+  const days = Object.entries(openingHours)
+    .filter(([key]) => key !== "custom")
+    .map(([day, value]) => {
+      const v = value as OpeningHourDay;
+      if (!v.open || !v.close) return null;
+      return {
+        day: day,
+        open: v.open,
+        close: v.close,
+      };
+    })
+    .filter(Boolean) as { day: string; open: string; close: string }[];
+
+  if (days.length === 0) {
+    return <Text>Horários não informados</Text>;
+  }
+  return (
+    <>
+      {days.map(({ day, open, close }, index) => (
+        <View style={styles.openingDay} key={index}>
+          <Text style={{fontSize: 13}}>
+            {daysMap[day] || day}: {open} - {close}
+          </Text>
+          {(openingHours[day as Exclude<keyof OpeningHours, "custom">]?.lunchBreak) && (
+            <Text style={{ fontSize: 10, color: theme.colors.danger }}>
+              Fecha para almoço
+            </Text>
+          )}
+        </View>
+      ))}
+    </>
+  );
+}
+
+function ExpandableText({ text, numberOfLines = 3}: { text: string; numberOfLines?: number }) {
+  const [expanded, setExpanded] = useState(false);
+  const [showExpandButton, setShowExpandButton] = useState(false);
+
+  const toggleExpanded = () => setExpanded(!expanded);
+
+  return (
+    <View>
+      <Text 
+        style={styles.value}
+        numberOfLines={expanded ? undefined : numberOfLines}
+        onTextLayout={(e) => {
+          if (!expanded) {
+            setShowExpandButton(e.nativeEvent.lines.length > numberOfLines);
+          }
+      }}>{text}</Text>
+      {showExpandButton && (
+        <Pressable onPress={toggleExpanded}>
+          <Text style={{ color: theme.colors.primary, fontSize: 13, fontWeight: 'bold', textDecorationLine: 'underline' }}>
+            {expanded ? "Mostrar menos" : "Mostrar mais"}
+          </Text>
+        </Pressable>
+      )}
+    </View>
+  );
+}
 
 export default function PropertyDetails() {
   const { property: propertyId } = useLocalSearchParams();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user, getToken } = useAuth();
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -96,6 +187,31 @@ export default function PropertyDetails() {
     );
   }
 
+  const toggleFavorite = async (propertyId: number) => {
+    if(! user) {
+      Toast.error("Para acessar essa funcionalidade, você precisa estar logado.");
+      return null;
+    }
+    try {
+      const response = await axios.post(`${env.API_URL}/properties/${propertyId}/favorite`, {}, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          Toast.error("Usuário não autenticado");
+        } else if (error.response?.status === 404) {
+          Toast.error("Propriedade não encontrada");
+        } else {
+          Toast.error("Erro ao alternar favorito");
+        }
+      }
+      return null;
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
@@ -125,36 +241,30 @@ export default function PropertyDetails() {
             </Text>
           </View>
           <Text style={styles.label}>
-            Categoria: <Text style={styles.value}>{property.category}</Text>
+            <ExpandableText text={'Categoria: ' + property.category} />
           </Text>
           <Text style={[styles.label, {marginBottom: 8}]}>
-            Subcategoria: <Text style={styles.value}>{property.subcategory}</Text>
+            <ExpandableText text={'Subcategoria: ' + property.subcategory} />
           </Text>
           <Text style={[globalStyles.textBase, styles.description]}>
             {property.description}
           </Text>
-
           <Text style={styles.sectionTitle}>Horários de Funcionamento</Text>
           <View style={styles.box}>
-            <Text>Segunda a Sexta: {property.openingHours.weekdays}</Text>
-            <Text>Sábado e Domingo: {property.openingHours.weekend}</Text>
+            <OpeningDays openingHours={property.openingHours} />
           </View>
-
           <Text style={styles.sectionTitle}>Produtos Disponíveis</Text>
           <View style={styles.box}>
             <Text>{property.products}</Text>
           </View>
-
           <Text style={styles.sectionTitle}>Acessibilidade</Text>
           <View style={styles.box}>
             <Text>{property.accessibility}</Text>
           </View>
-
           <Text style={styles.sectionTitle}>Política Pet Friendly</Text>
           <View style={styles.box}>
             <Text>{property.petPolicy}</Text>
           </View>
-
           <Text style={styles.sectionTitle}>Galeria de Fotos</Text>
           <ScrollView horizontal contentContainerStyle={{paddingBottom: 8}} style={{marginBottom: 24}}>
             {property.gallery.map((img, i) => (
@@ -163,13 +273,13 @@ export default function PropertyDetails() {
               </View>
             ))}
           </ScrollView>
-
           <Button 
             variant="success"
             outline={true}
             title="Ver no mapa"
             style={{marginBottom: 12}}
-            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success} />} />
+            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success} />}
+            />
           <View style={globalStyles.row}>
             <Button
               onPress={() => contactProperty(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
@@ -183,7 +293,8 @@ export default function PropertyDetails() {
               outline={true}
               style={{flex: 1}}
               title="Favoritar"
-              startIcon={<Foundation name="heart" size={16} color={theme.colors.secondary} />}  />
+              startIcon={<Foundation name="heart" size={16} color={theme.colors.secondary} />}
+              onPress={() => toggleFavorite(property.id)}  />
           </View>
         </View>
       </ScrollView>
@@ -282,5 +393,11 @@ const styles = StyleSheet.create({
     height: 100,
     width: 130,
     borderRadius: 10,
+  },
+  openingDay: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 2
   }
 });
