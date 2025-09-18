@@ -1,16 +1,20 @@
 import SearchInput from "@/components/controls/SearchInput";
 import Review from "@/components/Review";
 import { useAuth } from "@/context/AuthContext";
+import { useUserLocation } from "@/context/LocationContext";
 import { PropertyItemType, useProperties } from "@/hooks/useProperties";
 import HomeFilters, { PropertyFilters } from "@/modules/protected/HomeFilters";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
+import { formatter } from "@/util";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import * as Location from 'expo-location';
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const PropertyItem = ({property}: {property: PropertyItemType}) => {
+  const userLocation = useUserLocation();
   return (
     <Pressable style={[styles.card, globalStyles.shadowSm]} onPress={() => router.push({
       pathname: '/home/property/[property]',
@@ -27,10 +31,14 @@ const PropertyItem = ({property}: {property: PropertyItemType}) => {
           <FontAwesome6 name="location-dot" size={12} color={theme.colors.body} style={{marginStart: 2}} />
           <Text style={[styles.details, {marginStart: 6}]}>{property.location.city}</Text>
         </View>
-        <View style={[globalStyles.row, globalStyles.itemsCenter]}>
-          <FontAwesome6 name="route" size={12} color={theme.colors.body} />
-          <Text style={styles.details}>12 km</Text>
-        </View>
+        {userLocation && (
+          <View style={[globalStyles.row, globalStyles.itemsCenter]}>
+            <FontAwesome6 name="route" size={12} color={theme.colors.body} />
+            <Text style={styles.details}>
+              {formatter.format(property.distance || 0)} km
+            </Text>
+          </View>
+        )}
       </View>
       <FontAwesome6 name="chevron-right" size={16} color={theme.colors.secondary} style={{marginEnd: 12}} />
     </Pressable>
@@ -74,7 +82,7 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
       {data.length ? (
         <View style={styles.content}>
           <Text style={styles.results}>
-            Encontramos <Text style={globalStyles.extraBold}>{data.length} propriedades</Text> próximas da sua localização.
+            Encontramos <Text style={globalStyles.extraBold}>{data.length} propriedade(s)</Text> com base nos filtros aplicados
           </Text>
         </View>
       ) : undefined}
@@ -96,19 +104,48 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
 export default function Home() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [filters, setFilters] =  useState<PropertyFilters>();
+  const [userCity, setUserCity] = useState<string | null>('Rio de Janeiro');
   const { user } = useAuth();
+  const userLocation = useUserLocation();
+
+  useEffect(() => {
+    if (!userLocation) return;
+
+    (async () => {
+      try {
+        const [address] = await Location.reverseGeocodeAsync({
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+        });
+        // endereço pode ter city, region, street, etc
+        setUserCity(address.city || address.region);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [userLocation]);
+
   return (
     <View style={styles.container}>
       <View style={styles.welcome}>
         <Text style={globalStyles.textBase}>
           Bem-vindo! <Text style={globalStyles.bold}>{user?.name || 'Convidado'}! {"\n"}</Text>
-          Encontramos propriedades próximas à sua localização:{" "}
-          <Text style={globalStyles.bold}>Rio de Janeiro.</Text>
+          {userLocation ? (
+            <>
+              <Text>Buscando propriedades próximas à sua localização:{" "}</Text>
+              <Text style={globalStyles.bold}>{userCity}.</Text>
+            </>
+          ) : (
+            <>
+              <Text>Buscando propriedades em:{" "}</Text>
+              <Text style={globalStyles.bold}>{userCity}</Text>
+            </>
+          )}
         </Text>
       </View>
       <View style={styles.content}>
         <View style={[globalStyles.row, globalStyles.itemsCenter, {marginBottom: 16}]}>
-          <SearchInput />
+          <SearchInput onSearch={(search) => setFilters((filters) => ({ ...filters, keyword: search }))} />
           <TouchableOpacity style={styles.filters} onPress={() => setIsFiltersOpen(true)}>
             <Ionicons name="options-outline" size={22} color="#00796B" />
           </TouchableOpacity>

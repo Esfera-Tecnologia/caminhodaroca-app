@@ -3,6 +3,7 @@ import InputGroup from "@/components/controls/InputGroup";
 import { globalStyles } from "@/styles/global";
 import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
+import WebView from "react-native-webview";
 
 export default function RegistrationThirdStep() {
   const {
@@ -16,6 +17,9 @@ export default function RegistrationThirdStep() {
       <Text style={globalStyles.paragraph}>
         Leia e aceite o termo de uso para finalizar seu cadastro.
       </Text>
+      <WebView
+        source={{ uri: 'https://senar-rio.com.br/caminhodaroca/termo-de-uso/' }} 
+        style={{ height: 250, marginBottom: 16 }} />
       <InputGroup
         error={errors.terms}
         margin={16}>

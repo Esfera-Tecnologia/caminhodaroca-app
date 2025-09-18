@@ -147,6 +147,12 @@ export function handleRequestError<T>({
           ? 'Não foi possível completar a requisição'
           : response?.message ?? 'Erro desconhecido',
     });
+  } else {
+    Toast.error(
+      status === 500
+        ? 'Não foi possível completar a requisição'
+        : response?.message ?? 'Erro desconhecido',
+    );
   }
 }
 
@@ -158,3 +164,20 @@ export function formatEnumToOptions<T extends EnumLike>(enumObj: T) {
     label: value
   }));
 }
+
+export function getDistanceInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371; // Raio da Terra em km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; // distância em km
+}
+
+export const formatter = new Intl.NumberFormat('pt-BR', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});

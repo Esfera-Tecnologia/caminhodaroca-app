@@ -109,6 +109,29 @@ export const passwordSchema = z
     }
   });
 
+export const optionalPasswordSchema = z
+  .string()
+  .min(8, "A senha deve ter no mínimo 8 caracteres.")
+  .superRefine((value, ctx) => {
+    if (value === "") return; // ignora se vazio
+
+    const checks = [
+      hasUpper.test(value),
+      hasLower.test(value),
+      hasNumber.test(value),
+      hasSpecial.test(value),
+    ];
+    const met = checks.filter(Boolean).length;
+    if (met < 2) {
+      ctx.addIssue({
+        code: 'custom',
+        message:
+          "A senha deve conter ao menos duas das opções: letras maiúsculas, letras minúsculas, números ou caracteres especiais.",
+      });
+    }
+  })
+  .optional();
+
 export const step1Schema = z.object({
   name: stringSchema,
   email: emailSchema,
@@ -134,3 +157,9 @@ export const step3Schema = z.object({
 export const registrationSchema = step1Schema
   .merge(step2Schema)
   .merge(step3Schema);
+
+export const profileUpdateSchema = step1Schema
+  .extend({
+    password: optionalPasswordSchema,
+  })
+  .merge(step2Schema);

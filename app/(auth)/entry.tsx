@@ -13,7 +13,7 @@ export default function Entry() {
       <Pressable style={({pressed}) => [pressed && styles.pressed, styles.button]} onPress={() => router.push('/register')}>
         <Text style={styles.buttonText}>Criar Conta</Text>
       </Pressable>
-      <Pressable style={({pressed}) => [pressed && styles.pressed, styles.button]} onPress={() => router.replace('/home')}>
+      <Pressable style={({pressed}) => [pressed && styles.pressed, styles.button]} onPress={() => router.replace('/home/property')}>
         <Text style={styles.buttonText}>Entrar sem Login</Text>
       </Pressable>
     </AuthContainer>

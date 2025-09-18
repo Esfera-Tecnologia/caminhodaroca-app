@@ -15,7 +15,7 @@ export default function Select({
   IconStyle,
   ...props
 }: SelectProps) {
-  const groupedStyles = { ...styles.dropdownStyle, ...props.containerStyle };
+  const groupedStyles = { ...styles.dropdownStyle, ...props.containerStyle, ...props.disabled ? {backgroundColor: '#e9ecef'} : {} } as ViewStyle;
   if (IconName) groupedStyles["paddingStart"] = 34;
   return (
     <View>

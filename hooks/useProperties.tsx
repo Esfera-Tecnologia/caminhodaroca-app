@@ -1,5 +1,7 @@
 import env from "@/config.json";
+import { useUserLocation } from "@/context/LocationContext";
 import { PropertyFilters } from "@/modules/protected/HomeFilters";
+import { getDistanceInKm } from "@/util";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Toast } from "toastify-react-native";
@@ -10,6 +12,7 @@ export type PropertyItemType = {
   logo: string;
   type: string;
   rating: number;
+  distance: number | undefined;
   location: {
     city: string;
     coordinates: {
@@ -22,6 +25,7 @@ export type PropertyItemType = {
 export function useProperties(filters: PropertyFilters | undefined) {
   const [data, setData] = useState<PropertyItemType[]>([]);
   const [loading, setLoading] = useState(false);
+  const userLocation = useUserLocation();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -43,7 +47,28 @@ export function useProperties(filters: PropertyFilters | undefined) {
           },
           signal: controller.signal,
         });
-        setData(response.data);
+        let properties = response.data;
+        if(userLocation) {
+          properties = properties.map((p: PropertyItemType) => {
+            const distance = getDistanceInKm(
+              userLocation.latitude,
+              userLocation.longitude,
+              p.location.coordinates.lat,
+              p.location.coordinates.lng
+            );
+            return { ...p, distance };
+          })
+          .sort((a: PropertyItemType, b: PropertyItemType) => {
+            if(a.distance === undefined) return 1;
+            if(b.distance === undefined) return -1;
+            return a.distance - b.distance;
+          });
+          if (filters?.useCurrentLocation) {
+            properties = properties
+              .filter((p: PropertyItemType & { distance?: number }) => p.distance! <= 100);
+          }
+        }
+        setData(properties);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 404) {
@@ -60,7 +85,7 @@ export function useProperties(filters: PropertyFilters | undefined) {
     return () => {
       controller.abort();
     };
-  }, [filters]);
+  }, [filters, userLocation]);
 
   return { data, loading };
 }

@@ -3,10 +3,11 @@ import Input from "@/components/controls/Input";
 import InputGroup from "@/components/controls/InputGroup";
 import Select from "@/components/controls/Select";
 import Offcanvas, { OffcanvasProps } from "@/components/Offcanvas";
+import { useUserLocation } from "@/context/LocationContext";
 import { useCategories } from "@/hooks/useCategories";
 import { useCities } from "@/hooks/useCities";
 import { useSubcategories } from "@/hooks/useSubcategories";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 
 export type PropertyFilters = {
@@ -23,6 +24,7 @@ interface HomeFiltersProps extends OffcanvasProps {
 }
 
 export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
+  const userLocation = useUserLocation();
   const [filters, setFilters] = useState<PropertyFilters>({
     categories: [],
     subcategories: [],
@@ -41,6 +43,12 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
     props.onClose();
   }
 
+  useEffect(() => {
+    if(filters.useCurrentLocation && filters.propertyLocationId !== undefined) {
+      setFilters((prev) => ({ ...prev, propertyLocationId: undefined }));
+    }
+  }, [filters]);
+
   return (
     <Offcanvas {...props}>
       <View>
@@ -50,14 +58,17 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
               { label: "Sim", value: true },
               { label: "Não", value: false },
             ]}
+            disabled={!userLocation}
             selectedValue={filters.useCurrentLocation}
-            onValueChange={(value) =>
-              handleChange("useCurrentLocation", value)
+            onValueChange={(value) => {
+              handleChange("useCurrentLocation", value === true || value === 'true')
+            }
             }
           />
         </InputGroup>
         <InputGroup label="Localização da Propriedade">
           <Select
+            disabled={filters.useCurrentLocation}
             options={cities}
             selectedValue={filters.propertyLocationId}
             onValueChange={(value) => handleChange("propertyLocationId", value)}

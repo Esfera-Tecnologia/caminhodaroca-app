@@ -8,6 +8,45 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  schemas:
+    OpeningHoursDay:
+      type: object
+      properties:
+        open:
+          type: string
+          format: time
+          example: "08:00"
+          description: Horário de abertura no formato HH:mm
+        close:
+          type: string
+          format: time
+          example: "18:00"
+          description: Horário de fechamento no formato HH:mm
+        lunchBreak:
+          type: boolean
+          example: true
+          description: Indica se a propriedade fecha para almoço neste dia
+    OpeningHours:
+      type: object
+      properties:
+        monday:
+          $ref: '#/components/schemas/OpeningHoursDay'
+        tuesday:
+          $ref: '#/components/schemas/OpeningHoursDay'
+        wednesday:
+          $ref: '#/components/schemas/OpeningHoursDay'
+        thursday:
+          $ref: '#/components/schemas/OpeningHoursDay'
+        friday:
+          $ref: '#/components/schemas/OpeningHoursDay'
+        saturday:
+          $ref: '#/components/schemas/OpeningHoursDay'
+        sunday:
+          $ref: '#/components/schemas/OpeningHoursDay'
+        custom:
+          type: string
+          description: "Horário de funcionamento com agendamento ou personalizado"
+      description: Horários de funcionamento da propriedade para todos os dias da semana
 paths:
   /api/login:
     post:
@@ -43,14 +82,36 @@ paths:
                     type: integer
                   name:
                     type: string
+                  avatar:
+                    type: string
+                    format: uri
                   email:
                     type: string
+                    format: email
+                  state:
+                    type: string
+                  ageRange:
+                    type: string
+                  travelWith:
+                    type: string
+                  category:
+                    type: number
+                  subcategories:
+                    type: array
+                    items:
+                      type: number
                   token:
                     type: string
               example:
                 id: 1
                 name: "Alice"
+                avatar: "https://picsum.photos/200/300"
                 email: "alice@email.com"
+                state: "SP"
+                ageRange: "FROM_18_TO_29"
+                travelWith: "FRIENDS"
+                category: 3
+                subcategories: [5, 6]
                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
         '422':
           description: Credenciais inválidas
@@ -472,7 +533,7 @@ paths:
                               example: -50.8741
               example:
                 - id: 1
-                  name: "Cabana do Lago Cabana do Lago Cabana do LagoCabana do Lago Cabana do Lago"
+                  name: "Cabana do Lago"
                   logo: "https://picsum.photos/200/300"
                   type: "Cabana"
                   rating: 4.8
@@ -546,12 +607,7 @@ paths:
                   subcategory:
                     type: string
                   openingHours:
-                    type: object
-                    properties:
-                      weekdays:
-                        type: string
-                      weekend:
-                        type: string
+                    $ref: '#/components/schemas/OpeningHours'
                   products:
                     type: string
                   accessibility:
@@ -571,7 +627,7 @@ paths:
                     logo: "https://picsum.photos/200/300"
                     rating: 4.2
                     type: "Hospedagem Rural"
-                    phone: "5521999999999"
+                    phone: "21999999999"
                     location:
                       city: "Pedra de Guaratiba"
                       state: "Rio de Janeiro"
@@ -582,8 +638,14 @@ paths:
                     category: "Hospedagem Rural"
                     subcategory: "Cabana"
                     openingHours:
-                      weekdays: "08:00 às 18:00"
-                      weekend: "09:00 às 17:00"
+                      monday:    { open: "08:00", close: "18:00", lunchBreak: true }
+                      tuesday:   { open: "08:00", close: "18:00", lunchBreak: true }
+                      wednesday: { open: "08:00", close: "18:00", lunchBreak: false }
+                      thursday:  { open: "08:00", close: "18:00", lunchBreak: true }
+                      friday:    { open: "08:00", close: "18:00", lunchBreak: true }
+                      saturday:  { open: "09:00", close: "14:00", lunchBreak: false }
+                      sunday:    { open: null, close: null, lunchBreak: false }
+                      custom: "Abertura apenas sob agendamento com a equipe"
                     products: "Queijos artesanais, doces caseiros, ovos caipiras, hortaliças orgânicas"
                     accessibility: "Acesso para cadeirantes, estacionamento disponível"
                     petPolicy: "Nosso estabelecimento permite a entrada de animais de estimação"

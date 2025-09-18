@@ -2,6 +2,7 @@ import AppVersion from "@/components/AppVersion";
 import Avatar from "@/components/Avatar";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useAuth } from "@/context/AuthContext";
+import { LocationProvider } from "@/context/LocationContext";
 import { theme } from "@/theme";
 import { Feather, FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
@@ -22,13 +23,18 @@ function LogoTitle() {
 }
 export default function TabLayout() {
   const [modalVisible, setModalVisible] = useState(false);
-  const { user } = useAuth();
+  const { user, onLogout } = useAuth();
   const onMenuPress = (handlePress: () => void) => {
     handlePress();
     setModalVisible(false);
   }
+  const handleLogout = () => {
+    onLogout();
+    setModalVisible(false);
+    router.push('/home/property');
+  };
   return (
-    <>
+    <LocationProvider>
       <Tabs
         screenOptions={{
           headerStyle: {
@@ -84,6 +90,12 @@ export default function TabLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="terms"
+          options={{
+            href: null
+          }}
+        />
       </Tabs>
       <Modal animationType="slide" visible={modalVisible} onRequestClose={() => setModalVisible(false)} >
         <View style={styles.header}>
@@ -96,18 +108,18 @@ export default function TabLayout() {
           {user ? (
             <View>
               <Avatar />
-              <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.push('/home/profile'))}>
+              <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.navigate('/home/profile'))}>
                 <FontAwesome5 size={21} name="user-alt" color={theme.colors.success} style={styles.menuIcon} />
                 <Text style={styles.menuText}>Meus Dados</Text>
               </Pressable>
-              <View style={styles.menuItem}>
+              <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.navigate('/home/terms'))}>
                 <Ionicons name="document-text" size={21} color={theme.colors.success} style={styles.menuIcon} />
                 <Text style={styles.menuText}>Termos de Uso</Text>
-              </View>
-              <View style={[styles.menuItem, {borderBottomWidth: 0}]}>
+              </Pressable>
+              <Pressable style={[styles.menuItem, {borderBottomWidth: 0}]} onPress={handleLogout}>
                 <FontAwesome6 size={21} name="arrow-right-from-bracket" color={theme.colors.danger} style={styles.menuIcon} />
                 <Text style={[styles.menuText, {color: theme.colors.danger}]}>Sair</Text>
-              </View>
+              </Pressable>
               <AppVersion theme="light" />
             </View>
           ) : (
@@ -127,7 +139,7 @@ export default function TabLayout() {
           )}
         </View>
       </Modal>
-    </>
+    </LocationProvider>
   );
 }
 

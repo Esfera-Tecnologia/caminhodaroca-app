@@ -1,6 +1,8 @@
 import Review from "@/components/Review";
+import { useUserLocation } from "@/context/LocationContext";
 import { PropertyItemType, useProperties } from "@/hooks/useProperties";
 import { theme } from "@/theme";
+import { formatter, getDistanceInKm } from "@/util";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
@@ -11,6 +13,7 @@ const { width, height } = Dimensions.get("window");
 
 export default function Maps() {
   const { data: properties } = useProperties(undefined);
+  const userLocation = useUserLocation();
   const [selected, setSelected] = useState<PropertyItemType | null>(null);
   return (
     <View style={styles.container}>
@@ -20,8 +23,8 @@ export default function Maps() {
         initialRegion={{
           latitude: -22.9068,
           longitude: -43.1729,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: 0.5,
+          longitudeDelta: 0.5,
         }}
       >
         {properties.map((property) => (
@@ -38,6 +41,9 @@ export default function Maps() {
       {selected && (
         <View style={styles.cardContainer}>
           <View style={styles.card}>
+            <Pressable onPress={() => setSelected(null)} style={{position: 'absolute', top: 10, right: 10, zIndex: 1}}>
+              <FontAwesome6 name="xmark" size={22} color={theme.colors.secondary} />
+            </Pressable>
             <Pressable onPress={() => setSelected(null)} style={{alignItems: 'center'}}>
               <Image source={selected.logo} style={styles.image}/>
               <Text style={styles.title}>{selected.name}</Text>
@@ -48,7 +54,16 @@ export default function Maps() {
               </View>
               <View style={styles.row}>
                 <FontAwesome6 name="route" size={11} color={theme.colors.secondary} />
-                <Text style={styles.subtitle}>25 km</Text>
+                {userLocation && (
+                  <Text style={styles.subtitle}>
+                    {formatter.format(getDistanceInKm(
+                      selected.location.coordinates.lat,
+                      selected.location.coordinates.lng,
+                      userLocation.latitude,
+                      userLocation.longitude
+                    ))} km
+                  </Text>
+                )}
               </View>
             </Pressable>
             <TouchableOpacity

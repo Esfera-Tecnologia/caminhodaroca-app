@@ -2,8 +2,10 @@ import Button from '@/components/Button';
 import Review from '@/components/Review';
 import env from "@/config.json";
 import { useAuth } from '@/context/AuthContext';
+import { useUserLocation } from '@/context/LocationContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
+import { formatter, getDistanceInKm } from '@/util';
 import { FontAwesome6, Foundation } from '@expo/vector-icons';
 import axios from 'axios';
 import * as Clipboard from "expo-clipboard";
@@ -66,10 +68,12 @@ interface Property {
   accessibility: string;
   petPolicy: string;
   gallery: string[];
+  link_google_maps: string;
+  isFavorited: boolean;
 }
 
 const contactProperty = async (phone: string, message?: string) => {
-  const formattedPhone = phone.replace(/\D/g, ''); // só dígitos
+  const formattedPhone = phone.replace(/\D/g, '');
   const whatsappUrl = `https://wa.me/${formattedPhone}${message ? `?text=${encodeURIComponent(message)}` : ''}`;
   const telUrl = `tel:${formattedPhone}`;
 
@@ -83,6 +87,12 @@ const contactProperty = async (phone: string, message?: string) => {
       Toast.info("Número copiado para a área de transferência");
     }
   }
+};
+
+const openGoogleMapsLink = (url: string) => {
+  Linking.openURL(url).catch(err => {
+    console.log('Erro ao abrir o Google Maps', err);
+  });
 };
 
 function OpeningDays({openingHours}: {openingHours: OpeningHours})
@@ -127,7 +137,7 @@ function OpeningDays({openingHours}: {openingHours: OpeningHours})
 function ExpandableText({ text, numberOfLines = 3}: { text: string; numberOfLines?: number }) {
   const [expanded, setExpanded] = useState(false);
   const [showExpandButton, setShowExpandButton] = useState(false);
-
+  
   const toggleExpanded = () => setExpanded(!expanded);
 
   return (
@@ -152,15 +162,18 @@ function ExpandableText({ text, numberOfLines = 3}: { text: string; numberOfLine
 }
 
 export default function PropertyDetails() {
+  const userLocation = useUserLocation();
   const { property: propertyId } = useLocalSearchParams();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
-  const { user, getToken } = useAuth();
+  const [wasFavorited, setWasFavorited] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProperty = async () => {
       try {
         const response = await axios.get(`${env.API_URL}/properties/${propertyId}`);
+        setWasFavorited(response.data.isFavorited);
         setProperty(response.data);
       } catch (error) {
         console.log('Erro ao buscar propriedade:', error);
@@ -193,11 +206,9 @@ export default function PropertyDetails() {
       return null;
     }
     try {
-      const response = await axios.post(`${env.API_URL}/properties/${propertyId}/favorite`, {}, {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      });
+      const response = await axios.post(`${env.API_URL}/properties/${propertyId}/favorite`);
+      setWasFavorited(!wasFavorited);
+      Toast.success(response.data.message);
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -234,12 +245,19 @@ export default function PropertyDetails() {
               {property.location.city}, {property.location.state}
             </Text>
           </View>
-          <View style={[styles.infoRow, {marginBottom: 8}]}>
-            <FontAwesome6 name="route" size={12} color={theme.colors.secondary} />
-            <Text style={[styles.infoText]}>
-              12 km de distância
-            </Text>
-          </View>
+          {userLocation && (
+            <View style={[styles.infoRow, {marginBottom: 8}]}>
+                <FontAwesome6 name="route" size={12} color={theme.colors.secondary} />
+                <Text style={[styles.infoText]}>
+                  {formatter.format(getDistanceInKm(
+                    property.location.coordinates.lat,
+                    property.location.coordinates.lng,
+                    userLocation.latitude,
+                    userLocation.longitude
+                  ))} km de distância
+              </Text>
+            </View>
+            )}
           <Text style={styles.label}>
             <ExpandableText text={'Categoria: ' + property.category} />
           </Text>
@@ -278,7 +296,8 @@ export default function PropertyDetails() {
             outline={true}
             title="Ver no mapa"
             style={{marginBottom: 12}}
-            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success} />}
+            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success}
+            onPress={() => openGoogleMapsLink(property.link_google_maps)} />}
             />
           <View style={globalStyles.row}>
             <Button
@@ -288,13 +307,22 @@ export default function PropertyDetails() {
               style={{marginEnd: 8, flex: 1}}
               title="Contato"
               startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
-            <Button 
-              variant="secondary"
-              outline={true}
-              style={{flex: 1}}
-              title="Favoritar"
-              startIcon={<Foundation name="heart" size={16} color={theme.colors.secondary} />}
-              onPress={() => toggleFavorite(property.id)}  />
+            {wasFavorited ? (
+              <Button 
+                variant="success"
+                style={{flex: 1}}
+                title= "Desfavoritar"
+                startIcon={<Foundation name="heart" size={16} color={"#fff"} />}
+                onPress={() => toggleFavorite(property.id)}  />
+            ) : (
+              <Button 
+                variant="secondary"
+                outline={true}
+                style={{flex: 1}}
+                title="Favoritar"
+                startIcon={<Foundation name="heart" size={16} color={theme.colors.secondary} />}
+                onPress={() => toggleFavorite(property.id)}  />
+            )}
           </View>
         </View>
       </ScrollView>

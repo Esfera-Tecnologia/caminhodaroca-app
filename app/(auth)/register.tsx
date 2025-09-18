@@ -57,8 +57,10 @@ export default function Register() {
     switch(step) {
       case 1:
         route = 'categories'
+        break;
       default:
         route = 'personal-data'
+        break;
     };
     try {
       await axios.post(`${env.API_URL}/register/${route}`, prepareDataToSubmission(data));
@@ -83,7 +85,7 @@ export default function Register() {
       handleRequestError({
         error,
         setError: methods.setError,
-        fallbackField: 'name'
+        fallbackField: 'terms'
       })
     }
   };

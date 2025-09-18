@@ -36,7 +36,7 @@ export default function RegistrationFirstStep()  {
         control={control}
         name="password"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Senha*" error={errors.password}>
+          <InputGroup label="Senha" error={errors.password}>
             <Input
               placeholder="Digite sua senha"
               secureTextEntry
@@ -75,7 +75,7 @@ export default function RegistrationFirstStep()  {
         control={control}
         name="travelWith"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Com quem você viaja">
+          <InputGroup label="Com quem você viaja" error={errors.travelWith}>
             <Select
               options={formatEnumToOptions(CompanionType)}
               selectedValue={value}
