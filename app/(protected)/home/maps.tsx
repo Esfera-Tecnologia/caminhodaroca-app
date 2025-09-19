@@ -44,7 +44,7 @@ export default function Maps() {
             <Pressable onPress={() => setSelected(null)} style={{position: 'absolute', top: 10, right: 10, zIndex: 1}}>
               <FontAwesome6 name="xmark" size={22} color={theme.colors.secondary} />
             </Pressable>
-            <Pressable onPress={() => setSelected(null)} style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center'}}>
               <Image source={selected.logo} style={styles.image}/>
               <Text style={styles.title}>{selected.name}</Text>
               <Review length={5} review={selected.rating} />
@@ -65,7 +65,7 @@ export default function Maps() {
                   </Text>
                 )}
               </View>
-            </Pressable>
+            </View>
             <TouchableOpacity
               style={styles.button}
               onPress={() => router.push({pathname: `/home/property/[property]`, params: { property: String(selected.id) }})}
