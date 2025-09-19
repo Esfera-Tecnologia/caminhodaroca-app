@@ -7,7 +7,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { useSubcategories } from "@/hooks/useSubcategories";
 import { globalStyles } from "@/styles/global";
 import { registrationSchema } from "@/validation/schemas";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 import z from "zod";
@@ -19,6 +19,7 @@ export default function RegistrationSecondStep()  {
     control,
     watch,
     reset,
+    setValue,
     formState: { errors }
   } = useFormContext<FormData>();
 
@@ -26,12 +27,21 @@ export default function RegistrationSecondStep()  {
   const selectedCategories = useMemo(() => category ? [category] : undefined, [category]);
   const {categories} = useCategories();
   const {subcategories} = useSubcategories(selectedCategories);
+  const prevCategoryRef = useRef<number | undefined>(undefined);
   const [key, setKey] = useState(0);
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "subcategories",
   });
+
+  useEffect(() => {
+    if (prevCategoryRef.current !== undefined && prevCategoryRef.current !== category) {
+      setValue("subcategories", [], { shouldValidate: false, shouldDirty: false });
+    }
+    prevCategoryRef.current = category;
+  }, [category, setValue]);
+
   return (
     <View>
       <Text style={styles.title}>Preferências</Text>
