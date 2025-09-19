@@ -82,7 +82,7 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
       {data.length ? (
         <View style={styles.content}>
           <Text style={styles.results}>
-            Encontramos <Text style={globalStyles.extraBold}>{data.length} propriedade(s)</Text> com base nos filtros aplicados
+            Encontramos <Text style={globalStyles.extraBold}>{data.length} propriedade(s)</Text>
           </Text>
         </View>
       ) : undefined}
