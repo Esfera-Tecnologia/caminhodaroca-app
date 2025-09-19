@@ -23,8 +23,8 @@ export default function Maps() {
         initialRegion={{
           latitude: -22.9068,
           longitude: -43.1729,
-          latitudeDelta: 0.5,
-          longitudeDelta: 0.5,
+          latitudeDelta: 5,
+          longitudeDelta: 5,
         }}
       >
         {properties.map((property) => (
