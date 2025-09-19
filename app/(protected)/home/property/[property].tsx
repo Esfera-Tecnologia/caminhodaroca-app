@@ -234,7 +234,7 @@ export default function PropertyDetails() {
         <View style={styles.card}>
           <View style={styles.titleRow}>
             <Image source={{ uri: property.logo }} style={styles.logo} contentFit="cover" />
-            <View>
+            <View style={{flexShrink: 1}}>
               <Text style={styles.propertyName}>{property.name}</Text>
               <Review length={5} review={property.rating} />
             </View>

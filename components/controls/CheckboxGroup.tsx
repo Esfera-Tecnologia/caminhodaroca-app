@@ -10,7 +10,7 @@ export default function CheckboxGroup({label, size = 'md', margin = 0,  ...props
   return (
     <View style={[globalStyles.row, globalStyles.itemsCenter, {marginBottom: margin}]}>
       <StyledCheckbox size={size} style={{ marginEnd: 8 }} {...props} />
-      <Text style={globalStyles.textBase}>
+      <Text style={[globalStyles.textBase, {flexShrink: 1}]}>
         {label}
       </Text>
     </View>

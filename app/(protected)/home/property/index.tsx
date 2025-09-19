@@ -53,7 +53,7 @@ const EmptyPropertyList = () => {
         size={24}
         color={theme.colors.warning}
         style={{marginEnd: 12}} />
-      <Text style={{color: theme.colors.secondary}}>
+      <Text style={{color: theme.colors.secondary, flexShrink: 1}}>
         Infelizmente, não pudemos encontrar nenhuma propriedade
         próxima a sua localização no momento
       </Text>
