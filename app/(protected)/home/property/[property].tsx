@@ -92,7 +92,7 @@ const contactProperty = async (phone: string, message?: string) => {
 
 const openGoogleMapsLink = (url: string) => {
   Linking.openURL(url).catch(err => {
-    console.log('Erro ao abrir o Google Maps', err);
+    Toast.error('Não foi possível abrir o link do Google Maps.');
   });
 };
 
@@ -291,8 +291,8 @@ export default function PropertyDetails() {
             outline={true}
             title="Ver no mapa"
             style={{ marginBottom: 12 }}
-            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success}
-            onPress={() => openGoogleMapsLink(property.link_google_maps)} />}
+            onPress={() => openGoogleMapsLink(property.link_google_maps)} 
+            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success} />}
             />
           <View style={globalStyles.row}>
             <Button
