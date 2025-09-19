@@ -73,6 +73,7 @@ export default function Login() {
               <Input
                 placeholder="Digite sua senha"
                 secureTextEntry
+                autoComplete="current-password"
                 value={value}
                 onChangeText={onChange}
               />

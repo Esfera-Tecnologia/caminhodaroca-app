@@ -48,6 +48,7 @@ export default function RegistrationFirstStep()  {
             <Input
               placeholder="Digite sua senha"
               secureTextEntry
+              autoComplete="new-password"
               value={value}
               onChangeText={onChange}
             />
