@@ -8,11 +8,13 @@ export interface SelectProps extends DropdownProps {
   IconComponent?: React.ElementType | undefined;
   IconName?: string;
   IconStyle?: ViewStyle;
+  emptyListMessage?: string;
 }
 export default function Select({
   IconComponent,
   IconName,
   IconStyle,
+  emptyListMessage,
   ...props
 }: SelectProps) {
   const groupedStyles = { ...styles.dropdownStyle, ...props.containerStyle, ...props.disabled ? {backgroundColor: '#e9ecef'} : {} } as ViewStyle;
@@ -53,7 +55,7 @@ export default function Select({
         listControls={{
           selectAllText: 'Selecionar todos',
           unselectAllText: 'Remover todos',
-          emptyListMessage: 'Nenhum registro encontrado...',
+          emptyListMessage: emptyListMessage || 'Nenhum registro encontrado...',
         }}
         {...props}
       />

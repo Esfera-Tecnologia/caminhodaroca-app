@@ -93,6 +93,7 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
         <InputGroup label="Subcategoria">
           <Select
             isMultiple
+            emptyListMessage="Selecione ao menos uma categoria para continuar"
             options={subcategories}
             selectedValue={filters.subcategories}
             onValueChange={(values) =>
