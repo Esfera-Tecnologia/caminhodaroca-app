@@ -1,4 +1,5 @@
 import Button from '@/components/Button';
+import ImageGallery from '@/components/ImageGallery';
 import Review from '@/components/Review';
 import env from "@/config.json";
 import { useAuth } from '@/context/AuthContext';
@@ -284,18 +285,12 @@ export default function PropertyDetails() {
             <Text>{property.petPolicy}</Text>
           </View>
           <Text style={styles.sectionTitle}>Galeria de Fotos</Text>
-          <ScrollView horizontal contentContainerStyle={{paddingBottom: 8}} style={{marginBottom: 24}}>
-            {property.gallery.map((img, i) => (
-              <View key={i} style={styles.previewContainer}>
-                <Image source={{ uri: img }} style={styles.preview} />
-              </View>
-            ))}
-          </ScrollView>
+          <ImageGallery property={property} />
           <Button 
             variant="success"
             outline={true}
             title="Ver no mapa"
-            style={{marginBottom: 12}}
+            style={{ marginBottom: 12 }}
             startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success}
             onPress={() => openGoogleMapsLink(property.link_google_maps)} />}
             />
@@ -403,25 +398,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 12,
   },
-  previewContainer: {
-    padding: 4,
-    borderWidth: 1,
-    borderColor: "#dee2e6",
-    boxShadow: [{
-      offsetX: 0,
-      offsetY: 2,
-      blurRadius: 6,
-      spreadDistance: 0,
-      color: 'rgba(0,0,0,0.1)'
-    }],
-    borderRadius: 10,
-    marginEnd: 16,
-  },
-  preview: {
-    height: 100,
-    width: 130,
-    borderRadius: 10,
-  },
+  
   openingDay: {
     flexDirection: 'row',
     justifyContent: 'space-between',
