@@ -28,7 +28,15 @@ export default function RegistrationFirstStep()  {
         name="email"
         render={({ field: { onChange, value } }) => (
           <InputGroup label="E-mail*" error={errors.email}>
-            <Input placeholder="Digite seu e-mail" value={value} onChangeText={onChange} />
+            <Input 
+              placeholder="Digite seu e-mail"
+              value={value}
+              onChangeText={onChange}
+              keyboardType="email-address"
+              autoComplete="email"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
           </InputGroup>
         )}
       />

@@ -59,10 +59,15 @@ export default function ForgotPassword() {
               name="email"
               render={({ field: { onChange, value } }) => (
                 <InputGroup label="E-mail" error={errors.email}>
-                  <Input 
+                  <Input
                     placeholder="Digite seu e-mail"
                     value={value}
-                    onChangeText={onChange} />
+                    onChangeText={onChange}
+                    keyboardType="email-address"
+                    autoComplete="email"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
                 </InputGroup>
             )}/>
             <PrimaryButton
