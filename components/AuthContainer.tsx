@@ -1,5 +1,6 @@
 import { theme } from "@/theme";
 import { Image } from "expo-image";
+import { Href } from "expo-router";
 import React, { PropsWithChildren } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import AppVersion from "./AppVersion";
@@ -9,13 +10,14 @@ const logo = require("@/assets/images/logo.png");
 
 interface AuthContainerProps extends PropsWithChildren {
   title: string;
-  withBackButton?: boolean
+  withBackButton?: boolean;
+  backRoute?: Href;
 }
-export default function AuthContainer({title, children, withBackButton = false}: AuthContainerProps) {
+export default function AuthContainer({title, children, withBackButton = false, backRoute}: AuthContainerProps) {
   return (
     <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
       {withBackButton && (
-        <BackButton style={{position: 'absolute', top: 48, left: 12}}/>
+        <BackButton style={{position: 'absolute', top: 48, left: 12}} backRoute={backRoute} />
       )}
       <Image style={styles.logo} source={logo} contentFit="contain" />
       <Text style={styles.title}>

@@ -46,7 +46,7 @@ export default function Login() {
     }
   }
   return (
-    <AuthContainer title="Entrar com Login" withBackButton={true}>
+    <AuthContainer title="Entrar com Login" withBackButton={true} backRoute="/entry">
       <Card>
         <Controller
           control={control}
