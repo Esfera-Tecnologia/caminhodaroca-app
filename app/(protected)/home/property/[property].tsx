@@ -1,5 +1,6 @@
 import Button from '@/components/Button';
 import ImageGallery from '@/components/ImageGallery';
+import Rating from '@/components/Rating';
 import Review from '@/components/Review';
 import env from "@/config.json";
 import { useAuth } from '@/context/AuthContext';
@@ -118,15 +119,13 @@ const openInstagram = async (input?: string | null) => {
   }
 };
 
-
 const openGoogleMapsLink = (url: string) => {
   Linking.openURL(url).catch(err => {
     Toast.error('Não foi possível abrir o link do Google Maps.');
   });
 };
 
-function OpeningDays({openingHours}: {openingHours: OpeningHours})
-{
+function OpeningDays({openingHours}: {openingHours: OpeningHours}) {
   if(openingHours.custom) {
     return <Text>{openingHours.custom}</Text>
   }
@@ -232,7 +231,7 @@ export default function PropertyDetails() {
 
   const toggleFavorite = async (propertyId: number) => {
     if(! user) {
-      Toast.error("Para acessar essa funcionalidade, você precisa estar logado.");
+      Toast.warn("Para acessar essa funcionalidade, você precisa estar logado.");
       return null;
     }
     try {
@@ -261,7 +260,7 @@ export default function PropertyDetails() {
           style={styles.headerImage}
           contentFit="cover"
         />
-        <View style={styles.card}>
+        <View style={[globalStyles.card, {marginBottom: 16, marginTop: -60}]}>
           <View style={styles.titleRow}>
             <Image source={{ uri: property.logo }} style={styles.logo} contentFit="cover" />
             <View style={{flexShrink: 1}}>
@@ -359,6 +358,9 @@ export default function PropertyDetails() {
               startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
           </View>
         </View>
+        <Rating
+          onSuccess={(averageRating) =>  setProperty({...property, rating: averageRating})} 
+          propertyId={property.id} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -372,20 +374,6 @@ const styles = StyleSheet.create({
   headerImage: {
     width: '100%',
     height: 180
-  },
-  card: {
-    backgroundColor: '#fff',
-    margin: 16,
-    marginTop: -60,
-    borderRadius: 20,
-    padding: 16,
-    boxShadow: [{
-      offsetX: 0,
-      offsetY: 4,
-      blurRadius: 12,
-      spreadDistance: 0,
-      color: 'rgba(0,0,0,0.15)'
-    }]
   },
   titleRow: {
     flexDirection: 'row',

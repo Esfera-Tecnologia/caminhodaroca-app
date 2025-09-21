@@ -17,6 +17,19 @@ export const globalStyles = StyleSheet.create({
   spaceBetween: {
     justifyContent: 'space-between'
   },
+  card: {
+    backgroundColor: '#fff',
+    marginHorizontal: 16,
+    borderRadius: 20,
+    padding: 16,
+    boxShadow: [{
+      offsetX: 0,
+      offsetY: 4,
+      blurRadius: 12,
+      spreadDistance: 0,
+      color: 'rgba(0,0,0,0.15)'
+    }]
+  },
   title: {
     color: "#fff",
     fontSize: 32,
