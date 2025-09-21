@@ -6,5 +6,6 @@ export const theme = {
     warning: "#ffc107",
     danger: "#dc3545",
     body: "#212529",
+    instagram: "#DD2A7B",
   },
 };

@@ -4,7 +4,7 @@ import { Pressable, PressableProps, StyleProp, StyleSheet, Text, TextStyle, View
 
 interface ButtonProps extends PressableProps {
   title: string;
-  variant?: "primary" | "secondary" | "danger" | "success";
+  variant?: "primary" | "secondary" | "danger" | "warning" | "success" | "instagram";
   outline?: boolean;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
@@ -76,6 +76,10 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.success,
     borderColor: theme.colors.success,
   },
+  warning: {
+    backgroundColor: theme.colors.warning,
+    borderColor: theme.colors.warning,
+  },
   secondary: {
     backgroundColor: "#6c757d",
     borderColor: "#6c757d",
@@ -83,6 +87,10 @@ const styles = StyleSheet.create({
   danger: {
     backgroundColor: "#dc3545",
     borderColor: "#dc3545",
+  },
+  instagram: {
+    backgroundColor: "#DD2A7B",
+    borderColor: "#DD2A7B",
   },
 
   // Outline variants
@@ -109,10 +117,24 @@ const styles = StyleSheet.create({
   },
   outline_danger: {
     backgroundColor: "transparent",
-    borderColor: "#dc3545",
+    borderColor: theme.colors.danger,
   },
   outline_danger_text: {
-    color: "#dc3545",
+    color: theme.colors.danger,
+  },
+  outline_warning: {
+    backgroundColor: "transparent",
+    borderColor: theme.colors.warning,
+  },
+  outline_warning_text: {
+    color: theme.colors.warning,
+  },
+  outline_instagram: {
+    backgroundColor: "transparent",
+    borderColor: theme.colors.instagram,
+  },
+  outline_instagram_text: {
+    color: theme.colors.instagram,
   },
   icon: {
     justifyContent: "center",

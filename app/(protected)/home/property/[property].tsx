@@ -71,6 +71,7 @@ interface Property {
   gallery: string[];
   link_google_maps: string;
   isFavorited: boolean;
+  instagram: string;
 }
 
 const contactProperty = async (phone: string, message?: string) => {
@@ -89,6 +90,34 @@ const contactProperty = async (phone: string, message?: string) => {
     }
   }
 };
+
+const openInstagram = async (input?: string | null) => {
+  if (!input || typeof input !== "string") {
+    Toast.warn("A propriedade não cadastrou o Instagram.");
+    return;
+  }
+  const username = input
+    .trim()
+    .replace(/^@/, "")
+    .replace(/https?:\/\/(www\.)?instagram\.com\//, "")
+    .replace(/\/.*/, "");
+  if (!username) {
+    Toast.error("Parece que houve um problema com o link do Instagram.");
+    return;
+  }
+  const appUrl = `instagram://user?username=${username}`;
+  const webUrl = `https://www.instagram.com/${username}`;
+  try {
+    await Linking.openURL(appUrl);
+  } catch {
+    try {
+      await Linking.openURL(webUrl);
+    } catch {
+      Toast.error("Não foi possível abrir o perfil do Instagram da propriedade.");
+    }
+  }
+};
+
 
 const openGoogleMapsLink = (url: string) => {
   Linking.openURL(url).catch(err => {
@@ -286,26 +315,19 @@ export default function PropertyDetails() {
           </View>
           <Text style={styles.sectionTitle}>Galeria de Fotos</Text>
           <ImageGallery property={property} />
-          <Button 
-            variant="success"
-            outline={true}
-            title="Ver no mapa"
-            style={{ marginBottom: 12 }}
-            onPress={() => openGoogleMapsLink(property.link_google_maps)} 
-            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success} />}
-            />
-          <View style={globalStyles.row}>
-            <Button
-              onPress={() => contactProperty(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
-              variant="success"
+          <View style={[globalStyles.row, { marginBottom: 8 }]}>
+            <Button 
+              variant="secondary"
               outline={true}
-              style={{marginEnd: 8, flex: 1}}
-              title="Contato"
-              startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
+              title="Ver no mapa"
+              style={{ width: '50%', marginEnd: 8 }}
+              onPress={() => openGoogleMapsLink(property.link_google_maps)} 
+              startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.secondary} />}
+            />
             {wasFavorited ? (
               <Button 
                 variant="success"
-                style={{flex: 1}}
+                style={{width: '50%'}}
                 title= "Desfavoritar"
                 startIcon={<Foundation name="heart" size={16} color={"#fff"} />}
                 onPress={() => toggleFavorite(property.id)}  />
@@ -313,11 +335,28 @@ export default function PropertyDetails() {
               <Button 
                 variant="secondary"
                 outline={true}
-                style={{flex: 1}}
+                style={{width: '50%'}}
                 title="Favoritar"
                 startIcon={<Foundation name="heart" size={16} color={theme.colors.secondary} />}
                 onPress={() => toggleFavorite(property.id)}  />
             )}
+          </View>
+          <View style={[globalStyles.row]}>
+            <Button 
+              variant="instagram"
+              outline={true}
+              title="Instagram"
+              style={{ width: '50%', marginEnd: 8 }}
+              onPress={() => openInstagram(property.instagram)} 
+              startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.instagram} />}
+            />
+            <Button
+              onPress={() => contactProperty(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
+              variant="success"
+              outline={true}
+              style={{width: '50%' }}
+              title="Contato"
+              startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
           </View>
         </View>
       </ScrollView>
