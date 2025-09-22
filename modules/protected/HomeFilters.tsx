@@ -16,7 +16,7 @@ export type PropertyFilters = {
   subcategories?: number[];
   propertyLocationId?: number; 
   useCurrentLocation?: boolean;
-  favorites?: boolean;
+  isFavorite?: boolean;
 };
 
 interface HomeFiltersProps extends OffcanvasProps {
@@ -24,7 +24,7 @@ interface HomeFiltersProps extends OffcanvasProps {
 }
 
 export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
-  const userLocation = useUserLocation();
+  const {location: userLocation} = useUserLocation();
   const [filters, setFilters] = useState<PropertyFilters>({
     categories: [],
     subcategories: [],
@@ -42,7 +42,6 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
     onApply(filters);
     props.onClose();
   }
-
   useEffect(() => {
     if(filters.useCurrentLocation && filters.propertyLocationId !== undefined) {
       setFilters((prev) => ({ ...prev, propertyLocationId: undefined }));
@@ -99,6 +98,16 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
             onValueChange={(values) =>
               handleChange("subcategories", Array.isArray(values) ? values?.map(Number) : [Number(values)])
             } />
+        </InputGroup>
+        <InputGroup label="Favoritos">
+          <Select
+            options={[
+              { label: "Sim", value: true },
+              { label: "Não", value: false },
+            ]}
+            selectedValue={filters.isFavorite}
+            onValueChange={(value) => handleChange("isFavorite", value === true || value === 'true')}
+          />
         </InputGroup>
         <Button
           variant="primary"

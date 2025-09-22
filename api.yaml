@@ -492,6 +492,11 @@ paths:
           schema:
             type: boolean
           description: Se deve usar a localização atual do usuário
+        - in: query
+          name: isFavorite
+          schema:
+            type: boolean
+          description: Se deve retornar apenas propriedades que estão nos favoritos do usuário
       responses:
         '200':
           description: Lista de propriedades rurais
