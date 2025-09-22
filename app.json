@@ -2,7 +2,7 @@
   "expo": {
     "name": "Caminho da Roça",
     "slug": "caminhodaroca",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "caminhodaroca",
@@ -20,6 +20,10 @@
       "bundleIdentifier": "com.esfera.caminhodaroca"
     },
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCaR4-4NQwX0Z-tccbyH8uo4UtC74cnd_8"

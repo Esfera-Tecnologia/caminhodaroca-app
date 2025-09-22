@@ -28,7 +28,9 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         let loc = await Location.getLastKnownPositionAsync({});
         if (!loc) {
-          loc = await Location.getCurrentPositionAsync({});
+          loc = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Lowest,
+          });
         }
         if (loc) {
           setLocation({
