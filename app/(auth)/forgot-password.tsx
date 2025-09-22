@@ -82,7 +82,7 @@ export default function ForgotPassword() {
           </View>
         )}
         <Link
-          href="/"
+          href="/login"
           style={styles.link}>
             Voltar para tela de login
         </Link>

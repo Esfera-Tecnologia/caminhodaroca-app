@@ -28,7 +28,7 @@ export default function ResetPassword() {
           <Input placeholder="Digite sua senha"/>
         </InputGroup>
         <PrimaryButton label="Enviar" style={{marginBottom: 12}}/>
-        <Link href="/" style={styles.link}>Voltar para tela de login</Link>
+        <Link href="/login" style={styles.link}>Voltar para tela de login</Link>
       </Card>
     </ScrollView>
   );
