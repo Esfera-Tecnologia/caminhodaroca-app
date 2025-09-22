@@ -9,7 +9,7 @@ export interface User {
   email: string,
   state: string,
   ageRange: string,
-  travelWith: string | undefined,
+  travelWith: string[] | undefined,
   category: number,
   subcategories: number[],
   token: string,

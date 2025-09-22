@@ -33,7 +33,7 @@ export default function Profile() {
       email: user?.email || '',
       state: user?.state || '',
       ageRange: user?.ageRange || '',
-      travelWith: user?.travelWith || '',
+      travelWith: user?.travelWith || [],
       category: user?.category,
       subcategories: user?.subcategories?.map(sub => ({ value: sub })) || []
     }
