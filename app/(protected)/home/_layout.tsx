@@ -10,6 +10,7 @@ import { Image } from "expo-image";
 import { router, Tabs } from "expo-router";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
 function LogoTitle() {
@@ -22,6 +23,7 @@ function LogoTitle() {
   );
 }
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
   const [modalVisible, setModalVisible] = useState(false);
   const { user, onLogout } = useAuth();
   const onMenuPress = (handlePress: () => void) => {
@@ -39,6 +41,12 @@ export default function TabLayout() {
         screenOptions={{
           headerStyle: {
             backgroundColor: theme.colors.primary,
+          },
+          tabBarStyle: {
+            backgroundColor: "#fff",
+            borderTopColor: "#eee",
+            height: 60 + insets.bottom,
+            paddingBottom: 0,
           },
           headerTitle: () => <LogoTitle />,
           headerTitleAlign: "center",

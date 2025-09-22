@@ -1,15 +1,15 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { Slot } from "expo-router";
-import { KeyboardAvoidingView, Platform } from "react-native";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import ToastManager from 'toastify-react-native';
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+    <KeyboardProvider>
+      <AuthProvider>
         <Slot />
-      </KeyboardAvoidingView>
-      <ToastManager useModal={false} />
-    </AuthProvider>
+        <ToastManager useModal={false} />
+      </AuthProvider>
+    </KeyboardProvider>
   );
 }

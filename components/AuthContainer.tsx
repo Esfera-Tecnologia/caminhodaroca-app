@@ -3,6 +3,7 @@ import { Image } from "expo-image";
 import { Href } from "expo-router";
 import React, { PropsWithChildren } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import AppVersion from "./AppVersion";
 import BackButton from "./BackButton";
 
@@ -15,17 +16,19 @@ interface AuthContainerProps extends PropsWithChildren {
 }
 export default function AuthContainer({title, children, withBackButton = false, backRoute}: AuthContainerProps) {
   return (
-    <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
-      {withBackButton && (
-        <BackButton style={{position: 'absolute', top: 48, left: 12}} backRoute={backRoute} />
-      )}
-      <Image style={styles.logo} source={logo} contentFit="contain" />
-      <Text style={styles.title}>
-        {title}
-      </Text>
-      {children}
-      <AppVersion /> 
-    </ScrollView>
+    <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }}>
+      <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
+        <Image style={styles.logo} source={logo} contentFit="contain" />
+        {withBackButton && (
+          <BackButton style={{position: 'absolute', top: 48, left: 12}} backRoute={backRoute} />
+        )}
+        <Text style={styles.title}>
+          {title}
+        </Text>
+        {children}
+        <AppVersion /> 
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

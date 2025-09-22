@@ -16,11 +16,15 @@ export default function AuthLayout() {
       screenOptions={{
         headerShown: false,
         headerShadowVisible: false,
-      }}
-    >
+    }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="second" />
       <Stack.Screen name="third" />
+      <Stack.Screen name="entry" />
+      <Stack.Screen name="login" />
+      <Stack.Screen name="register" />
+      <Stack.Screen name="forgot-password" />
+      <Stack.Screen name="reset-password" />
     </Stack>
   );
 }
