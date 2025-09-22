@@ -1,6 +1,6 @@
 import { theme } from "@/theme";
 import React from "react";
-import { Pressable, PressableProps, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import { ActivityIndicator, Pressable, PressableProps, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 
 interface ButtonProps extends PressableProps {
   title: string;
@@ -11,6 +11,7 @@ interface ButtonProps extends PressableProps {
   textStyle?: StyleProp<TextStyle>;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
+  loading?: boolean;
 };
 
 export default function Button({
@@ -22,6 +23,7 @@ export default function Button({
   textStyle,
   startIcon,
   endIcon,
+  loading = false,
   ...props
 }: ButtonProps) {
   const variantStyle = outline ? styles[`outline_${variant}`] : styles[variant];
@@ -41,6 +43,7 @@ export default function Button({
       ]}
     >
       <View style={styles.content}>
+        {loading && <ActivityIndicator size="small" color="#fff" style={{marginEnd: 6}} />}
         {startIcon && <View style={styles.icon}>{startIcon}</View>}
         <Text style={[variantTextStyle, textStyle]}>{title}</Text>
         {endIcon && <View style={styles.icon}>{endIcon}</View>}

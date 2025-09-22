@@ -55,11 +55,11 @@ export default function Register() {
     if(step + 1 > steps.length) return;
     let route;
     switch(step) {
+      case 0: 
+        route = 'personal-data'
+        break;
       case 1:
         route = 'categories'
-        break;
-      default:
-        route = 'personal-data'
         break;
     };
     try {
@@ -120,6 +120,7 @@ export default function Register() {
                 title="Próximo" />
             ) : (
               <Button
+                loading={methods.formState.isSubmitting}
                 onPress={methods.handleSubmit(onSubmitForm)}
                 variant="primary"
                 title="Finalizar Cadastro" />

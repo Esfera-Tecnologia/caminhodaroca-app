@@ -28,7 +28,7 @@ export default function Login() {
     control,
     setError,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<Inputs>({
     resolver: zodResolver(schema),
   })
@@ -83,6 +83,7 @@ export default function Login() {
         <PrimaryButton 
           label="Entrar"
           style={{marginBottom: 12}}
+          loading={isSubmitting}
           onPress={handleSubmit(onSubmit)}/>
         <Link
           href="/forgot-password"
