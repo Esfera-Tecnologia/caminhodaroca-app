@@ -89,6 +89,7 @@ export default function RegistrationFirstStep()  {
               options={formatEnumToOptions(CompanionType)}
               selectedValue={value}
               onValueChange={onChange}
+              isMultiple={true}
             />
           </InputGroup>
         )}
