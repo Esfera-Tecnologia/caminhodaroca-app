@@ -1,5 +1,6 @@
 import SearchInput from "@/components/controls/SearchInput";
 import Review from "@/components/Review";
+import TextPlaceholder from "@/components/TextPlaceholder";
 import { useAuth } from "@/context/AuthContext";
 import { useUserLocation } from "@/context/LocationContext";
 import { PropertyItemType, useProperties } from "@/hooks/useProperties";
@@ -14,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const PropertyItem = ({property}: {property: PropertyItemType}) => {
-  const userLocation = useUserLocation();
+  const {location: userLocation} = useUserLocation();
   return (
     <Pressable style={[styles.card, globalStyles.shadowSm]} onPress={() => router.push({
       pathname: '/home/property/[property]',
@@ -76,7 +77,8 @@ const LoadingPropertyList = () => {
 }
 
 const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
-  const { data, loading } = useProperties(filters);
+  const { data, loading: propertiesLoading } = useProperties(filters);
+  const {loading: userLocationLoading} = useUserLocation();
   return (
     <View>
       {data.length ? (
@@ -86,7 +88,7 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
           </Text>
         </View>
       ) : undefined}
-      {! loading ? (
+      {! propertiesLoading  && ! userLocationLoading ? (
         <FlatList
           style={{paddingHorizontal: 16}}
           data={data}
@@ -106,42 +108,50 @@ export default function Home() {
   const [filters, setFilters] =  useState<PropertyFilters>();
   const [userCity, setUserCity] = useState<string | null>('Rio de Janeiro');
   const { user } = useAuth();
-  const userLocation = useUserLocation();
+  const {location, loading: userLocationLoading} = useUserLocation();
 
   useEffect(() => {
-    if (!userLocation) return;
+    if (!location) return;
 
     (async () => {
       try {
         const [address] = await Location.reverseGeocodeAsync({
-          latitude: userLocation.latitude,
-          longitude: userLocation.longitude,
+          latitude: location.latitude,
+          longitude: location.longitude,
         });
-        // endereço pode ter city, region, street, etc
         setUserCity(address.city || address.region);
       } catch (error) {
         console.log(error);
       }
     })();
-  }, [userLocation]);
+  }, [location]);
 
   return (
     <View style={styles.container}>
       <View style={styles.welcome}>
         <Text style={globalStyles.textBase}>
-          Bem-vindo! <Text style={globalStyles.bold}>{user?.name || 'Convidado'}! {"\n"}</Text>
-          {userLocation ? (
-            <>
-              <Text>Buscando propriedades próximas à sua localização:{" "}</Text>
-              <Text style={globalStyles.bold}>{userCity}.</Text>
-            </>
-          ) : (
-            <>
-              <Text>Buscando propriedades em:{" "}</Text>
-              <Text style={globalStyles.bold}>{userCity}</Text>
-            </>
-          )}
+          Bem-vindo! <Text style={globalStyles.bold}>{user?.name || 'Convidado'}!</Text>
         </Text>
+        {userLocationLoading ? (
+          <>
+            <TextPlaceholder />
+            <TextPlaceholder />
+          </>
+        ) : (
+          <Text style={{lineHeight: 20}}>
+            {location ? (
+              <>
+                <Text>Buscando propriedades próximas à sua localização:{" "}</Text>
+                <Text style={globalStyles.bold}>{userCity}.</Text>
+              </>
+            ) : (
+              <>
+                <Text>Buscando propriedades próximas a localização de:{" "}</Text>
+                <Text style={globalStyles.bold}>{userCity}</Text>
+              </>
+            )}
+          </Text>
+        )}
       </View>
       <View style={styles.content}>
         <View style={[globalStyles.row, globalStyles.itemsCenter, {marginBottom: 16}]}>

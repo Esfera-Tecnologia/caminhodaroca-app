@@ -6,10 +6,19 @@ export type UserLocationType = {
   longitude: number;
 } | null;
 
-const LocationContext = createContext<UserLocationType>(null);
+type LocationContextType = {
+  location: UserLocationType;
+  loading: boolean;
+};
+
+const LocationContext = createContext<LocationContextType>({
+  location: null,
+  loading: true, // começa carregando
+});
 
 export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [location, setLocation] = useState<UserLocationType>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -29,12 +38,14 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }
       } catch (e) {
         console.warn("Erro ao obter localização:", e);
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
 
   return (
-    <LocationContext.Provider value={location}>
+    <LocationContext.Provider value={{location, loading}}>
       {children}
     </LocationContext.Provider>
   );

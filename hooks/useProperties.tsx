@@ -25,9 +25,10 @@ export type PropertyItemType = {
 export function useProperties(filters: PropertyFilters | undefined) {
   const [data, setData] = useState<PropertyItemType[]>([]);
   const [loading, setLoading] = useState(false);
-  const userLocation = useUserLocation();
+  const {location: userLocation, loading: userLocationLoading} = useUserLocation();
 
   useEffect(() => {
+    if (userLocationLoading) return;
     const controller = new AbortController();
     const fetchData = async () => {
       setLoading(true);
@@ -81,11 +82,14 @@ export function useProperties(filters: PropertyFilters | undefined) {
         setLoading(false);
       }
     };
+    if (filters?.useCurrentLocation && !userLocation) {
+      return;
+    }
     fetchData();
     return () => {
       controller.abort();
     };
-  }, [filters, userLocation]);
+  }, [filters, userLocation, userLocationLoading]);
 
   return { data, loading };
 }

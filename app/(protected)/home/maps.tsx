@@ -13,7 +13,7 @@ const { width, height } = Dimensions.get("window");
 
 export default function Maps() {
   const { data: properties } = useProperties(undefined);
-  const userLocation = useUserLocation();
+  const {location: userLocation} = useUserLocation();
   const [selected, setSelected] = useState<PropertyItemType | null>(null);
   return (
     <View style={styles.container}>

@@ -191,7 +191,7 @@ function ExpandableText({ text, numberOfLines = 3}: { text: string; numberOfLine
 }
 
 export default function PropertyDetails() {
-  const userLocation = useUserLocation();
+  const {location: userLocation} = useUserLocation();
   const { property: propertyId } = useLocalSearchParams();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
