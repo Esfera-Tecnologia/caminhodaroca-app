@@ -93,7 +93,9 @@ paths:
                   ageRange:
                     type: string
                   travelWith:
-                    type: string
+                    type: array
+                    items:
+                      type: string
                   category:
                     type: number
                   subcategories:
@@ -109,7 +111,7 @@ paths:
                 email: "alice@email.com"
                 state: "SP"
                 ageRange: "FROM_18_TO_29"
-                travelWith: "FRIENDS"
+                travelWith: ["FRIENDS"]
                 category: 3
                 subcategories: [5, 6]
                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
@@ -321,7 +323,9 @@ paths:
                 ageRange:
                   type: string
                 travelWith:
-                  type: string
+                    type: array
+                    items:
+                      type: string
               required:
                 - name
                 - email
@@ -403,7 +407,9 @@ paths:
                 ageRange:
                   type: string
                 travelWith:
-                  type: string
+                    type: array
+                    items:
+                      type: string
                 # Etapa 2
                 category:
                   type: number
@@ -437,7 +443,7 @@ paths:
                 email: "alice@email.com"
                 state: "SP"
                 ageRange: "FROM_18_TO_29"
-                travelWith: "FRIENDS"
+                travelWith: ["FRIENDS"]
                 category: 3
                 subcategories: [5, 6]
                 token: '9f4e3c2a1b6d8e0f3c4d5a6b7e8f9a0b'
@@ -802,7 +808,9 @@ paths:
                 ageRange:
                   type: string
                 travelWith:
-                  type: string
+                    type: array
+                    items:
+                      type: string
               required:
                 - name
                 - email
