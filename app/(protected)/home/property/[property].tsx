@@ -17,9 +17,6 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Linking, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Toast } from 'toastify-react-native';
 
-const propertyBackground = require('@/assets/images/property.jpg');
-
-
 const daysMap: Record<string, string> = {
   monday: "Segunda-feira",
   tuesday: "Terça-feira",
@@ -256,7 +253,7 @@ export default function PropertyDetails() {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         <Image
-          source={property.gallery[0] ? { uri: property.gallery[0] } : propertyBackground}
+          source={property.gallery[0] ? { uri: property.gallery[0] } : undefined}
           style={styles.headerImage}
           contentFit="cover"
         />
