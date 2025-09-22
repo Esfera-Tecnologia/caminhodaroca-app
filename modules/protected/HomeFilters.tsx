@@ -3,6 +3,7 @@ import Input from "@/components/controls/Input";
 import InputGroup from "@/components/controls/InputGroup";
 import Select from "@/components/controls/Select";
 import Offcanvas, { OffcanvasProps } from "@/components/Offcanvas";
+import { useAuth } from "@/context/AuthContext";
 import { useUserLocation } from "@/context/LocationContext";
 import { useCategories } from "@/hooks/useCategories";
 import { useCities } from "@/hooks/useCities";
@@ -24,6 +25,7 @@ interface HomeFiltersProps extends OffcanvasProps {
 }
 
 export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
+  const { user } = useAuth();
   const {location: userLocation} = useUserLocation();
   const [filters, setFilters] = useState<PropertyFilters>({
     categories: [],
@@ -101,10 +103,11 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
         </InputGroup>
         <InputGroup label="Favoritos">
           <Select
-            options={[
+            options={user ? [
               { label: "Sim", value: true },
               { label: "Não", value: false },
-            ]}
+            ] : []}
+            emptyListMessage="Faça login para filtrar por favoritos"
             selectedValue={filters.isFavorite}
             onValueChange={(value) => handleChange("isFavorite", value === true || value === 'true')}
           />
