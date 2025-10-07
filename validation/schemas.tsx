@@ -138,7 +138,7 @@ export const step1Schema = z.object({
   password: passwordSchema,
   state: stringSchema,
   ageRange: stringSchema,
-  travelWith: z.array(stringSchema).min(1, 'Selecione ao menos uma opção'),
+  travelWith: z.array(stringSchema).optional(),
 });
   
 const subcategoriesSchema = z.object({
