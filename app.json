@@ -17,7 +17,7 @@
         "NSLocationWhenInUseUsageDescription": "Usamos sua localização para mostrar as propriedades próximas a você"
       },
       "supportsTablet": true,
-      "bundleIdentifier": "com.esfera.caminhodaroca"
+      "bundleIdentifier": "com.esfera.caminhodaroca.ios"
     },
     "android": {
       "adaptiveIcon": {
@@ -52,12 +52,7 @@
         }
       ],
       [
-        "expo-build-properties",
-        {
-          "android": {
-            "usesCleartextTraffic": true
-          }
-        }
+        "expo-build-properties"
       ],
       "expo-secure-store",
       [
