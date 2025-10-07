@@ -24,9 +24,6 @@ const PropertyItem = ({property}: {property: PropertyItemType}) => {
       <Image source={{uri: property.logo}} style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.name} numberOfLines={2}>{property.name}</Text>
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>{property.type}</Text>
-        </View>
         <Review length={5} review={property.rating}/>
         <View style={[globalStyles.row, globalStyles.itemsCenter]}>
           <FontAwesome6 name="location-dot" size={12} color={theme.colors.body} style={{marginStart: 2}} />
@@ -222,18 +219,6 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     color: theme.colors.success,
     marginBottom: 2,
-  },
-  badge: {
-    backgroundColor: theme.colors.success,
-    borderRadius: 6,
-    paddingVertical: 4,
-    paddingHorizontal: 8
-  },
-  badgeText: {
-    color: "#fff",
-    fontSize: 12,
-    lineHeight: 12,
-    fontWeight: 700,
   },
   details: {
     fontSize: 14,
