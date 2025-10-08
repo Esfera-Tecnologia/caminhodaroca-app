@@ -45,6 +45,12 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
     props.onClose();
   }
   useEffect(() => {
+    if(userLocation) {
+      setFilters((prev) => ({ ...prev, useCurrentLocation: true }));
+    }
+  }, [userLocation])
+
+  useEffect(() => {
     if(filters.useCurrentLocation && filters.propertyLocationId !== undefined) {
       setFilters((prev) => ({ ...prev, propertyLocationId: undefined }));
     }

@@ -70,13 +70,21 @@ export function useProperties(filters: PropertyFilters | undefined) {
           }
         }
         setData(properties);
-      } catch (error) {
+      } catch (error: unknown) {
+        // Verifica se foi um abort (cancelamento da requisição)
+        if (axios.isCancel(error) || (error as any)?.name === 'CanceledError' || (error as any)?.code === 'ERR_CANCELED') {
+          // Podemos simplesmente ignorar o cancelamento
+          return;
+        }
+        // Caso contrário, é um erro real de rede ou API
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 404) {
             setData([]);
           } else {
             Toast.error('Não foi possível obter a lista de propriedades no momento');
           }
+        } else {
+          console.error('Erro inesperado:', error);
         }
       } finally {
         setLoading(false);
