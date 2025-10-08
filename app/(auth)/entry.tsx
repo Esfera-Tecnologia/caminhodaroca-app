@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import React from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
 
-export default function Entry() {
+export default function EntryScreen() {
   return (
     <AuthContainer title="Como deseja continuar?">
       <Pressable style={({pressed}) => [pressed && styles.pressed, styles.button]} onPress={() => router.push('/login')}>

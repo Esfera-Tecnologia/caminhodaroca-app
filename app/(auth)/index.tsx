@@ -1,27 +1,28 @@
-import AuthPresentation from "@/components/AuthPresentation";
-import DarkGreenButton from "@/components/DarkGreenButton";
-import LinkButton from "@/components/LinkButton";
-import { globalStyles } from "@/styles/global";
-import { router } from "expo-router";
-import React from "react";
-import { Text } from "react-native";
-
-const background = require("@/assets/images/background-1.jpg");
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from "react";
+import EntryScreen from "./entry";
+import FirstScreen from "./first";
 
 export default function App() {
+  const [firstLaunch, setFirstLaunch] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkFirstLaunch = async () => {
+      const value = await AsyncStorage.getItem('@alreadyLaunched');
+      if (value === null) {
+        // Primeira vez
+        setFirstLaunch(true);
+      } else {
+        // Já abriu antes
+        setFirstLaunch(false);
+      }
+    };
+    checkFirstLaunch();
+  }, []);
+
+  if(firstLaunch === null) return;
+
   return (
-    <AuthPresentation background={background}>
-      <Text style={globalStyles.title}>Explore o campo</Text>
-      <Text style={globalStyles.subtitle}>
-        Descubra propriedades rurais incríveis próximas de você.
-      </Text>
-      <DarkGreenButton
-        label="Próximo"
-        onPress={() => router.push('/second')}
-        style={{marginBottom: 12}}/>
-      <LinkButton 
-        label="Pular apresentação"
-        onPress={() => router.push('/entry')} />
-    </AuthPresentation>
+    firstLaunch === true ? <FirstScreen /> : <EntryScreen />
   );
 }
