@@ -2,6 +2,7 @@ import AuthContainer from '@/components/AuthContainer';
 import Card from '@/components/Card';
 import Input from '@/components/controls/Input';
 import InputGroup from '@/components/controls/InputGroup';
+import Password from '@/components/controls/Password';
 import PrimaryButton from '@/components/PrimaryButton';
 import env from "@/config.json";
 import { useAuth } from '@/context/AuthContext';
@@ -70,10 +71,7 @@ export default function Login() {
           name="password"
           render={({ field: { onChange, value } }) => (
             <InputGroup label="Senha" error={errors.password}>
-              <Input
-                placeholder="Digite sua senha"
-                secureTextEntry
-                autoComplete="current-password"
+              <Password
                 value={value}
                 onChangeText={onChange}
               />

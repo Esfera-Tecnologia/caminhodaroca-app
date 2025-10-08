@@ -2,7 +2,7 @@ import { theme } from "@/theme";
 import { useState } from "react";
 import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
 
-interface InputProps extends TextInputProps {
+export interface InputProps extends TextInputProps {
   shouldApplyDefaultStyle?: boolean;
 }
 
