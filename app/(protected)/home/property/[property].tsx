@@ -49,6 +49,7 @@ interface Property {
   name: string;
   logo: string;
   rating: number;
+  user_rating: number;
   type: string;
   phone: string;
   location: {
@@ -356,8 +357,12 @@ export default function PropertyDetails() {
           </View>
         </View>
         <Rating
-          initialUserRating={property.rating}
-          onSuccess={(averageRating) =>  setProperty({...property, rating: averageRating})} 
+          initialUserRating={property.user_rating}
+          onSuccess={(averageRating, userRating) =>  setProperty({
+            ...property,
+            rating: averageRating,
+            user_rating: userRating
+          })}
           propertyId={property.id} />
       </ScrollView>
     </SafeAreaView>

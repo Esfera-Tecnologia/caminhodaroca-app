@@ -13,7 +13,7 @@ interface RatingProps {
   initialUserRating?: number;
   title?: string;
   description?: string;
-  onSuccess: (averageRating: number) => void;
+  onSuccess: (averageRating: number, userRating: number) => void;
 }
 
 export default function Rating({
@@ -38,7 +38,7 @@ export default function Rating({
       const response = await axios.post(`${env.API_URL}/properties/${propertyId}/rating`, {
         rating,
       });
-      onSuccess(response.data.average_rating);
+      onSuccess(response.data.average_rating, response.data.user_rating);
       Toast.success("Avaliação registrada com sucesso!");
     } catch (error: any) {
       setUserRating(initialUserRating);
