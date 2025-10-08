@@ -15,6 +15,7 @@ export default function Password({placeholder, autoComplete, ...props}: Password
   return (
     <View style={styles.container}>
       <Input
+        style={{paddingRight: 48}}
         placeholder={placeholder || "Digite sua senha"}
         secureTextEntry={!showPassword}
         autoComplete={autoComplete || "current-password"}
@@ -32,9 +33,11 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   button: {
+    width: 48,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
     position: "absolute",
-    right: 12,
-    top: '50%',
-    transform: [{ translateY: -12 }],
+    right: 0,
   },
 })
