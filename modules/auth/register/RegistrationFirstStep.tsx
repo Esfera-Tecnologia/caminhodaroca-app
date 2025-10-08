@@ -1,5 +1,6 @@
 import Input from "@/components/controls/Input";
 import InputGroup from "@/components/controls/InputGroup";
+import Password from "@/components/controls/Password";
 import Select from "@/components/controls/Select";
 import { AgeRange, CompanionType } from "@/enums";
 import { useStates } from "@/hooks/useStates";
@@ -45,13 +46,10 @@ export default function RegistrationFirstStep()  {
         name="password"
         render={({ field: { onChange, value } }) => (
           <InputGroup label="Senha" error={errors.password}>
-            <Input
-              placeholder="Digite sua senha"
-              secureTextEntry
+            <Password
               autoComplete="new-password"
               value={value}
-              onChangeText={onChange}
-            />
+              onChangeText={onChange} />
           </InputGroup>
         )}
       />

@@ -6,17 +6,18 @@ import Input, { InputProps } from "./Input";
 
 interface PasswordProps extends InputProps {
   placeholder?: string;
+  autoComplete?: "current-password" | "new-password";
 }
 
-export default function Password({...props}: PasswordProps)  {
+export default function Password({placeholder, autoComplete, ...props}: PasswordProps)  {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <View style={styles.container}>
       <Input
-        placeholder={props.placeholder || "Digite sua senha"}
+        placeholder={placeholder || "Digite sua senha"}
         secureTextEntry={!showPassword}
-        autoComplete="current-password"
+        autoComplete={autoComplete || "current-password"}
         {...props}
       />
       <Pressable onPress={() => setShowPassword(!showPassword)} style={styles.button}>
