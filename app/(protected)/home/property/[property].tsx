@@ -356,6 +356,7 @@ export default function PropertyDetails() {
           </View>
         </View>
         <Rating
+          initialUserRating={property.rating}
           onSuccess={(averageRating) =>  setProperty({...property, rating: averageRating})} 
           propertyId={property.id} />
       </ScrollView>
