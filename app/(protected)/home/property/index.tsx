@@ -77,7 +77,7 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
   const { data, loading: propertiesLoading } = useProperties(filters);
   const {loading: userLocationLoading} = useUserLocation();
   return (
-    <View>
+    <View style={{flex: 1}}>
       {data.length ? (
         <View style={styles.content}>
           <Text style={styles.results}>
@@ -87,7 +87,8 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
       ) : undefined}
       {! propertiesLoading  && ! userLocationLoading ? (
         <FlatList
-          style={{paddingHorizontal: 16}}
+          contentContainerStyle={{ paddingHorizontal: 16 }}
+          style={{ flex: 1 }}
           data={data}
           ListEmptyComponent={<EmptyPropertyList />}
           keyExtractor={(item) => item.id.toString()}
