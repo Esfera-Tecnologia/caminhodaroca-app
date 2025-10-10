@@ -1,4 +1,6 @@
+import Button from "@/components/Button";
 import SearchInput from "@/components/controls/SearchInput";
+import DefaultModal from "@/components/DefaultModal";
 import Review from "@/components/Review";
 import TextPlaceholder from "@/components/TextPlaceholder";
 import { useAuth } from "@/context/AuthContext";
@@ -105,7 +107,7 @@ export default function Home() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [filters, setFilters] =  useState<PropertyFilters>();
   const [userCity, setUserCity] = useState<string | null>('Rio de Janeiro');
-  const { user } = useAuth();
+  const { user, showWelcomeModal, setShowWelcomeModal } = useAuth();
   const {location, loading: userLocationLoading} = useUserLocation();
 
   useEffect(() => {
@@ -166,6 +168,22 @@ export default function Home() {
         onApply={setFilters}
         title="Filtros"
         direction="right" />
+      <DefaultModal
+        visible={!!showWelcomeModal}
+        onClose={() => setShowWelcomeModal?.(false)}
+      >
+        <View style={{padding: 8}}>
+          <View>
+            <Text style={styles.welcomeTitle}>Bem-vindo!</Text>
+            <Text style={styles.welcomeDescription}>Notamos que seu você realizou o cadastro através da plataforma web. Acesse o seu perfil para completar os seus dados.</Text>
+
+            <Button title="Continuar" onPress={() => {
+              setShowWelcomeModal?.(false)
+              router.push('/home/profile')
+            }} />
+          </View>
+        </View>
+      </DefaultModal>
     </View>
   );
 }
@@ -241,5 +259,14 @@ const styles = StyleSheet.create({
     borderRadius:20,
     borderWidth: 1,
     borderColor: theme.colors.primary
+  },
+  welcomeTitle: {
+    fontSize: 18,
+    fontWeight: 700,
+    marginBottom: 8,
+  },
+  welcomeDescription: {
+    fontSize: 14, 
+    marginBottom: 16,
   }
 });

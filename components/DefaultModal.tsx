@@ -3,9 +3,10 @@ import { Modal, ScrollView, StyleSheet, View } from "react-native";
 
 
 interface DefaultModalProps extends PropsWithChildren {
-  visible: boolean
+  visible: boolean,
+  onClose?: () => void,
 }
-export default function DefaultModal({visible, children}: DefaultModalProps) {
+export default function DefaultModal({visible, onClose, children}: DefaultModalProps) {
   const [modalVisible, setModalVisible] = useState(visible);
 
   return (
@@ -13,7 +14,10 @@ export default function DefaultModal({visible, children}: DefaultModalProps) {
       animationType="slide"
       transparent={true}
       visible={modalVisible}
-      onRequestClose={() => setModalVisible(false)}
+      onRequestClose={() => {
+        setModalVisible(false)
+        onClose && onClose();
+      }}
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
