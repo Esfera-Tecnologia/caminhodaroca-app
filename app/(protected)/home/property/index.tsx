@@ -170,7 +170,7 @@ export default function Home() {
         direction="right" />
       <DefaultModal
         visible={!!showWelcomeModal}
-        onClose={() => setShowWelcomeModal?.(false)}
+        onClose={() => setShowWelcomeModal(false)}
       >
         <View style={{padding: 8}}>
           <View>
@@ -178,7 +178,7 @@ export default function Home() {
             <Text style={styles.welcomeDescription}>Notamos que seu você realizou o cadastro através da plataforma web. Acesse o seu perfil para completar os seus dados.</Text>
 
             <Button title="Continuar" onPress={() => {
-              setShowWelcomeModal?.(false)
+              setShowWelcomeModal(false)
               router.push('/home/profile')
             }} />
           </View>

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren } from "react";
 import { Modal, ScrollView, StyleSheet, View } from "react-native";
 
 
@@ -7,15 +7,12 @@ interface DefaultModalProps extends PropsWithChildren {
   onClose?: () => void,
 }
 export default function DefaultModal({visible, onClose, children}: DefaultModalProps) {
-  const [modalVisible, setModalVisible] = useState(visible);
-
   return (
     <Modal
       animationType="slide"
       transparent={true}
-      visible={modalVisible}
+      visible={visible}
       onRequestClose={() => {
-        setModalVisible(false)
         onClose && onClose();
       }}
     >
