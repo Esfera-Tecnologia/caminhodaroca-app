@@ -2,7 +2,7 @@
   "expo": {
     "name": "Caminho da Roça",
     "slug": "caminhodaroca",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "caminhodaroca",
@@ -41,6 +41,12 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O aplicativo acessa sua galeria para que você possa atualizar a foto de perfil"
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
@@ -66,7 +72,9 @@
         {
           "android": {
             "parentTheme": "Default",
-            "enforceNavigationBarContrast": true
+            "statusBarTranslucent": true,
+            "navigationBarTranslucent": true,
+            "enforceNavigationBarContrast": false
           }
         }
       ]

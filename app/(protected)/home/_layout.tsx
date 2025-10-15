@@ -10,8 +10,8 @@ import { Image } from "expo-image";
 import { router, Tabs } from "expo-router";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { SystemBars } from "react-native-edge-to-edge";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 
 function LogoTitle() {
   return (
@@ -37,6 +37,7 @@ export default function TabLayout() {
   };
   return (
     <LocationProvider>
+      <SystemBars style="dark" />
       <Tabs
         screenOptions={{
           headerStyle: {
