@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import { Modal, ScrollView, StyleSheet, View } from "react-native";
+import { SystemBars } from "react-native-edge-to-edge";
 
 
 interface DefaultModalProps extends PropsWithChildren {
@@ -16,6 +17,7 @@ export default function DefaultModal({visible, onClose, children}: DefaultModalP
         onClose && onClose();
       }}
     >
+      <SystemBars style="dark" />
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <ScrollView>

@@ -11,7 +11,7 @@ import { router, Tabs } from "expo-router";
 import { useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 function LogoTitle() {
   return (
@@ -107,46 +107,49 @@ export default function TabLayout() {
         />
       </Tabs>
       <Modal animationType="slide" visible={modalVisible} onRequestClose={() => setModalVisible(false)} >
-        <View style={styles.header}>
-          <Text style={styles.title}>Minha Conta</Text>
-          <Pressable onPress={() => setModalVisible(false)}>
-            <Feather name="x" size={24} color="rgba(0,0,0,0.5)" />
-          </Pressable>
-        </View>
-        <View style={styles.body}>
-          {user ? (
-            <View>
-              <Avatar />
-              <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.navigate('/home/profile'))}>
-                <FontAwesome5 size={21} name="user-alt" color={theme.colors.success} style={styles.menuIcon} />
-                <Text style={styles.menuText}>Meus Dados</Text>
-              </Pressable>
-              <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.navigate('/home/terms'))}>
-                <Ionicons name="document-text" size={21} color={theme.colors.success} style={styles.menuIcon} />
-                <Text style={styles.menuText}>Termos de Uso</Text>
-              </Pressable>
-              <Pressable style={[styles.menuItem, {borderBottomWidth: 0}]} onPress={handleLogout}>
-                <FontAwesome6 size={21} name="arrow-right-from-bracket" color={theme.colors.danger} style={styles.menuIcon} />
-                <Text style={[styles.menuText, {color: theme.colors.danger}]}>Sair</Text>
-              </Pressable>
-              <AppVersion theme="light" />
-            </View>
-          ) : (
-            <View style={{paddingHorizontal: 20, paddingTop: 40}}>
-              <Image
-                source={require("@/assets/images/farm1.png")}
-                style={{ width: 'auto', height: 100 }}
-                contentFit='contain'
-              />
-              <Text style={[styles.title]}>Bem-vindo ao Caminho da Roça</Text>
-              <Text style={{marginBottom: 16}}>
-                Faça login ou crie uma conta para desfrutar de todas as
-                funcionalidades do aplicativo.
-              </Text>
-              <PrimaryButton label="Ir para o login" onPress={() => router.push('/login')} />
-            </View>
-          )}
-        </View>
+        <SystemBars style="dark" />
+        <SafeAreaView style={{flex: 1}}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Minha Conta</Text>
+            <Pressable onPress={() => setModalVisible(false)}>
+              <Feather name="x" size={24} color="rgba(0,0,0,0.5)" />
+            </Pressable>
+          </View>
+          <View style={styles.body}>
+            {user ? (
+              <View>
+                <Avatar />
+                <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.navigate('/home/profile'))}>
+                  <FontAwesome5 size={21} name="user-alt" color={theme.colors.success} style={styles.menuIcon} />
+                  <Text style={styles.menuText}>Meus Dados</Text>
+                </Pressable>
+                <Pressable style={styles.menuItem} onPress={() => onMenuPress(() => router.navigate('/home/terms'))}>
+                  <Ionicons name="document-text" size={21} color={theme.colors.success} style={styles.menuIcon} />
+                  <Text style={styles.menuText}>Termos de Uso</Text>
+                </Pressable>
+                <Pressable style={[styles.menuItem, {borderBottomWidth: 0}]} onPress={handleLogout}>
+                  <FontAwesome6 size={21} name="arrow-right-from-bracket" color={theme.colors.danger} style={styles.menuIcon} />
+                  <Text style={[styles.menuText, {color: theme.colors.danger}]}>Sair</Text>
+                </Pressable>
+                <AppVersion theme="light" />
+              </View>
+            ) : (
+              <View style={{paddingHorizontal: 20, paddingTop: 40}}>
+                <Image
+                  source={require("@/assets/images/farm1.png")}
+                  style={{ width: 'auto', height: 100 }}
+                  contentFit='contain'
+                />
+                <Text style={[styles.title]}>Bem-vindo ao Caminho da Roça</Text>
+                <Text style={{marginBottom: 16}}>
+                  Faça login ou crie uma conta para desfrutar de todas as
+                  funcionalidades do aplicativo.
+                </Text>
+                <PrimaryButton label="Ir para o login" onPress={() => router.push('/login')} />
+              </View>
+            )}
+          </View>
+        </SafeAreaView>
       </Modal>
     </LocationProvider>
   );
