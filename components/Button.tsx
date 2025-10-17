@@ -33,6 +33,7 @@ export default function Button({
 
   return (
     <Pressable
+      disabled={loading}
       onPress={onPress}
       {...props}
       style={({ pressed }) => [

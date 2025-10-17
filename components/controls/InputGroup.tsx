@@ -6,13 +6,18 @@ import ErrorMessage from "./ErrorMessage";
 type InputGroupProps = PropsWithChildren<{
   label?: string;
   labelStyle?: TextStyle;
-  error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
+  error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | string;
   style?: ViewStyle | ViewStyle[];
   margin?: number;
 }>;
 
-function getErrorMessage(error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>>): string | undefined {
-  return error?.message as string | undefined;
+function getErrorMessage(
+  error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | string
+): string | undefined {
+  if (!error) return undefined;
+  if (typeof error === "string") return error;
+  if ("message" in error) return error.message as string | undefined;
+  return undefined;
 }
 
 export default function InputGroup({
@@ -24,6 +29,7 @@ export default function InputGroup({
   error,
 }: InputGroupProps) {
   const message = getErrorMessage(error);
+
   return (
     <View style={[styles.container, { marginBottom: margin }, style]}>
       {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}

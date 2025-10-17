@@ -1,18 +1,21 @@
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
+import PasswordConfirmationModal from "@/components/PasswordConfirmationModal";
 import Steps from "@/components/Steps";
 import env from "@/config.json";
 import { useAuth, User } from "@/context/AuthContext";
 import RegistrationFirstStep from "@/modules/auth/register/RegistrationFirstStep";
 import RegistrationSecondStep from "@/modules/auth/register/RegistrationSecondStep";
 import { globalStyles } from "@/styles/global";
+import { theme } from "@/theme";
 import { handleRequestError } from "@/util";
 import { profileUpdateSchema } from "@/validation/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { router } from "expo-router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Toast } from "toastify-react-native";
 import z from "zod";
 
@@ -24,7 +27,7 @@ const steps = [
 ];
 
 export default function Profile() {
-  const { user, setUser } = useAuth();
+  const { user, setUser, onLogout } = useAuth();
   const methods = useForm<FormData>({
     resolver: zodResolver(profileUpdateSchema),
     mode: "onChange",
@@ -39,6 +42,8 @@ export default function Profile() {
     }
   });
   const [currentStep, setCurrentStep] = useState(0);
+  const [deleteModalIsVisible, setDeleteModalIsVisible] = useState(false);
+
 
   const prevStep = () => setCurrentStep((s) => s - 1);
   const nextStep = () => setCurrentStep((s) => s + 1);
@@ -105,7 +110,7 @@ export default function Profile() {
     <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
       <FormProvider {...methods}>
         <Avatar style={{marginBottom: 12}} />
-        <View style={styles.card}>
+        <View style={[styles.card,  {marginBottom: 16}]}>
           <Steps current={currentStep} length={steps.length} />
           {steps[currentStep]}
           <View style={[globalStyles.row, globalStyles.itemsCenter, {gap: 8, justifyContent: currentStep === 0 ? 'center' : 'space-between'}]}>
@@ -128,7 +133,21 @@ export default function Profile() {
               title="Salvar" />
           </View>
         </View>
+        <View style={[styles.card, {alignItems: 'flex-start'}]}>
+          <Text style={[styles.cardTitle, {color: theme.colors.danger}]}>Excluir conta</Text>
+          <Text style={{marginBottom: 12}}>Uma vez que você deletar a sua conta, perderá todos os dados vinculados.</Text>
+          <Button variant="danger" title="Excluir conta" onPress={() => setDeleteModalIsVisible(true)}/>
+        </View>
       </FormProvider>
+      <PasswordConfirmationModal 
+        visible={deleteModalIsVisible}
+        route={`${env.API_URL}/profile/delete`}
+        onConfirm={(response) => {
+          setDeleteModalIsVisible(false);
+          router.replace('/');
+          onLogout()
+        }}
+        onDismiss={() => setDeleteModalIsVisible(false)}/>
     </ScrollView>
   )
 }
@@ -156,6 +175,11 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: '#fff',
     fontWeight: 500,
+  },
+  cardTitle: {
+    fontWeight: 700,
+    fontSize: 16,
+    marginBottom: 4
   },
   back: {
     position: 'absolute',

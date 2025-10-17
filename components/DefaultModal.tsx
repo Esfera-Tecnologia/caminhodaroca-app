@@ -20,7 +20,7 @@ export default function DefaultModal({visible, onClose, children}: DefaultModalP
       <SystemBars style="dark" />
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <ScrollView>
+          <ScrollView contentContainerStyle={{paddingHorizontal: 8}}>
             {children}
           </ScrollView>
         </View>
