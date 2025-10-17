@@ -1,7 +1,7 @@
-import { WebView } from 'react-native-webview';
+import Terms from "@/components/Terms";
 
-export default function Terms() {
+export default function Page() {
   return (
-    <WebView source={{ uri: 'https://senar-rio.com.br/caminhodaroca/termo-de-uso/' }} />
+    <Terms style={{flex: 1, padding: 20}}/>
   );
 }
