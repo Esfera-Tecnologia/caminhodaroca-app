@@ -136,8 +136,8 @@ export const step1Schema = z.object({
   name: stringSchema,
   email: emailSchema,
   password: passwordSchema,
-  state: stringSchema,
-  ageRange: stringSchema,
+  state: optionalStringSchema,
+  ageRange: optionalStringSchema,
   travelWith: z.array(stringSchema).optional(),
 });
   

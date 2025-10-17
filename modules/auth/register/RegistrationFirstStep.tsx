@@ -57,7 +57,7 @@ export default function RegistrationFirstStep()  {
         control={control}
         name="state"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Estado*" error={errors.state}>
+          <InputGroup label="Estado" error={errors.state}>
             <Select 
               options={states}
               selectedValue={value}
@@ -69,7 +69,7 @@ export default function RegistrationFirstStep()  {
         control={control}
         name="ageRange"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Faixa Etária*" error={errors.ageRange}>
+          <InputGroup label="Faixa Etária" error={errors.ageRange}>
             <Select
               options={formatEnumToOptions(AgeRange)}
               selectedValue={value}
