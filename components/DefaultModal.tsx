@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from "react";
 import { Modal, ScrollView, StyleSheet, View } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 interface DefaultModalProps extends PropsWithChildren {
@@ -19,11 +20,13 @@ export default function DefaultModal({visible, onClose, children}: DefaultModalP
     >
       <SystemBars style="dark" />
       <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <ScrollView contentContainerStyle={{paddingHorizontal: 8}}>
-            {children}
-          </ScrollView>
-        </View>
+        <SafeAreaView style={{ flex: 1}}>
+          <View style={styles.modalContent}>
+            <ScrollView contentContainerStyle={{paddingHorizontal: 8}}>
+              {children}
+            </ScrollView>
+          </View>
+        </SafeAreaView>
       </View>
     </Modal>
   );
