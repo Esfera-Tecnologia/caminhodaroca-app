@@ -53,9 +53,10 @@ const styles = StyleSheet.create({
   searchInput: {
     color: "#000",
     flex: 1,
+    height: 36,
     fontSize: 14,
-    lineHeight: 24,
     paddingVertical: 6,
     paddingHorizontal: 12,
+    textAlignVertical: "center",
   },
 });
