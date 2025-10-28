@@ -20,7 +20,7 @@ export default function DefaultModal({visible, onClose, children}: DefaultModalP
     >
       <SystemBars style="dark" />
       <View style={styles.modalOverlay}>
-        <SafeAreaView style={{ flex: 1}}>
+        <SafeAreaView style={{ flex: 1, justifyContent: "center"}}>
           <View style={styles.modalContent}>
             <ScrollView contentContainerStyle={{paddingHorizontal: 8}}>
               {children}
