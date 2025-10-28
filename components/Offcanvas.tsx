@@ -11,6 +11,7 @@ import {
   View,
   ViewStyle
 } from "react-native";
+import { SystemBars } from "react-native-edge-to-edge";
 
 const { width } = Dimensions.get("window");
 
@@ -74,7 +75,8 @@ const Offcanvas: React.FC<OffcanvasProps> = ({
   };
 
   return (
-    <Modal visible={visible} transparent animationType="none">
+    <Modal visible={visible} animationType="none">
+      <SystemBars style={{statusBar: 'light', navigationBar: 'dark'}} />
       <Animated.View style={[styles.offcanvas, offcanvasStyle]}>
         <View style={[globalStyles.row, globalStyles.itemsCenter, globalStyles.spaceBetween, styles.header]}>
           <Text style={styles.title}>{title}</Text>

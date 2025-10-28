@@ -16,6 +16,7 @@ import axios from "axios";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SystemBars } from "react-native-edge-to-edge";
 import { z } from "zod";
 
 type FormData = z.infer<typeof registrationSchema>;
@@ -98,6 +99,7 @@ export default function Register() {
   }
   return (
     <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
+      <SystemBars style={{statusBar: 'light', navigationBar: 'dark'}} />
       <View style={[globalStyles.row, globalStyles.flexCenter, {marginVertical: 40}]}>
         <BackButton style={{position: 'absolute', left: 0}}/>
         <Text style={styles.title}>Criar Conta</Text>
@@ -126,8 +128,8 @@ export default function Register() {
                 title="Finalizar Cadastro" />
             )}
           </View>
-          <AppVersion theme="light" style={{marginBottom: 20}} />
         </Card>
+        <AppVersion style={{marginBottom: 20}} />
       </FormProvider>
     </ScrollView>
   );

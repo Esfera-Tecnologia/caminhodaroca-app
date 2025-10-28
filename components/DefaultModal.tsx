@@ -11,6 +11,8 @@ interface DefaultModalProps extends PropsWithChildren {
 export default function DefaultModal({visible, onClose, children}: DefaultModalProps) {
   return (
     <Modal
+      statusBarTranslucent
+      navigationBarTranslucent
       animationType="slide"
       transparent={true}
       visible={visible}
@@ -18,7 +20,7 @@ export default function DefaultModal({visible, onClose, children}: DefaultModalP
         onClose && onClose();
       }}
     >
-      <SystemBars style="dark" />
+      <SystemBars style="light" />
       <View style={styles.modalOverlay}>
         <SafeAreaView style={{ flex: 1, justifyContent: "center"}}>
           <View style={styles.modalContent}>

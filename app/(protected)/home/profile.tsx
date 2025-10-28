@@ -16,6 +16,7 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SystemBars } from "react-native-edge-to-edge";
 import { Toast } from "toastify-react-native";
 import z from "zod";
 
@@ -108,6 +109,7 @@ export default function Profile() {
 
   return (
     <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
+      <SystemBars style={{statusBar: 'light', navigationBar: 'dark'}}/>
       <FormProvider {...methods}>
         <Avatar style={{marginBottom: 12}} />
         <View style={[styles.card,  {marginBottom: 16}]}>

@@ -37,7 +37,7 @@ export default function TabLayout() {
   };
   return (
     <LocationProvider>
-      <SystemBars style="dark" />
+      <SystemBars style={{statusBar: 'light', navigationBar: 'dark'}} />
       <Tabs
         screenOptions={{
           headerStyle: {
