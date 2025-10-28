@@ -1,7 +1,7 @@
+import { Image } from "expo-image";
 import React, { useRef, useState } from "react";
 import {
   Dimensions,
-  Image,
   ImageSourcePropType,
   Modal,
   ScrollView,

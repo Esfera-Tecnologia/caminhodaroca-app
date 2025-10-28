@@ -200,8 +200,17 @@ export default function PropertyDetails() {
     const fetchProperty = async () => {
       try {
         const response = await axios.get(`${env.API_URL}/properties/${propertyId}`);
-        setWasFavorited(response.data.isFavorited);
-        setProperty(response.data);
+        const data = response.data;
+        if (data.gallery?.length > 0) {
+          await Promise.allSettled(
+            data.gallery.map((uri: string) => Image.prefetch(uri))
+          );
+        }
+        if (data.logo) {
+          await Image.prefetch(data.logo);
+        }
+        setWasFavorited(data.isFavorited);
+        setProperty(data);
       } catch (error) {
         console.log('Erro ao buscar propriedade:', error);
       } finally {

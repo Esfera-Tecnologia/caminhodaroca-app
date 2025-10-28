@@ -11,10 +11,11 @@ import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { formatter } from "@/util";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import * as Location from 'expo-location';
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const PropertyItem = ({property}: {property: PropertyItemType}) => {
   const {location: userLocation} = useUserLocation();
