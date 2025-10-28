@@ -14,7 +14,8 @@ import * as Clipboard from "expo-clipboard";
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router/build/hooks';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Linking, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Toast } from 'toastify-react-native';
 
 const daysMap: Record<string, string> = {
@@ -260,121 +261,119 @@ export default function PropertyDetails() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={styles.container}>
-        <Image
-          source={property.gallery[0] ? { uri: property.gallery[0] } : undefined}
-          style={styles.headerImage}
-          contentFit="cover"
-        />
-        <View style={[globalStyles.card, {marginBottom: 16, marginTop: -60}]}>
-          <View style={styles.titleRow}>
-            <Image source={{ uri: property.logo }} style={styles.logo} contentFit="cover" />
-            <View style={{flexShrink: 1}}>
-              <Text style={styles.propertyName}>{property.name}</Text>
-              <Review length={5} review={property.rating} />
-            </View>
+    <ScrollView style={styles.container}>
+      <Image
+        source={property.gallery[0] ? { uri: property.gallery[0] } : undefined}
+        style={styles.headerImage}
+        contentFit="cover"
+      />
+      <View style={[globalStyles.card, {marginBottom: 16, marginTop: -60}]}>
+        <View style={styles.titleRow}>
+          <Image source={{ uri: property.logo }} style={styles.logo} contentFit="cover" />
+          <View style={{flexShrink: 1}}>
+            <Text style={styles.propertyName}>{property.name}</Text>
+            <Review length={5} review={property.rating} />
           </View>
-          <View style={styles.infoRow}>
-            <FontAwesome6 name="location-dot" size={12} color={theme.colors.secondary} style={{marginStart: 2}} />
-            <Text style={[styles.infoText, {marginStart: 6}]}>
-              {property.location.city}, {property.location.state}
+        </View>
+        <View style={styles.infoRow}>
+          <FontAwesome6 name="location-dot" size={12} color={theme.colors.secondary} style={{marginStart: 2}} />
+          <Text style={[styles.infoText, {marginStart: 6}]}>
+            {property.location.city}, {property.location.state}
+          </Text>
+        </View>
+        {userLocation && (
+          <View style={[styles.infoRow, {marginBottom: 8}]}>
+              <FontAwesome6 name="route" size={12} color={theme.colors.secondary} />
+              <Text style={[styles.infoText]}>
+                {formatter.format(getDistanceInKm(
+                  property.location.coordinates.lat,
+                  property.location.coordinates.lng,
+                  userLocation.latitude,
+                  userLocation.longitude
+                ))} km de distância
             </Text>
           </View>
-          {userLocation && (
-            <View style={[styles.infoRow, {marginBottom: 8}]}>
-                <FontAwesome6 name="route" size={12} color={theme.colors.secondary} />
-                <Text style={[styles.infoText]}>
-                  {formatter.format(getDistanceInKm(
-                    property.location.coordinates.lat,
-                    property.location.coordinates.lng,
-                    userLocation.latitude,
-                    userLocation.longitude
-                  ))} km de distância
-              </Text>
-            </View>
-            )}
-          <Text style={styles.label}>
-            <ExpandableText text={'Categoria: ' + property.category} />
-          </Text>
-          <Text style={[styles.label, {marginBottom: 8}]}>
-            <ExpandableText text={'Subcategoria: ' + property.subcategory} />
-          </Text>
-          <Text style={[globalStyles.textBase, styles.description]}>
-            {property.description}
-          </Text>
-          <Text style={styles.sectionTitle}>Horários de Funcionamento</Text>
-          <View style={styles.box}>
-            <OpeningDays openingHours={property.openingHours} />
-          </View>
-          <Text style={styles.sectionTitle}>Produtos Disponíveis</Text>
-          <View style={styles.box}>
-            <Text>{property.products}</Text>
-          </View>
-          <Text style={styles.sectionTitle}>Acessibilidade</Text>
-          <View style={styles.box}>
-            <Text>{property.accessibility}</Text>
-          </View>
-          <Text style={styles.sectionTitle}>Política Pet Friendly</Text>
-          <View style={styles.box}>
-            <Text>{property.petPolicy}</Text>
-          </View>
-          <Text style={styles.sectionTitle}>Galeria de Fotos</Text>
-          <ImageGallery property={property} />
-          <View style={[globalStyles.row, { marginBottom: 8 }]}>
+          )}
+        <Text style={styles.label}>
+          <ExpandableText text={'Categoria: ' + property.category} />
+        </Text>
+        <Text style={[styles.label, {marginBottom: 8}]}>
+          <ExpandableText text={'Subcategoria: ' + property.subcategory} />
+        </Text>
+        <Text style={[globalStyles.textBase, styles.description]}>
+          {property.description}
+        </Text>
+        <Text style={styles.sectionTitle}>Horários de Funcionamento</Text>
+        <View style={styles.box}>
+          <OpeningDays openingHours={property.openingHours} />
+        </View>
+        <Text style={styles.sectionTitle}>Produtos Disponíveis</Text>
+        <View style={styles.box}>
+          <Text>{property.products}</Text>
+        </View>
+        <Text style={styles.sectionTitle}>Acessibilidade</Text>
+        <View style={styles.box}>
+          <Text>{property.accessibility}</Text>
+        </View>
+        <Text style={styles.sectionTitle}>Política Pet Friendly</Text>
+        <View style={styles.box}>
+          <Text>{property.petPolicy}</Text>
+        </View>
+        <Text style={styles.sectionTitle}>Galeria de Fotos</Text>
+        <ImageGallery property={property} />
+        <View style={[globalStyles.row, { marginBottom: 8 }]}>
+          <Button 
+            variant="secondary"
+            outline={true}
+            title="Ver no mapa"
+            style={{ width: '50%', marginEnd: 8 }}
+            onPress={() => openGoogleMapsLink(property.link_google_maps)} 
+            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.secondary} />}
+          />
+          {wasFavorited ? (
+            <Button 
+              variant="success"
+              style={{width: '50%'}}
+              title= "Desfavoritar"
+              startIcon={<Foundation name="heart" size={16} color={"#fff"} />}
+              onPress={() => toggleFavorite(property.id)}  />
+          ) : (
             <Button 
               variant="secondary"
               outline={true}
-              title="Ver no mapa"
-              style={{ width: '50%', marginEnd: 8 }}
-              onPress={() => openGoogleMapsLink(property.link_google_maps)} 
-              startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.secondary} />}
-            />
-            {wasFavorited ? (
-              <Button 
-                variant="success"
-                style={{width: '50%'}}
-                title= "Desfavoritar"
-                startIcon={<Foundation name="heart" size={16} color={"#fff"} />}
-                onPress={() => toggleFavorite(property.id)}  />
-            ) : (
-              <Button 
-                variant="secondary"
-                outline={true}
-                style={{width: '50%'}}
-                title="Favoritar"
-                startIcon={<Foundation name="heart" size={16} color={theme.colors.secondary} />}
-                onPress={() => toggleFavorite(property.id)}  />
-            )}
-          </View>
-          <View style={[globalStyles.row]}>
-            <Button 
-              variant="instagram"
-              outline={true}
-              title="Instagram"
-              style={{ width: '50%', marginEnd: 8 }}
-              onPress={() => openInstagram(property.instagram)} 
-              startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.instagram} />}
-            />
-            <Button
-              onPress={() => contactProperty(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
-              variant="success"
-              outline={true}
-              style={{width: '50%' }}
-              title="Contato"
-              startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
-          </View>
+              style={{width: '50%'}}
+              title="Favoritar"
+              startIcon={<Foundation name="heart" size={16} color={theme.colors.secondary} />}
+              onPress={() => toggleFavorite(property.id)}  />
+          )}
         </View>
-        <Rating
-          initialUserRating={property.user_rating}
-          onSuccess={(averageRating, userRating) =>  setProperty({
-            ...property,
-            rating: averageRating,
-            user_rating: userRating
-          })}
-          propertyId={property.id} />
-      </ScrollView>
-    </SafeAreaView>
+        <View style={[globalStyles.row]}>
+          <Button 
+            variant="instagram"
+            outline={true}
+            title="Instagram"
+            style={{ width: '50%', marginEnd: 8 }}
+            onPress={() => openInstagram(property.instagram)} 
+            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.instagram} />}
+          />
+          <Button
+            onPress={() => contactProperty(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
+            variant="success"
+            outline={true}
+            style={{width: '50%' }}
+            title="Contato"
+            startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
+        </View>
+      </View>
+      <Rating
+        initialUserRating={property.user_rating}
+        onSuccess={(averageRating, userRating) =>  setProperty({
+          ...property,
+          rating: averageRating,
+          user_rating: userRating
+        })}
+        propertyId={property.id} />
+    </ScrollView>
   );
 }
 
