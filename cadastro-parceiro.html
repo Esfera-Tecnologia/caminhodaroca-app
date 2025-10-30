@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Parceiro - Caminho da Roça</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #006b5f;
+      color: #333;
+    }
+    .form-title-area {
+      background-color: #006b5f;
+      padding: 2rem 1rem 2rem;
+      color: white;
+      margin-bottom: 4rem;
+      text-align: center;
+      position: relative;
+    }
+    .form-title-area h2 {
+      margin: 0;
+      font-size: 1.75rem;
+    }
+    .back-button {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+    }
+    .card-wrapper {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem 1.5rem;
+      margin-top: -3rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #00473c;
+      font-weight: 600;
+    }
+    .helper-text {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+    .form-label span {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #6c757d;
+      margin-left: 4px;
+    }
+    .divider {
+      border-bottom: 1px solid #e6f0ed;
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-title-area">
+    <button class="back-button" onclick="history.back()" aria-label="Voltar">&larr;</button>
+    <h2>Cadastro de Parceiro</h2>
+  </div>
+
+  <div class="container pb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="card-wrapper">
+          <form id="formulario-parceiro" enctype="multipart/form-data">
+            <h4 class="section-title">Informações do Parceiro</h4>
+
+            <div class="mb-3">
+              <label class="form-label" for="nomeParceiro">Nome do parceiro*</label>
+              <input type="text" class="form-control" id="nomeParceiro" placeholder="Nome do parceiro ou marca" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="emailParceiro">E-mail*</label>
+              <input type="email" class="form-control" id="emailParceiro" placeholder="contato@exemplo.com" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="logoParceiro">Logotipo*</label>
+              <input type="file" class="form-control" id="logoParceiro" accept="image/*" required>
+              <p class="helper-text mt-1 mb-0">Formato PNG ou JPG. Tamanho recomendado: 512x512px.</p>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="descricaoParceiro">Descrição*</label>
+              <textarea class="form-control" id="descricaoParceiro" rows="4" placeholder="Conte um pouco sobre a experiência oferecida" required></textarea>
+            </div>
+
+            <div class="divider"></div>
+
+            <h4 class="section-title">Presença Digital</h4>
+
+            <div class="mb-3">
+              <label class="form-label" for="instagramParceiro">Instagram</label>
+              <input type="url" class="form-control" id="instagramParceiro" placeholder="https://www.instagram.com/seuPerfil">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="siteParceiro">Site</label>
+              <input type="url" class="form-control" id="siteParceiro" placeholder="https://www.seusite.com.br">
+            </div>
+
+            <div class="divider"></div>
+
+            <h4 class="section-title">Localização e Segmentação</h4>
+
+            <div class="mb-3">
+              <label class="form-label" for="municipioParceiro">Município*</label>
+              <select class="form-select" id="municipioParceiro" required>
+                <option value="">Selecione</option>
+                <option>Rio de Janeiro</option>
+                <option>Nova Friburgo</option>
+                <option>Paraty</option>
+                <option>Vargem Grande</option>
+                <option>Petrópolis</option>
+              </select>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="categoriaParceiro">Categoria<span>(opcional)</span></label>
+                <select class="form-select" id="categoriaParceiro">
+                  <option value="">Selecione</option>
+                  <option>Hospedagem</option>
+                  <option>Gastronomia</option>
+                  <option>Experiências</option>
+                  <option>Produtos Artesanais</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="subcategoriaParceiro">Subcategoria<span>(opcional)</span></label>
+                <select class="form-select" id="subcategoriaParceiro">
+                  <option value="">Selecione</option>
+                  <option>Cabana</option>
+                  <option>Sítio</option>
+                  <option>Queijaria</option>
+                  <option>Agroecologia</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h4 class="section-title">Experiências Oferecidas</h4>
+
+            <div class="mb-3">
+              <label class="form-label" for="rotasParceiro">Rotas*</label>
+              <textarea class="form-control" id="rotasParceiro" rows="3" placeholder="Descreva as rotas sugeridas para os visitantes" required></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="circuitosParceiro">Circuitos*</label>
+              <textarea class="form-control" id="circuitosParceiro" rows="3" placeholder="Detalhe os circuitos e caminhos disponíveis" required></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="atrativosParceiro">Atrativos*</label>
+              <textarea class="form-control" id="atrativosParceiro" rows="3" placeholder="Liste os principais atrativos do parceiro" required></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label d-block">Eventos</label>
+              <p class="helper-text mb-3">Inclua eventos, festivais ou ações especiais. Você pode adicionar quantos eventos precisar.</p>
+              <div id="eventosContainer" class="d-flex flex-column gap-3">
+                <div class="evento-group border rounded p-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0 text-success evento-title">Evento 1</h6>
+                    <button type="button" class="btn btn-link text-danger p-0 small btn-remove-evento d-none">Remover</button>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Descrição</label>
+                    <textarea class="form-control" rows="3" placeholder="Detalhe o evento, datas e público-alvo"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Imagem do evento<span>(opcional)</span></label>
+                    <input type="file" class="form-control" accept="image/*">
+                  </div>
+                  <div>
+                    <label class="form-label">Link externo<span>(opcional)</span></label>
+                    <input type="url" class="form-control" placeholder="https://link-do-evento.com">
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline-success w-100 mt-3" id="adicionarEvento">Adicionar outro evento</button>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success btn-lg fw-semibold">Enviar cadastro</button>
+            </div>
+          </form>
+
+          <p class="text-center text-muted mt-4">Versão 1.0.0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const eventosContainer = document.getElementById('eventosContainer');
+    const addEventoBtn = document.getElementById('adicionarEvento');
+
+    function updateEventoTitulos() {
+      const grupos = eventosContainer.querySelectorAll('.evento-group');
+      grupos.forEach((grupo, index) => {
+        const titulo = grupo.querySelector('.evento-title');
+        const remover = grupo.querySelector('.btn-remove-evento');
+        if (titulo) {
+          titulo.textContent = `Evento ${index + 1}`;
+        }
+        if (remover) {
+          remover.classList.toggle('d-none', grupos.length === 1);
+        }
+      });
+    }
+
+    function criarGrupoEvento() {
+      const grupo = document.createElement('div');
+      grupo.className = 'evento-group border rounded p-3';
+      grupo.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="mb-0 text-success evento-title">Evento</h6>
+          <button type="button" class="btn btn-link text-danger p-0 small btn-remove-evento">Remover</button>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Descrição</label>
+          <textarea class="form-control" rows="3" placeholder="Detalhe o evento, datas e público-alvo"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Imagem do evento<span>(opcional)</span></label>
+          <input type="file" class="form-control" accept="image/*">
+        </div>
+        <div>
+          <label class="form-label">Link externo<span>(opcional)</span></label>
+          <input type="url" class="form-control" placeholder="https://link-do-evento.com">
+        </div>
+      `;
+      const remover = grupo.querySelector('.btn-remove-evento');
+      remover.addEventListener('click', function () {
+        grupo.remove();
+        updateEventoTitulos();
+      });
+      return grupo;
+    }
+
+    addEventoBtn.addEventListener('click', function () {
+      eventosContainer.appendChild(criarGrupoEvento());
+      updateEventoTitulos();
+    });
+
+    eventosContainer.querySelectorAll('.btn-remove-evento').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btn.closest('.evento-group').remove();
+        updateEventoTitulos();
+      });
+    });
+
+    updateEventoTitulos();
+  });
+</script>
+</body>
+</html>

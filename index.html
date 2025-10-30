@@ -104,6 +104,47 @@
       background-color: #62B55A;
       color: #fff;
     }
+
+    .partner-card {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 22px 24px;
+      margin-top: 26px;
+      width: 82%;
+      max-width: 340px;
+      backdrop-filter: blur(4px);
+    }
+
+    .partner-card h3 {
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .partner-card p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    .btn-partner {
+      display: block;
+      background-color: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 32px;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-partner:hover {
+      background-color: #62B55A;
+      border-color: #62B55A;
+      color: #ffffff;
+    }
   </style>
 </head>
 <body>
@@ -158,6 +199,12 @@
       <a href="login.html" class="btn btn-auth">Entrar com Login</a>
       <a href="cadastro.html" class="btn btn-auth">Criar Conta</a>
       <a href="home.html" class="btn btn-auth">Entrar sem Login</a>
+
+      <div class="partner-card text-center">
+        <h3>Divulgue suas experiências rurais</h3>
+        <p>Cadastre-se como <strong>parceiro Caminho da Roça</strong> e conecte-se com visitantes interessados na vida do campo.</p>
+        <a href="cadastro-parceiro.html" class="btn-partner">Quero ser parceiro</a>
+      </div>
 
       <p class="text-white text-center mt-4 small">Versão 1.0.0</p>
 

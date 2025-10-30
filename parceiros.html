@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Parceiros | Caminho da Roça</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f5f5f5;
+    }
+
+    .header {
+      background-color: #006D60;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header h1 {
+      margin: 0;
+    }
+
+    .partner-list-section {
+      padding: 20px 18px 100px;
+    }
+
+    .search-wrapper {
+      display: flex;
+      align-items: center;
+      background-color: #ffffff;
+      border-radius: 30px;
+      padding: 8px 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 18px;
+    }
+
+    .search-wrapper i {
+      color: #8fb5af;
+      font-size: 1rem;
+      margin-right: 10px;
+    }
+
+    .search-wrapper input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .partner-card {
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .partner-card:hover {
+      border-color: #62B55A;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .partner-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      object-fit: cover;
+      background-color: #f0f0f0;
+    }
+
+    .partner-info h5 {
+      font-size: 1.05rem;
+      color: #006D60;
+      margin: 0;
+    }
+
+    .partner-info span {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .partner-arrow {
+      margin-left: auto;
+      color: #bbb;
+      font-size: 1.1rem;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background-color: #ffffff;
+      border-top: 1px solid #ddd;
+      box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      color: #888;
+      font-size: 12px;
+      text-align: center;
+      flex: 1;
+      transition: color 0.2s;
+    }
+
+    .bottom-nav a.active {
+      color: #006D60;
+      font-weight: 600;
+    }
+
+    .bottom-nav i {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 4px;
+      transition: transform 0.2s;
+    }
+
+    .bottom-nav a.active i {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar header text-white px-3 py-2" style="max-height: 60px;">
+    <h1 class="navbar-brand mb-0 h5 text-white text-center w-100">
+      <img src="assets/logo-caminho.png" alt="Caminho da Roça" style="margin-top: -30px;height: 100px;">
+    </h1>
+  </nav>
+
+  <section class="partner-list-section">
+    <h2 class="h5 text-success mb-3">Parceiros em destaque</h2>
+
+    <div class="search-wrapper mb-3">
+      <i class="fas fa-search"></i>
+      <input type="text" id="buscaParceiros" placeholder="Buscar por nome ou município">
+    </div>
+
+    <div class="partner-card partner-owned" data-nome="Fazenda Boa Vista" data-local="Pedra de Guaratiba Rio de Janeiro">
+      <div class="d-flex align-items-start gap-3 flex-grow-1">
+        <img src="assets/logo1.png" alt="Fazenda Boa Vista" class="partner-logo">
+        <div class="flex-grow-1">
+          <a href="parceiro-detalhe.html" class="text-decoration-none text-reset d-block mb-2">
+            <div class="partner-info">
+              <h5>Fazenda Boa Vista</h5>
+              <span>Pedra de Guaratiba • Rio de Janeiro</span>
+            </div>
+          </a>
+          <a href="editar-parceiro.html" class="btn btn-outline-success btn-sm fw-semibold d-inline-flex align-items-center gap-2">
+            <i class="fas fa-pen"></i>
+            Editar parceiro
+          </a>
+        </div>
+      </div>
+      <a href="parceiro-detalhe.html" class="text-success ms-3">
+        <i class="fas fa-chevron-right partner-arrow"></i>
+      </a>
+    </div>
+
+    <a href="parceiro-detalhe.html" class="partner-card" data-nome="Sítio Vale Verde" data-local="Vargem Grande Rio de Janeiro">
+      <img src="assets/logo2.png" alt="Sítio Vale Verde" class="partner-logo">
+      <div class="partner-info">
+        <h5>Sítio Vale Verde</h5>
+        <span>Vargem Grande • Rio de Janeiro</span>
+      </div>
+      <i class="fas fa-chevron-right partner-arrow"></i>
+    </a>
+
+    <a href="parceiro-detalhe.html" class="partner-card" data-nome="Chácara do Sol" data-local="Campo Grande Rio de Janeiro">
+      <img src="assets/logo3.png" alt="Chácara do Sol" class="partner-logo">
+      <div class="partner-info">
+        <h5>Chácara do Sol</h5>
+        <span>Campo Grande • Rio de Janeiro</span>
+      </div>
+      <i class="fas fa-chevron-right partner-arrow"></i>
+    </a>
+  </section>
+
+  <div class="bottom-nav">
+    <a href="home.html">
+      <i class="fas fa-home"></i>
+      Início
+    </a>
+    <a href="mapa.html">
+      <i class="fas fa-map-marked-alt"></i>
+      Mapa
+    </a>
+    <a href="parceiros.html">
+      <i class="fas fa-handshake"></i>
+      Parceiros
+    </a>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#modalMinhaConta">
+      <i class="fas fa-user"></i>
+      Minha Conta
+    </a>
+  </div>
+
+  <!-- Modal Minha Conta -->
+  <div class="modal fade" id="modalMinhaConta" tabindex="-1" aria-labelledby="modalMinhaContaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between align-items-center">
+          <h5 class="modal-title fw-bold" id="modalMinhaContaLabel">Minha Conta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img src="https://i.pravatar.cc/150?img=1" alt="Foto do usuário" class="rounded-circle mb-2" width="100" height="100">
+          <h6 class="fw-bold">João da Silva</h6>
+
+          <div class="list-group mt-4">
+            <a href="cadastro.html" class="list-group-item list-group-item-action border-0 border-bottom d-flex align-items-center py-3 px-4 bg-white" style="border-color: #eee;">
+              <i class="fas fa-user text-success me-3 fs-5"></i>
+              <span class="fw-medium">Meus Dados</span>
+            </a>
+            <a href="termodeuso.html" class="list-group-item list-group-item-action border-0 border-bottom d-flex align-items-center py-3 px-4 bg-white" style="border-color: #eee;">
+              <i class="fas fa-file-alt text-success me-3 fs-5"></i>
+              <span class="fw-medium">Termo de Uso</span>
+            </a>
+            <a href="index.html" class="list-group-item list-group-item-action border-0 d-flex align-items-center py-3 px-4 text-danger bg-white">
+              <i class="fas fa-sign-out-alt me-3 fs-5"></i>
+              <span class="fw-medium">Sair</span>
+            </a>
+          </div>
+
+          <p class="text-muted mt-5 small">Versão 1.0.0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const links = document.querySelectorAll('.bottom-nav a');
+    const currentPage = location.pathname.split('/').pop();
+
+    links.forEach(link => {
+      const linkPage = link.getAttribute('href');
+      if (linkPage === currentPage) {
+        link.classList.add('active');
+      }
+    });
+
+    const searchInput = document.getElementById('buscaParceiros');
+    const partnerCards = document.querySelectorAll('.partner-card');
+
+    searchInput.addEventListener('input', function () {
+      const filtro = this.value.trim().toLowerCase();
+
+      partnerCards.forEach(card => {
+        const nome = card.dataset.nome ? card.dataset.nome.toLowerCase() : '';
+        const local = card.dataset.local ? card.dataset.local.toLowerCase() : '';
+        const exibe = nome.includes(filtro) || local.includes(filtro);
+        card.style.display = exibe ? 'flex' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

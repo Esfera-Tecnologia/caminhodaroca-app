@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Parceiro | Caminho da Roça</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      margin: 0;
+      padding-bottom: 80px;
+    }
+
+    .top-bar {
+      background-color: #006d60;
+      color: white;
+      padding: 14px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .partner-card {
+      background: white;
+      border-radius: 20px;
+      margin: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .partner-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .partner-logo {
+      width: 76px;
+      height: 76px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 2px solid #e5e5e5;
+    }
+
+    .partner-header h1 {
+      font-size: 1.35rem;
+      color: #006d60;
+      margin: 0;
+    }
+
+    .info-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: #e9f5f1;
+      color: #007f74;
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      margin-right: 8px;
+    }
+
+    .section-title {
+      font-weight: 700;
+      color: #006d60;
+      font-size: 1.1rem;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .info-box {
+      background: #f8f8f8;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    .info-box strong {
+      color: #006d60;
+    }
+
+    .contact-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 30px;
+      border: 1px solid #006d60;
+      color: #006d60;
+      text-decoration: none;
+      margin-right: 8px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .contact-links a:hover {
+      background-color: #006d60;
+      color: #fff;
+    }
+
+    .events-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .partner-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin: 18px 0;
+    }
+
+    .event-card {
+      background-color: #ffffff;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    }
+
+    .event-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      color: #006d60;
+    }
+
+    .event-card p {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .event-card a {
+      font-size: 0.9rem;
+      color: #006d60;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background-color: #ffffff;
+      border-top: 1px solid #ddd;
+      box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      color: #888;
+      font-size: 12px;
+      text-align: center;
+      flex: 1;
+      transition: color 0.2s;
+    }
+
+    .bottom-nav a.active {
+      color: #006D60;
+      font-weight: 600;
+    }
+
+    .bottom-nav i {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 4px;
+      transition: transform 0.2s;
+    }
+
+    .bottom-nav a.active i {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">Parceiro</div>
+
+  <div class="partner-card">
+    <div class="partner-header">
+      <img src="assets/logo1.png" alt="Fazenda Boa Vista" class="partner-logo">
+      <div>
+        <h1>Fazenda Boa Vista</h1>
+        <div>
+          <span class="info-chip"><i class="fas fa-map-marker-alt"></i> Pedra de Guaratiba • Rio de Janeiro</span>
+          <span class="info-chip"><i class="fas fa-tags"></i> Hospedagem Rural</span>
+          <span class="info-chip"><i class="fas fa-leaf"></i> Cabana</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Descrição</strong>
+      <p class="mb-0">Experiência autêntica em meio à natureza com hospedagem, gastronomia local e atividades guiadas para toda a família.</p>
+    </div>
+
+    <div class="section-title">Contato e presença digital</div>
+    <div class="info-box">
+      <p class="mb-1"><i class="fas fa-envelope text-success me-2"></i> contato@fazendaboavista.com</p>
+      <div class="contact-links mt-2">
+        <a href="https://www.instagram.com/fazendaboavista" target="_blank" rel="noopener">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://www.fazendaboavista.com" target="_blank" rel="noopener">
+          <i class="fas fa-globe"></i> Site Oficial
+        </a>
+      </div>
+    </div>
+
+    <div class="section-title">Localização e Segmentação</div>
+    <div class="info-box">
+      <p class="mb-1"><strong>Município:</strong> Rio de Janeiro</p>
+      <p class="mb-1"><strong>Categoria:</strong> Hospedagem</p>
+      <p class="mb-0"><strong>Subcategoria:</strong> Cabana</p>
+    </div>
+
+    <div class="section-title">Experiências Oferecidas</div>
+    <div class="info-box">
+      <p class="mb-2"><strong>Rotas:</strong> Trilhas pela mata atlântica com duração de 2 horas guiadas por especialistas locais.</p>
+      <p class="mb-2"><strong>Circuitos:</strong> Circuito gastronômico com degustação de queijos e visitas aos pomares.</p>
+      <p class="mb-0"><strong>Atrativos:</strong> Mirante panorâmico, lago com pedalinho, fazendinha com animais resgatados.</p>
+    </div>
+
+    <div class="section-title">Eventos</div>
+    <div class="events-grid">
+      <div class="event-card">
+        <h3>Festival Sabores da Roça</h3>
+        <p>Degustação de produtos típicos, música ao vivo regional e oficinas de culinária rural.</p>
+        <a href="https://www.fazendaboavista.com/eventos/sabores" target="_blank" rel="noopener">
+          Ver detalhes do evento
+        </a>
+      </div>
+      <div class="event-card">
+        <h3>Lua Cheia na Fazenda</h3>
+        <p>Passeio noturno guiado com observação astronômica e contação de histórias ao redor da fogueira.</p>
+        <a href="https://www.fazendaboavista.com/eventos/luacheia" target="_blank" rel="noopener">
+          Ver detalhes do evento
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="home.html">
+      <i class="fas fa-home"></i>
+      Início
+    </a>
+    <a href="mapa.html">
+      <i class="fas fa-map-marked-alt"></i>
+      Mapa
+    </a>
+    <a href="parceiros.html">
+      <i class="fas fa-handshake"></i>
+      Parceiros
+    </a>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#modalMinhaConta">
+      <i class="fas fa-user"></i>
+      Minha Conta
+    </a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Modal Minha Conta -->
+  <div class="modal fade" id="modalMinhaConta" tabindex="-1" aria-labelledby="modalMinhaContaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between align-items-center">
+          <h5 class="modal-title fw-bold" id="modalMinhaContaLabel">Minha Conta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img src="https://i.pravatar.cc/150?img=1" alt="Foto do usuário" class="rounded-circle mb-2" width="100" height="100">
+          <h6 class="fw-bold">João da Silva</h6>
+
+          <div class="list-group mt-4">
+            <a href="cadastro.html" class="list-group-item list-group-item-action border-0 border-bottom d-flex align-items-center py-3 px-4 bg-white" style="border-color: #eee;">
+              <i class="fas fa-user text-success me-3 fs-5"></i>
+              <span class="fw-medium">Meus Dados</span>
+            </a>
+            <a href="termodeuso.html" class="list-group-item list-group-item-action border-0 border-bottom d-flex align-items-center py-3 px-4 bg-white" style="border-color: #eee;">
+              <i class="fas fa-file-alt text-success me-3 fs-5"></i>
+              <span class="fw-medium">Termo de Uso</span>
+            </a>
+            <a href="index.html" class="list-group-item list-group-item-action border-0 d-flex align-items-center py-3 px-4 text-danger bg-white">
+              <i class="fas fa-sign-out-alt me-3 fs-5"></i>
+              <span class="fw-medium">Sair</span>
+            </a>
+          </div>
+
+          <p class="text-muted mt-5 small">Versão 1.0.0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const links = document.querySelectorAll('.bottom-nav a');
+    const currentPage = location.pathname.split('/').pop();
+    const activeTarget = currentPage === 'parceiro-detalhe.html' ? 'parceiros.html' : currentPage;
+
+    links.forEach(link => {
+      if (link.getAttribute('href') === activeTarget) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>
