@@ -24,7 +24,7 @@ interface HomeFiltersProps extends OffcanvasProps {
   onApply: (filters: PropertyFilters) => void;
 }
 
-export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
+export default function HomeFilters({ onApply, onClose, isOpen, ...props }: HomeFiltersProps) {
   const { user } = useAuth();
   const {location: userLocation} = useUserLocation();
   const [filters, setFilters] = useState<PropertyFilters>({
@@ -37,12 +37,28 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
   const { cities } = useCities('RJ', true);
 
   const handleChange = (key: keyof PropertyFilters, value: any) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    const newFilters = {...filters, [key]: value};
+    setFilters(newFilters);
+
+    const noFiltersApplied =
+      !newFilters.keyword &&
+      (!newFilters.categories || newFilters.categories.length === 0) &&
+      (!newFilters.subcategories || newFilters.subcategories.length === 0) &&
+      !newFilters.propertyLocationId &&
+      !newFilters.useCurrentLocation &&
+      !newFilters.isFavorite;
+
+    if (isOpen && noFiltersApplied) {
+      setTimeout(() => {
+        onApply(newFilters);
+        onClose();
+      }, 500);
+    }
   };
 
   const handleApply = () => {
     onApply(filters);
-    props.onClose();
+    onClose();
   }
   useEffect(() => {
     if(userLocation) {
@@ -57,7 +73,7 @@ export default function HomeFilters({ onApply, ...props }: HomeFiltersProps) {
   }, [filters]);
 
   return (
-    <Offcanvas {...props}>
+    <Offcanvas {...props} onClose={onClose} isOpen={isOpen}>
       <View>
         <InputGroup label="Localização Atual">
           <Select
