@@ -13,6 +13,7 @@ type SearchInputProps = {
 export default function SearchInput({ onSearch }: SearchInputProps) {
   const debounceTimeout = useRef<number | null>(null);
   const [ query, setQuery ] = useState('');
+  const [ hideResults, setHideResults ] = useState(false);
   const { options } = useAutocompleteProperties(query);
 
   const handleChange = (text: string) => {
@@ -34,8 +35,11 @@ export default function SearchInput({ onSearch }: SearchInputProps) {
           style={styles.searchIcon}
         />
         <AutocompleteInput
+          hideResults={hideResults || options.length === 1 && options[0].label === query}
           placeholder="Buscar por palavra-chave..."
-          placeholderTextColor="#BCBCBD" 
+          placeholderTextColor="#BCBCBD"
+          onBlur={() => setHideResults(true)}
+          onFocus={() => setHideResults(false)}
           autoCorrect={false}
           data={options}
           inputContainerStyle={styles.searchInputContainer}
@@ -46,6 +50,7 @@ export default function SearchInput({ onSearch }: SearchInputProps) {
             handleChange(text);
           }}
           flatListProps={{
+            keyboardShouldPersistTaps: 'always',
             style: [styles.listStyle, globalStyles.shadowSm],
             keyExtractor: (item) => `P_${item.value}`,
             renderItem: ({item}) => (
