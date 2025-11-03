@@ -81,13 +81,6 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
   const {loading: userLocationLoading} = useUserLocation();
   return (
     <View style={{flex: 1}}>
-      {data.length ? (
-        <View style={styles.content}>
-          <Text style={styles.results}>
-            Encontramos <Text style={globalStyles.extraBold}>{data.length} propriedade(s)</Text>
-          </Text>
-        </View>
-      ) : undefined}
       {! propertiesLoading  && ! userLocationLoading ? (
         <FlatList
           contentContainerStyle={{ paddingHorizontal: 16 }}
