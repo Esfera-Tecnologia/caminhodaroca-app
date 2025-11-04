@@ -13,12 +13,13 @@ interface AuthContainerProps extends PropsWithChildren {
   title: string;
   withBackButton?: boolean;
   backRoute?: Href;
+  logoMargin?: number;
 }
-export default function AuthContainer({title, children, withBackButton = false, backRoute}: AuthContainerProps) {
+export default function AuthContainer({title, children, logoMargin = 100, withBackButton = false, backRoute}: AuthContainerProps) {
   return (
     <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }}>
-      <ScrollView style={{flex: 1}} contentContainerStyle={styles.container} alwaysBounceVertical={false} bounces={false}>
-        <Image style={styles.logo} source={logo} contentFit="contain" />
+      <ScrollView style={{flex: 1}} contentContainerStyle={[styles.container]} alwaysBounceVertical={false} bounces={false}>
+        <Image style={[styles.logo, {marginBottom: logoMargin}]} source={logo} contentFit="contain" />
         {withBackButton && (
           <BackButton style={{position: 'absolute', top: 48, left: 12}} backRoute={backRoute} />
         )}
@@ -43,7 +44,6 @@ const styles = StyleSheet.create({
   logo: {
     height: 70,
     width: '100%',
-    marginBottom: 100,
   },
   title: {
     color: "#fff",
