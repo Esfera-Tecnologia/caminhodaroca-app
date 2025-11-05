@@ -29,7 +29,7 @@ export default function Button({
   const variantStyle = outline ? styles[`outline_${variant}`] : styles[variant];
   const variantTextStyle = outline
     ? [styles.text, styles[`outline_${variant}_text`]]
-    : styles.text;
+    : [styles.text];
 
   return (
     <Pressable

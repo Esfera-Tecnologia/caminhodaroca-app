@@ -10,6 +10,9 @@ export const globalStyles = StyleSheet.create({
   itemsCenter: {
     alignItems: 'center'
   },
+  itemsStart: {
+    alignItems: 'flex-start',
+  },
   flexCenter: {
     justifyContent: 'center',
     alignItems: 'center'

@@ -6,11 +6,11 @@ import { useRef, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AutocompleteInput from "react-native-autocomplete-input";
 
-type SearchInputProps = {
+type SearchPropertiesProps = {
   onSearch: (search: string) => void;
 };
 
-export default function SearchInput({ onSearch }: SearchInputProps) {
+export default function SearchProperties({ onSearch }: SearchPropertiesProps) {
   const debounceTimeout = useRef<number | null>(null);
   const [ query, setQuery ] = useState('');
   const [ hideResults, setHideResults ] = useState(false);

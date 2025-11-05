@@ -79,6 +79,16 @@ export default function TabLayout() {
         />
 
         <Tabs.Screen
+          name="partners"
+          options={{
+            title: "Parceiros",
+            tabBarIcon: ({ color }) => (
+              <FontAwesome6 name="handshake-simple" size={21} color={color} />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
           name="profile"
           options={{
             title: "Minha Conta",
