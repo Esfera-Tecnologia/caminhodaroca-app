@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import SearchInput from "@/components/controls/SearchInput";
+import SearchProperties from "@/components/controls/SearchProperties";
 import DefaultModal from "@/components/DefaultModal";
 import Review from "@/components/Review";
 import TextPlaceholder from "@/components/TextPlaceholder";
@@ -149,7 +149,7 @@ export default function Home() {
       </View>
       <View style={styles.content}>
         <View style={[globalStyles.row, globalStyles.itemsCenter, {marginBottom: 16}]}>
-          <SearchInput onSearch={(search) => setFilters((filters) => ({ ...filters, keyword: search }))} />
+          <SearchProperties onSearch={(search) => setFilters((filters) => ({ ...filters, keyword: search }))} />
           <TouchableOpacity style={styles.filters} onPress={() => setIsFiltersOpen(true)}>
             <Ionicons name="options-outline" size={22} color="#00796B" />
           </TouchableOpacity>
