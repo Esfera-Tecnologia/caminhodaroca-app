@@ -5,6 +5,7 @@ import ErrorMessage from "./ErrorMessage";
 
 type InputGroupProps = PropsWithChildren<{
   label?: string;
+  helper?: string;
   labelStyle?: TextStyle;
   error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | string;
   style?: ViewStyle | ViewStyle[];
@@ -22,6 +23,7 @@ function getErrorMessage(
 
 export default function InputGroup({
   label,
+  helper,
   labelStyle,
   margin = 16,
   style,
@@ -32,7 +34,7 @@ export default function InputGroup({
 
   return (
     <View style={[styles.container, { marginBottom: margin }, style]}>
-      {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
+      {label && <Text style={[styles.label, labelStyle]}>{label} {helper && <Text style={styles.helper}>{helper}</Text>}</Text>}
       {children}
       {message && <ErrorMessage>{message}</ErrorMessage>}
     </View>
@@ -47,6 +49,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 14,
     color: "#212529",
+  },
+  helper: {
+    fontSize: 12,
+    fontWeight: 500,
+    color: '#6c757d',
+    marginLeft: 4,
   },
   icon: {
     marginRight: 10,

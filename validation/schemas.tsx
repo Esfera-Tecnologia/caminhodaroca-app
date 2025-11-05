@@ -15,6 +15,8 @@ export const stringSchema = z
 export const emailSchema = z
   .email(messages.invalidEmail)
 
+export const optionalUrl = z.url("Informe uma URL válida").optional();
+
 export const dateSchema = z
   .string({
     error: messages.required

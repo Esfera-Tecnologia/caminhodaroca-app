@@ -22,7 +22,7 @@ export default function EntryScreen() {
           Cadastre-se como <Text style={{fontWeight: 700}}>parceiro Caminho da Roça</Text>{" "}
           e conecte-se com visitantes interessados na vida do campo.
         </Text>
-        <Pressable style={({pressed}) => [pressed && styles.pressed, styles.cardButton]}>
+        <Pressable style={({pressed}) => [pressed && styles.pressed, styles.cardButton]} onPress={() => router.push('/partner')}>
           <Text style={styles.cardButtonText}>
             Quero ser parceiro
           </Text>
