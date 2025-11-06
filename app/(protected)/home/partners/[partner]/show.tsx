@@ -1,24 +1,48 @@
 import Badge from '@/components/Badge';
 import Button from '@/components/Button';
+import RecordLoading from '@/components/RecordLoading';
+import RecordNotFound from '@/components/RecordNotFound';
+import env from "@/config.json";
 import { useAuth } from '@/context/AuthContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import axios from 'axios';
 import { Image } from 'expo-image';
-import React from 'react';
+import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-const Event = () => {
+type EventType = {
+  id: number;
+  name: string;
+  description: string;
+}
+
+interface PartnerType {
+  id: number;
+  name: string;
+  logo: string;
+  city: string;
+  uf: string;
+  category: string;
+  subcategory: string;
+  description: string;
+  email: string;
+  routes: string;
+  circuits: string;
+  attractions: string;
+  events: EventType[]
+}
+
+const Event = ({event}: {event: EventType}) => {
   return (
     <View style={styles.event}>
       <Text style={styles.eventName}>
-        Lua Cheia na Fazenda
+        {event.name}
       </Text>
       <Text style={styles.eventDescription}>
-        Pariatur tempor est incididunt reprehenderit elit
-        labore ullamco non reprehenderit adipisicing elit.
-        Do occaecat exercitation nostrud adipisicing id
-        duis qui. Cupidatat consectetur ex enim et duis
+        {event.description}
       </Text>
       <Pressable>
         <Text style={{color: theme.colors.primary, fontWeight: 600}}>Ver detalhes do evento</Text>
@@ -27,28 +51,51 @@ const Event = () => {
   )
 }
 export default function PropertyDetails() {
+  const { partner: partnerId } = useLocalSearchParams();
+  const [loading, setLoading] = useState(true);
+  const [partner, setPartner] = useState<PartnerType | null>(null);
   const { user } = useAuth();
 
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const response = await axios.get(`${env.API_URL}/partners/${partnerId}`);
+        setPartner(response.data);
+      } catch (error) {
+        console.log('Erro ao buscar propriedade:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperty();
+  }, [partnerId]);
+
+  if (loading) {
+    return <RecordLoading />;
+  }
+  if (!partner) {
+    return <RecordNotFound />;
+  }
   return (
     <ScrollView style={styles.container}>
       <View style={[globalStyles.card, {marginVertical: 20}]}>
         <View style={[globalStyles.row, globalStyles.itemsStart, globalStyles.mb3]}>
           <Image
-            source={{uri: 'https://picsum.photos/200/300'}}
+            source={{uri: partner.logo}}
             style={styles.logo}
             contentFit='cover' />
           <View style={[{flexShrink: 1, alignItems: 'flex-start', paddingEnd: 16}]}>
-            <Text style={styles.name} numberOfLines={2}>Fazenda Boa Vista Fazendinha Feliz Demais da conta</Text>
+            <Text style={styles.name} numberOfLines={2}>{partner.name}</Text>
             <Badge 
-              text="Pedra de Guaratiba • RJ"
+              text={`${partner.city} • ${partner.uf}`}
               icon={<FontAwesome5 name="map-marker-alt" size={16} color={theme.colors.primary}/>}
               style={{marginBottom: 6}}/>
             <Badge
-              text="Hospedagem Rural"
+              text={partner.category}
               icon={<FontAwesome5 name="tags" size={12} color={theme.colors.primary}/>}
               style={{marginBottom: 6}}/>
             <Badge 
-              text="Cabana"
+              text={partner.subcategory}
               icon={<FontAwesome5 name="leaf" size={12} color={theme.colors.primary}/>} />
           </View>
         </View>
@@ -57,9 +104,7 @@ export default function PropertyDetails() {
             Descrição
           </Text>
           <Text style={styles.sectionDescription}>
-            Lorem exercitation esse officia irure aute ea pariatur elit.
-            Laborum sit excepteur laboris anim sit proident laboris id
-            sit dolore dolor nulla culpa.
+            {partner.description}
           </Text>
         </View>
         <Text style={styles.title}>
@@ -69,7 +114,7 @@ export default function PropertyDetails() {
           <Button 
             variant="primary"
             outline={true}
-            title="contato@fazendaboavista.com.br"
+            title={partner.email}
             startIcon={<Ionicons name="mail" size={14} color={theme.colors.primary} />}
             textStyle={{fontSize: 14}}
             style={{flex: 1, borderRadius: 30, marginBottom: 12}}/>
@@ -95,11 +140,11 @@ export default function PropertyDetails() {
         </Text>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Município</Text>
-          <Text style={{marginBottom: 8}}>Rio de Janeiro</Text>
+          <Text style={{marginBottom: 8}}>{partner.city}</Text>
           <Text style={styles.sectionTitle}>Categoria</Text>
-          <Text style={{marginBottom: 8}}>Hospedagem</Text>
+          <Text style={{marginBottom: 8}}>{partner.category}</Text>
           <Text style={styles.sectionTitle}>Subcategoria</Text>
-          <Text>Cabana</Text>
+          <Text>{partner.subcategory}</Text>
         </View>
         <Text style={styles.title}>
           Experiencias Oferecidas
@@ -107,27 +152,23 @@ export default function PropertyDetails() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Rotas</Text>
           <Text style={{marginBottom: 8}}>
-            Ipsum mollit esse nostrud exercitation irure consequat.
-            Incididunt irure adipisicing eu mollit id consequat cillum
-            cupidatat adipisicing consequat.
+            {partner.routes}
           </Text>
           <Text style={styles.sectionTitle}>Circuitos</Text>
           <Text style={{marginBottom: 8}}>
-            Ipsum mollit esse nostrud exercitation irure consequat.
-            Incididunt irure adipisicing eu mollit id consequat cillum
-            cupidatat adipisicing consequat.
+            {partner.circuits}
           </Text>
           <Text style={styles.sectionTitle}>Atrativos</Text>
           <Text>
-            Ipsum mollit esse nostrud exercitation irure consequat.
-            Incididunt irure adipisicing eu mollit id consequat cillum
-            cupidatat adipisicing consequat.
+            {partner.attractions}
           </Text>
         </View>
         <Text style={styles.title}>
           Eventos
         </Text>
-        <Event />
+        {partner.events.map(event => (
+          <Event key={event.id} event={event}/>)
+        )}
       </View>
     </ScrollView>
   );
