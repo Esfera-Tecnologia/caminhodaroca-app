@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import PartnerRegistration from "@/modules/auth/partner/Registration";
 import { globalStyles } from "@/styles/global";
 import { handleRequestError, onValidationFail } from "@/util";
-import { emailSchema, optionalDecimalSchema, optionalUrl, stringSchema } from "@/validation/schemas";
+import { partnerSchema } from "@/validation/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { FormProvider, useForm } from "react-hook-form";
@@ -15,35 +15,13 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
 import { z } from "zod";
 
-const eventSchema = z.object({
-  description: stringSchema,
-  image: z.any().refine((file) => file instanceof File, "Selecione um arquivo válido"),
-  externalLink: z.url('Informe uma URL válida')
-});
 
-const schema = z.object({
-  name: stringSchema,
-  email: emailSchema,
-  description: stringSchema,
-  logo: z.any().refine((file) => file instanceof File, "Selecione um arquivo válido"),
-  instagram: optionalUrl,
-  site: optionalUrl,
-  state: stringSchema,
-  city: stringSchema,
-  category: optionalDecimalSchema,
-  subcategory: optionalDecimalSchema,
-  routes: stringSchema,
-  circuits: stringSchema,
-  attractions: stringSchema,
-  events: z.array(eventSchema).optional(),
-});
-
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<typeof partnerSchema>;
 
 export default function Register() {
   const { onLogin } = useAuth();  
   const methods = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(partnerSchema),
     mode: "onChange",
     defaultValues: {
       events: [

@@ -165,3 +165,26 @@ export const profileUpdateSchema = step1Schema
     password: optionalPasswordSchema,
   })
   .merge(step2Schema);
+
+export const eventSchema = z.object({
+  description: stringSchema,
+  image: z.any().refine((file) => file instanceof File, "Selecione um arquivo válido"),
+  externalLink: z.url('Informe uma URL válida')
+});
+
+export const partnerSchema = z.object({
+  name: stringSchema,
+  email: emailSchema,
+  description: stringSchema,
+  logo: z.any().refine((file) => file instanceof File, "Selecione um arquivo válido"),
+  instagram: optionalUrl,
+  site: optionalUrl,
+  state: stringSchema,
+  city: stringSchema,
+  category: optionalDecimalSchema,
+  subcategory: optionalDecimalSchema,
+  routes: stringSchema,
+  circuits: stringSchema,
+  attractions: stringSchema,
+  events: z.array(eventSchema).optional(),
+});
