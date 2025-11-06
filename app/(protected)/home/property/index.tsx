@@ -117,7 +117,7 @@ export default function Home() {
               </>
             ) : (
               <>
-                <Text>Buscando propriedades próximas a localização de:{" "}</Text>
+                <Text>Buscando propriedades próximas à localização de:{" "}</Text>
                 <Text style={globalStyles.bold}>{userCity}</Text>
               </>
             )}
@@ -141,13 +141,14 @@ export default function Home() {
         direction="right" />
       <DefaultModal
         visible={!!showWelcomeModal}
-        onClose={() => setShowWelcomeModal(false)}
-      >
+        onClose={() => setShowWelcomeModal(false)}>
         <View style={{padding: 8}}>
           <View>
             <Text style={styles.welcomeTitle}>Bem-vindo!</Text>
-            <Text style={styles.welcomeDescription}>Notamos que seu você realizou o cadastro através da plataforma web. Acesse o seu perfil para completar os seus dados.</Text>
-
+            <Text style={styles.welcomeDescription}>
+              Notamos que seu você realizou o cadastro através da plataforma web.
+              Acesse o seu perfil para completar os seus dados.
+            </Text>
             <Button title="Continuar" onPress={() => {
               setShowWelcomeModal(false)
               router.push('/home/profile')

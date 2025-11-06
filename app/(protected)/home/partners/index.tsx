@@ -11,8 +11,7 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
-function PartnerItem({partner}: {partner: PartnerItemType})
-{
+function PartnerItem({partner}: {partner: PartnerItemType}) {
   return (
     <View style={[globalStyles.row, globalStyles.itemsStart, styles.partner]}>
       <Image
@@ -117,11 +116,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#e0e0e0',
+    alignItems: 'center',
   },
   partnerDetails: {
     marginHorizontal: 12,
     flex: 1,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   partnerName: {
     fontSize: 16,
@@ -132,16 +132,15 @@ const styles = StyleSheet.create({
   partnerLocation: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 8,
   },
   partnerEditButton: {
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
+    marginTop: 8
   },
   partnerShowButton: {
     flexShrink: 0,
-    alignSelf: 'center',
     marginRight: -4
   },
   partnerLogo: {
@@ -149,5 +148,6 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 12,
     marginTop: 3,
+    alignSelf: 'flex-start'
   }
 });
