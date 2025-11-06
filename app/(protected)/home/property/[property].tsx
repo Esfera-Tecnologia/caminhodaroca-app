@@ -10,14 +10,13 @@ import { useAuth } from '@/context/AuthContext';
 import { useUserLocation } from '@/context/LocationContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
-import { formatter, getDistanceInKm } from '@/util';
+import { formatter, getDistanceInKm, openGoogleMaps, openInstagram, openWhatsapp } from '@/util';
 import { FontAwesome6, Foundation } from '@expo/vector-icons';
 import axios from 'axios';
-import * as Clipboard from "expo-clipboard";
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router/build/hooks';
 import React, { useEffect, useState } from 'react';
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Toast } from 'toastify-react-native';
 
 const daysMap: Record<string, string> = {
@@ -75,56 +74,6 @@ interface Property {
   isFavorited: boolean;
   instagram: string;
 }
-
-const contactProperty = async (phone: string, message?: string) => {
-  const formattedPhone = phone.replace(/\D/g, '');
-  const whatsappUrl = `https://wa.me/${formattedPhone}${message ? `?text=${encodeURIComponent(message)}` : ''}`;
-  const telUrl = `tel:${formattedPhone}`;
-
-  try {
-    await Linking.openURL(whatsappUrl);
-  } catch {
-    try {
-      await Linking.openURL(telUrl);
-    } catch {
-      await Clipboard.setStringAsync(formattedPhone);
-      Toast.info("Número copiado para a área de transferência");
-    }
-  }
-};
-
-const openInstagram = async (input?: string | null) => {
-  if (!input || typeof input !== "string") {
-    Toast.warn("A propriedade não cadastrou o Instagram.");
-    return;
-  }
-  const username = input
-    .trim()
-    .replace(/^@/, "")
-    .replace(/https?:\/\/(www\.)?instagram\.com\//, "")
-    .replace(/\/.*/, "");
-  if (!username) {
-    Toast.error("Parece que houve um problema com o link do Instagram.");
-    return;
-  }
-  const appUrl = `instagram://user?username=${username}`;
-  const webUrl = `https://www.instagram.com/${username}`;
-  try {
-    await Linking.openURL(appUrl);
-  } catch {
-    try {
-      await Linking.openURL(webUrl);
-    } catch {
-      Toast.error("Não foi possível abrir o perfil do Instagram da propriedade.");
-    }
-  }
-};
-
-const openGoogleMapsLink = (url: string) => {
-  Linking.openURL(url).catch(err => {
-    Toast.error('Não foi possível abrir o link do Google Maps.');
-  });
-};
 
 function OpeningDays({openingHours}: {openingHours: OpeningHours}) {
   if(openingHours.custom) {
@@ -292,7 +241,7 @@ export default function PropertyDetails() {
             outline={true}
             title="Ver no mapa"
             style={{ width: '50%', marginEnd: 8 }}
-            onPress={() => openGoogleMapsLink(property.link_google_maps)} 
+            onPress={() => openGoogleMaps(property.link_google_maps)} 
             startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.secondary} />}
           />
           {wasFavorited ? (
@@ -322,7 +271,7 @@ export default function PropertyDetails() {
             startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.instagram} />}
           />
           <Button
-            onPress={() => contactProperty(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
+            onPress={() => openWhatsapp(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
             variant="success"
             outline={true}
             style={{width: '50%' }}

@@ -1,4 +1,6 @@
+import * as Clipboard from "expo-clipboard";
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import { Linking } from 'react-native';
 import { Toast } from 'toastify-react-native';
 import { messages } from './validation/messages';
 
@@ -181,3 +183,54 @@ export const formatter = new Intl.NumberFormat('pt-BR', {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
+
+
+export const openInstagram = async (input?: string | null) => {
+  if (!input || typeof input !== "string") {
+    Toast.warn("O Instagram não foi informado.");
+    return;
+  }
+  const username = input
+    .trim()
+    .replace(/^@/, "")
+    .replace(/https?:\/\/(www\.)?instagram\.com\//, "")
+    .replace(/\/.*/, "");
+  if (!username) {
+    Toast.error("Parece que houve um problema com o link do Instagram.");
+    return;
+  }
+  const appUrl = `instagram://user?username=${username}`;
+  const webUrl = `https://www.instagram.com/${username}`;
+  try {
+    await Linking.openURL(appUrl);
+  } catch {
+    try {
+      await Linking.openURL(webUrl);
+    } catch {
+      Toast.error("Não foi possível abrir o perfil do Instagram.");
+    }
+  }
+};
+
+export const openWhatsapp = async (phone: string, message?: string) => {
+  const formattedPhone = phone.replace(/\D/g, '');
+  const whatsappUrl = `https://wa.me/${formattedPhone}${message ? `?text=${encodeURIComponent(message)}` : ''}`;
+  const telUrl = `tel:${formattedPhone}`;
+
+  try {
+    await Linking.openURL(whatsappUrl);
+  } catch {
+    try {
+      await Linking.openURL(telUrl);
+    } catch {
+      await Clipboard.setStringAsync(formattedPhone);
+      Toast.info("Número copiado para a área de transferência");
+    }
+  }
+};
+
+export const openGoogleMaps = (url: string) => {
+  Linking.openURL(url).catch(err => {
+    Toast.error('Não foi possível abrir o link do Google Maps.');
+  });
+};
