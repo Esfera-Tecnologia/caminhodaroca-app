@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import SearchInput from "@/components/controls/SearchInput";
 import { EmptyList } from "@/components/EmptyList";
 import { LoadingList } from "@/components/LoadingList";
-import { PartnerFilters, usePartners } from "@/hooks/usePartners";
+import { PartnerFilters, PartnerItemType, usePartners } from "@/hooks/usePartners";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { Feather, FontAwesome } from "@expo/vector-icons";
@@ -11,17 +11,7 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
-type Partner = {
-  id: number;
-  name: string;
-  city: string;
-  state: string;
-  logo: string;
-  editable: boolean;
-  pendingApproval: boolean;
-}
-
-function PartnerItem({partner}: {partner: Partner})
+function PartnerItem({partner}: {partner: PartnerItemType})
 {
   return (
     <View style={[globalStyles.row, globalStyles.itemsStart, styles.partner]}>

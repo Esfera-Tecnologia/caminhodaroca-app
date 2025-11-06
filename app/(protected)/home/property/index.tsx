@@ -1,6 +1,8 @@
 import Button from "@/components/Button";
 import SearchProperties from "@/components/controls/SearchProperties";
 import DefaultModal from "@/components/DefaultModal";
+import { EmptyList } from "@/components/EmptyList";
+import { LoadingList } from "@/components/LoadingList";
 import Review from "@/components/Review";
 import TextPlaceholder from "@/components/TextPlaceholder";
 import { useAuth } from "@/context/AuthContext";
@@ -15,7 +17,7 @@ import { Image } from "expo-image";
 import * as Location from 'expo-location';
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const PropertyItem = ({property}: {property: PropertyItemType}) => {
   const {location: userLocation} = useUserLocation();
@@ -46,36 +48,6 @@ const PropertyItem = ({property}: {property: PropertyItemType}) => {
   )
 }
 
-const EmptyPropertyList = () => {
-  return (
-    <View style={[styles.card, {padding: 16, borderColor: theme.colors.warning}]}>
-      <FontAwesome6 
-        name="question-circle"
-        size={24}
-        color={theme.colors.warning}
-        style={{marginEnd: 12}} />
-      <Text style={{color: theme.colors.secondary, flexShrink: 1}}>
-        Infelizmente, não pudemos encontrar nenhuma propriedade
-        próxima a sua localização no momento
-      </Text>
-    </View>
-  )
-}
-
-const LoadingPropertyList = () => {
-  return (
-    <View style={[styles.card, {marginHorizontal: 16, padding: 16, borderColor: theme.colors.primary}]}>
-      <ActivityIndicator
-        size="small"
-        color={theme.colors.primary}
-        style={{marginEnd: 8}}/>
-      <Text style={{color: theme.colors.primary}}>
-        Carregando lista de propriedades...
-      </Text>
-    </View>
-  )
-}
-
 const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
   const { data, loading: propertiesLoading } = useProperties(filters);
   const {loading: userLocationLoading} = useUserLocation();
@@ -86,12 +58,17 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
           contentContainerStyle={{ paddingHorizontal: 16 }}
           style={{ flex: 1 }}
           data={data}
-          ListEmptyComponent={<EmptyPropertyList />}
+          ListEmptyComponent={
+            <EmptyList text="Infelizmente, não pudemos encontrar nenhuma
+              propriedade próxima a sua localização no momento" />
+          }
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => ( <PropertyItem property={item} /> )}
         />
       ) : (
-        <LoadingPropertyList />
+        <View style={{marginHorizontal: 16}}>
+          <LoadingList text="Carregando lista de propriedades..."/>
+        </View>
       )}
     </View>
   )
