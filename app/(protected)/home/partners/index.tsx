@@ -4,6 +4,7 @@ import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
 type Partner = {
@@ -14,7 +15,8 @@ type Partner = {
   logo: string;
 }
 
-function PartnerItem({partner}: {partner: Partner}) {
+function PartnerItem({partner}: {partner: Partner})
+{
   return (
     <View style={[globalStyles.row, globalStyles.itemsStart, styles.partner]}>
       <Image
@@ -26,6 +28,10 @@ function PartnerItem({partner}: {partner: Partner}) {
         <Text style={styles.partnerName}>{partner.name}</Text>
         <Text style={styles.partnerLocation}>{partner.city} - {partner.state}</Text>
         <Button
+          onPress={() => router.push({
+            pathname: '/home/partners/[partner]/edit',
+            params: {partner: partner.id}
+          })}
           variant="success"
           outline={true}
           title="Editar parceiro"
@@ -33,14 +39,20 @@ function PartnerItem({partner}: {partner: Partner}) {
           textStyle={{fontSize: 13, fontWeight: 600}}
           style={styles.partnerEditButton}/>
       </View>
-      <Pressable style={styles.partnerShowButton}>
+      <Pressable
+        style={styles.partnerShowButton}
+        onPress={() => router.push({
+          pathname: '/home/partners/[partner]/show',
+          params: {partner: partner.id
+        }})}>
         <Feather name="chevron-right" size={24} color="#bbb" />
       </Pressable>
     </View>
   )
 }
 
-function PartnerList() {
+function PartnerList()
+{
   const partners = Array(10).fill({
     id: 1,
     logo: 'https://picsum.photos/200/300',
@@ -57,7 +69,8 @@ function PartnerList() {
   )
 }
 
-export default function Partners() {
+export default function Index()
+{
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Parceiros em destaque</Text>

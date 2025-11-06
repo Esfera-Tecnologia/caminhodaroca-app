@@ -20,6 +20,9 @@ export const globalStyles = StyleSheet.create({
   spaceBetween: {
     justifyContent: 'space-between'
   },
+  mb3: {
+    marginBottom: 16,
+  },
   card: {
     backgroundColor: '#fff',
     marginHorizontal: 16,
