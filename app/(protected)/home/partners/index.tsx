@@ -13,6 +13,8 @@ type Partner = {
   city: string;
   state: string;
   logo: string;
+  editable: boolean;
+  pendingApproval: boolean;
 }
 
 function PartnerItem({partner}: {partner: Partner})
@@ -27,17 +29,28 @@ function PartnerItem({partner}: {partner: Partner})
       <View style={styles.partnerDetails}>
         <Text style={styles.partnerName}>{partner.name}</Text>
         <Text style={styles.partnerLocation}>{partner.city} - {partner.state}</Text>
-        <Button
-          onPress={() => router.push({
-            pathname: '/home/partners/[partner]/edit',
-            params: {partner: partner.id}
-          })}
-          variant="success"
-          outline={true}
-          title="Editar parceiro"
-          startIcon={<FontAwesome name="pencil" size={14} color={theme.colors.success} />}
-          textStyle={{fontSize: 13, fontWeight: 600}}
-          style={styles.partnerEditButton}/>
+        {partner.editable && (
+          <Button
+            onPress={() => router.push({
+              pathname: '/home/partners/[partner]/edit',
+              params: {partner: partner.id}
+            })}
+            variant="success"
+            outline={true}
+            title="Editar parceiro"
+            startIcon={<FontAwesome name="pencil" size={14} color={theme.colors.success} />}
+            textStyle={{fontSize: 13, fontWeight: 600}}
+            style={styles.partnerEditButton}/>
+        )}
+        {! partner.editable && partner.pendingApproval && (
+          <Button
+            disabled
+            variant="warning"
+            outline={true}
+            title="Pendente aprovação"
+            textStyle={{fontSize: 13, fontWeight: 600}}
+            style={styles.partnerEditButton}/>
+        )}
       </View>
       <Pressable
         style={styles.partnerShowButton}
@@ -58,7 +71,9 @@ function PartnerList()
     logo: 'https://picsum.photos/200/300',
     name: 'Fazenda Boa Vista',
     city: 'Vargem grande',
-    state: 'Rio de Janeiro'
+    state: 'Rio de Janeiro',
+    editable: true,
+    pendingApproval: true,
   });
   return (
     <FlatList
