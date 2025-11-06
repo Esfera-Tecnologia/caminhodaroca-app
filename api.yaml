@@ -348,6 +348,167 @@ paths:
                 errors:
                   email: ["O e-mail informado já está em uso"]
                   password: ["A senha deve ter no mínimo 8 caracteres."]
+  /api/register/partner:
+    post:
+      summary: Cadastro de parceiro
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nome do parceiro
+                email:
+                  type: string
+                  format: email
+                  description: E-mail do parceiro
+                description:
+                  type: string
+                  description: Descrição sobre o parceiro
+                logo:
+                  type: string
+                  format: binary
+                  description: Arquivo de imagem representando o parceiro
+                instagram:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: URL opcional do Instagram
+                site:
+                  type: string
+                  format: uri
+                  nullable: true
+                  description: URL opcional do site do parceiro
+                state:
+                  type: string
+                  description: Estado onde o parceiro atua
+                city:
+                  type: string
+                  description: Cidade onde o parceiro atua
+                category:
+                  type: number
+                  nullable: true
+                  description: ID da categoria principal (opcional)
+                subcategory:
+                  type: number
+                  nullable: true
+                  description: ID da subcategoria (opcional)
+                routes:
+                  type: string
+                  description: Descrição das rotas relacionadas
+                circuits:
+                  type: string
+                  description: Descrição dos circuitos relacionados
+                attractions:
+                  type: string
+                  description: Descrição das atrações relacionadas
+                events:
+                  type: array
+                  nullable: true
+                  description: Lista de eventos do parceiro
+                  items:
+                    type: object
+                    properties:
+                      description:
+                        type: string
+                        description: Descrição do evento
+                      image:
+                        type: string
+                        format: binary
+                        nullable: true
+                        description: Imagem do evento
+                      externalLink:
+                        type: string
+                        format: uri
+                        nullable: true
+                        description: Link externo relacionado ao evento
+                    required:
+                      - description
+              required:
+                - name
+                - email
+                - description
+                - logo
+                - state
+                - city
+                - routes
+                - circuits
+                - attractions
+      responses:
+        '200':
+          description: Cadastro concluído
+          content:
+            application/json:
+              example:
+                message: "O parceiro foi cadastrado com sucesso!"
+        '422':
+          description: Erro de validação
+          content:
+            application/json:
+              example:
+                message: "Os dados informados são inválidos"
+                errors:
+                  email: ["O e-mail informado já está em uso"]
+                  logo: ["Selecione um arquivo válido"]
+  /api/partners:
+    get:
+      summary: Lista de parceiros
+      description: Retorna uma lista de parceiros
+      parameters:
+        - in: query
+          name: keyword
+          schema:
+            type: string
+          description: Palavra-chave para busca (nome, cidade ou estado do parceiro)
+      responses:
+        '200':
+          description: Lista de parceiros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    logo:
+                      type: string
+                      example: "https://picsum.photos/200/300"
+                    name:
+                      type: string
+                      example: "Fazenda Boa Vista"
+                    city:
+                      type: string
+                      example: "Vargem Grande"
+                    state:
+                      type: string
+                      example: "Rio de Janeiro"
+                    editable:
+                      type: boolean
+                      example: true
+                    pendingApproval:
+                      type: boolean
+                      example: true
+              example:
+                - id: 1
+                  logo: "https://picsum.photos/200/300"
+                  name: "Fazenda Boa Vista"
+                  city: "Vargem Grande"
+                  state: "Rio de Janeiro"
+                  editable: true
+                  pendingApproval: true
+                - id: 2
+                  logo: "https://picsum.photos/200/300"
+                  name: "Sítio Bela Vista"
+                  city: "Petrópolis"
+                  state: "Rio de Janeiro"
+                  editable: false
+                  pendingApproval: false
   /api/register/categories:
     post:
       summary: Cadastro - Etapa 2 (Categoria/Subcategorias)

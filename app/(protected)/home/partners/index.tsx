@@ -1,10 +1,14 @@
 import Button from "@/components/Button";
 import SearchInput from "@/components/controls/SearchInput";
+import { EmptyList } from "@/components/EmptyList";
+import { LoadingList } from "@/components/LoadingList";
+import { PartnerFilters, usePartners } from "@/hooks/usePartners";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
+import { useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
 type Partner = {
@@ -64,37 +68,42 @@ function PartnerItem({partner}: {partner: Partner})
   )
 }
 
-function PartnerList()
-{
-  const partners = Array(10).fill({
-    id: 1,
-    logo: 'https://picsum.photos/200/300',
-    name: 'Fazenda Boa Vista',
-    city: 'Vargem grande',
-    state: 'Rio de Janeiro',
-    editable: true,
-    pendingApproval: true,
-  });
+const PartnerList = ({filters}: {filters?: PartnerFilters}) => {
+  const { data, loading: loading } = usePartners(filters);
+  
   return (
-    <FlatList
-      data={partners}
-      keyExtractor={(item, index) => 'P_' + item.id}
-      renderItem={({item}) => (<PartnerItem partner={item} />)}
-    />
+    <View style={{flex: 1}}>
+      {! loading ? (
+        <FlatList
+          style={{ flex: 1 }}
+          data={data}
+          ListEmptyComponent={
+            <EmptyList text="
+              Infelizmente, não pudemos encontrar nenhum
+              parceiro com base nos filtros aplicados" />
+          }
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => ( <PartnerItem partner={item} /> )}
+        />
+      ) : (
+        <LoadingList text="Carregando a lista de parceiros..." />
+      )}
+    </View>
   )
 }
 
-export default function Index()
-{
+export default function Index() {
+  const [filters, setFilters] =  useState<PartnerFilters>();
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Parceiros em destaque</Text>
       <View style={{marginBottom: 16}}>
         <SearchInput
-          onSearch={(search) => console.log(search)}
+          onSearch={(search) => setFilters((old) => ({...old, search: search}))}
           placeholder="Buscar por nome ou município"/> 
       </View>
-      <PartnerList />
+      <PartnerList filters={filters}/>
     </View>
   );
 }

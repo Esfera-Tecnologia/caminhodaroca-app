@@ -62,7 +62,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ property }) => {
               <View key={i} style={{ width, height, justifyContent: "center", alignItems: "center" }}>
                 <Image
                   source={{ uri: img } as ImageSourcePropType}
-                  style={{ width: width * 0.9, height: height * 0.7, resizeMode: "contain" }}
+                  style={{ width: width * 0.9, height: height * 0.7}}
+                  contentFit="contain"
                 />
               </View>
             ))}

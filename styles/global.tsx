@@ -1,3 +1,4 @@
+import { theme } from "@/theme";
 import { StyleSheet } from "react-native";
 
 export const globalStyles = StyleSheet.create({
@@ -35,6 +36,21 @@ export const globalStyles = StyleSheet.create({
       spreadDistance: 0,
       color: 'rgba(0,0,0,0.15)'
     }]
+  },
+  notification: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 6,
+    marginBottom: 16,
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderLeftWidth: 5,
+    borderTopColor: "#0000002D",
+    borderRightColor: "#0000002D",
+    borderBottomColor: "#0000002D",
+    borderLeftColor: theme.colors.primary,
   },
   title: {
     color: "#fff",
