@@ -1,6 +1,9 @@
 import Button from '@/components/Button';
+import { ExpandableText } from '@/components/ExpandableText';
 import ImageGallery from '@/components/ImageGallery';
 import Rating from '@/components/Rating';
+import RecordLoading from '@/components/RecordLoading';
+import RecordNotFound from '@/components/RecordNotFound';
 import Review from '@/components/Review';
 import env from "@/config.json";
 import { useAuth } from '@/context/AuthContext';
@@ -14,8 +17,7 @@ import * as Clipboard from "expo-clipboard";
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router/build/hooks';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Toast } from 'toastify-react-native';
 
 const daysMap: Record<string, string> = {
@@ -162,33 +164,6 @@ function OpeningDays({openingHours}: {openingHours: OpeningHours}) {
   );
 }
 
-function ExpandableText({ text, numberOfLines = 3}: { text: string; numberOfLines?: number }) {
-  const [expanded, setExpanded] = useState(false);
-  const [showExpandButton, setShowExpandButton] = useState(false);
-  
-  const toggleExpanded = () => setExpanded(!expanded);
-
-  return (
-    <View>
-      <Text 
-        style={styles.value}
-        numberOfLines={expanded ? undefined : numberOfLines}
-        onTextLayout={(e) => {
-          if (!expanded) {
-            setShowExpandButton(e.nativeEvent.lines.length > numberOfLines);
-          }
-      }}>{text}</Text>
-      {showExpandButton && (
-        <Pressable onPress={toggleExpanded}>
-          <Text style={{ color: theme.colors.primary, fontSize: 13, fontWeight: 'bold', textDecorationLine: 'underline' }}>
-            {expanded ? "Mostrar menos" : "Mostrar mais"}
-          </Text>
-        </Pressable>
-      )}
-    </View>
-  );
-}
-
 export default function PropertyDetails() {
   const {location: userLocation} = useUserLocation();
   const { property: propertyId } = useLocalSearchParams();
@@ -221,22 +196,6 @@ export default function PropertyDetails() {
     fetchProperty();
   }, [propertyId]);
 
-  if (loading) {
-    return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </SafeAreaView>
-    );
-  }
-
-  if (!property) {
-    return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Propriedade não encontrada</Text>
-      </SafeAreaView>
-    );
-  }
-
   const toggleFavorite = async (propertyId: number) => {
     if(! user) {
       Toast.warn("Para acessar essa funcionalidade, você precisa estar logado.");
@@ -260,6 +219,12 @@ export default function PropertyDetails() {
     }
   };
 
+  if (loading) {
+    return <RecordLoading />;
+  }
+  if (!property) {
+    return <RecordNotFound />;
+  }
   return (
     <ScrollView style={styles.container}>
       <Image
