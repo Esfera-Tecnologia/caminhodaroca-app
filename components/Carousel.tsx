@@ -1,9 +1,9 @@
+import { Entypo } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   ViewToken
@@ -28,7 +28,7 @@ type Props = {
 
 export default function Carousel({
   data,
-  height = 200,
+  height,
   autoPlay = true,
   autoPlayInterval = 4000,
   loop = true,
@@ -122,7 +122,7 @@ export default function Carousel({
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
-          <View style={[styles.slide, { height, width: containerWidth || 0 }]}>
+          <View style={[styles.slide, { width: containerWidth || 0 }, height ? {height} : {}]}>
             {item.render()}
           </View>
         )}
@@ -143,7 +143,7 @@ export default function Carousel({
 
       <View style={styles.controlsContainer} pointerEvents="box-none">
         <TouchableOpacity
-          style={[styles.controlButton, { left: 10 }]}
+          style={[styles.controlButton, { left: -2 }]}
           onPress={() => {
             const prev = currentIndex - 1;
             if (prev < 0) {
@@ -151,11 +151,11 @@ export default function Carousel({
             } else goToIndex(prev);
           }}
         >
-          <Text style={styles.controlText}>{"‹"}</Text>
+          <Entypo name="chevron-thin-left" size={20} color={"#fff"} />
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.controlButton, { right: 10 }]}
+          style={[styles.controlButton, { right: -2 }]}
           onPress={() => {
             const next = currentIndex + 1;
             if (next >= data.length) {
@@ -163,7 +163,7 @@ export default function Carousel({
             } else goToIndex(next);
           }}
         >
-          <Text style={styles.controlText}>{"›"}</Text>
+          <Entypo name="chevron-thin-right" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
     </View>
@@ -172,11 +172,11 @@ export default function Carousel({
 
 const styles = StyleSheet.create({
   slide: {
-    backgroundColor: "#eee",
+    justifyContent: 'center',
   },
   indicatorWrapper: {
     position: "absolute",
-    bottom: 8,
+    bottom: -2,
     left: 0,
     right: 0,
     flexDirection: "row",
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 8,
-    backgroundColor: "#fff",
+    backgroundColor: "#a1a1a1ff",
     marginHorizontal: 4,
   },
   controlsContainer: {
@@ -203,16 +203,11 @@ const styles = StyleSheet.create({
   controlButton: {
     position: "absolute",
     top: "45%",
-    backgroundColor: "rgba(0,0,0,0.35)",
+    backgroundColor: "rgba(0,0,0,0.15)",
     width: 36,
     height: 36,
     borderRadius: 18,
     justifyContent: "center",
     alignItems: "center",
-  },
-  controlText: {
-    color: "#fff",
-    fontSize: 24,
-    lineHeight: 24,
   },
 });

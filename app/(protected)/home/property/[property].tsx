@@ -1,6 +1,8 @@
 import Button from '@/components/Button';
+import Carousel from '@/components/Carousel';
 import { ExpandableText } from '@/components/ExpandableText';
 import ImageGallery from '@/components/ImageGallery';
+import Logo from '@/components/Logo';
 import Rating from '@/components/Rating';
 import RecordLoading from '@/components/RecordLoading';
 import RecordNotFound from '@/components/RecordNotFound';
@@ -111,6 +113,25 @@ function OpeningDays({openingHours}: {openingHours: OpeningHours}) {
       ))}
     </>
   );
+}
+
+const PartnerCarouselItem = ({id}: {id: number}) => {
+  return (
+    <View style={{flex: 1, justifyContent: 'center'}}>
+      <View style={[styles.partner]}>
+        <Logo source={{uri: 'https://picsum.photos/200/300'}}/>
+        <Text numberOfLines={2} style={styles.partnerName}>Sitio Vale Verde</Text>
+        <Text style={styles.partnerDetails}>Vargem verde</Text>
+        <Text style={styles.partnerDetails}>Hospedagem</Text>
+        <Text style={[styles.partnerDetails, {marginBottom: 8}]}>Cabana</Text>
+        <Button
+          variant="primary"
+          outline={true}
+          size={'sm'}
+          title="Ver parceiro" />
+      </View>
+    </View>
+  )
 }
 
 export default function PropertyDetails() {
@@ -261,7 +282,7 @@ export default function PropertyDetails() {
               onPress={() => toggleFavorite(property.id)}  />
           )}
         </View>
-        <View style={[globalStyles.row]}>
+        <View style={[globalStyles.row, {marginBottom: 36}]}>
           <Button 
             variant="instagram"
             outline={true}
@@ -278,6 +299,12 @@ export default function PropertyDetails() {
             title="Contato"
             startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
         </View>
+        <Text style={[styles.sectionTitle, {marginBottom: -4}]}>Parceiros Relacionados</Text>
+        <Carousel data={[
+          { id: 1, render: () => <PartnerCarouselItem id={1} /> },
+          { id: 2, render: () => <PartnerCarouselItem id={2} /> },
+          { id: 3, render: () => <PartnerCarouselItem id={3} /> },
+        ]} autoPlay autoPlayInterval={3000} />
       </View>
       <Rating
         initialUserRating={property.user_rating}
@@ -356,5 +383,34 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 2
+  },
+  partner: {
+    margin: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 109, 96, 0.12)',
+    boxShadow: [{
+      offsetX: 0,
+      offsetY: 0,
+      blurRadius: 18,
+      spreadDistance: 0,
+      color: 'rgba(0, 109, 96, 0.08)'
+    }]
+  },
+  partnerName: {
+    fontSize: 20,
+    fontWeight: 500,
+    color: theme.colors.primary,
+    marginBottom: 4,
+    marginTop: 8,
+    textAlign: 'center'
+  },
+  partnerDetails: {
+    fontSize: 14,
+    color: '#6c757d',
   }
 });
