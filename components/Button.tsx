@@ -12,6 +12,7 @@ interface ButtonProps extends PressableProps {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   loading?: boolean;
+  size?: 'sm' | 'md' | 'lg'
 };
 
 export default function Button({
@@ -24,8 +25,11 @@ export default function Button({
   startIcon,
   endIcon,
   loading = false,
+  size = 'md',
   ...props
 }: ButtonProps) {
+  const sizeStyle = styles[`size_${size}`];
+  const sizeTextStyle = styles[`size_${size}_text`];
   const variantStyle = outline ? styles[`outline_${variant}`] : styles[variant];
   const variantTextStyle = outline
     ? [styles.text, styles[`outline_${variant}_text`]]
@@ -39,6 +43,7 @@ export default function Button({
       style={({ pressed }) => [
         styles.base,
         variantStyle,
+        sizeStyle,
         pressed && styles.pressed,
         style,
       ]}
@@ -46,7 +51,7 @@ export default function Button({
       <View style={styles.content}>
         {loading && <ActivityIndicator size="small" color="#fff" style={{marginEnd: 6}} />}
         {startIcon && <View style={[styles.icon, title ? {marginEnd: 8} : {}]}>{startIcon}</View>}
-        {title && <Text style={[variantTextStyle, textStyle]}>{title}</Text>}
+        {title && <Text style={[variantTextStyle, sizeTextStyle, textStyle]}>{title}</Text>}
         {endIcon && <View style={styles.icon}>{endIcon}</View>}
       </View>
     </Pressable>
@@ -55,9 +60,6 @@ export default function Button({
 
 const styles = StyleSheet.create({
   base: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
     alignItems: "center",
     borderWidth: 1,
   },
@@ -67,7 +69,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 16,
     lineHeight: 24,
     color: "#fff",
   },
@@ -139,6 +140,33 @@ const styles = StyleSheet.create({
   },
   outline_instagram_text: {
     color: theme.colors.instagram,
+  },
+  size_lg: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+  },
+  size_md: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  size_sm: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+  },
+  size_lg_text: {
+    fontSize: 18,
+    lineHeight: 28,
+  },
+  size_md_text: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  size_sm_text: {
+    fontSize: 13,
+    lineHeight: 20,
   },
   icon: {
     justifyContent: "center",

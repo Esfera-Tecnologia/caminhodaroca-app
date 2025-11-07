@@ -33,10 +33,11 @@ function PartnerItem({partner}: {partner: PartnerItemType}) {
               })}
               variant="success"
               outline={true}
+              size="sm"
               title="Editar parceiro"
               startIcon={<FontAwesome name="pencil" size={14} color={theme.colors.success} />}
-              textStyle={{fontSize: 13, fontWeight: 600}}
-              style={[styles.partnerEditButton, {marginEnd: 8}]}/>
+              textStyle={{fontWeight: 600}}
+              style={[{marginTop: 8, marginEnd: 8}]}/>
           )}
           {partner.pendingApproval && (
             <Button
@@ -46,13 +47,14 @@ function PartnerItem({partner}: {partner: PartnerItemType}) {
               })}
               variant="warning"
               outline={true}
+              size="sm"
               startIcon={
                 <MaterialCommunityIcons
                   name="clock-edit-outline"
                   color={theme.colors.warning}
                   size={21} />
               }
-              style={[styles.partnerEditButton, {paddingVertical: 3}]}/>
+              style={[{marginTop: 8, paddingVertical: 3}]}/>
           )}
         </View>
       </View>
@@ -151,12 +153,6 @@ const styles = StyleSheet.create({
   partnerLocation: {
     fontSize: 14,
     color: '#666',
-  },
-  partnerEditButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-    marginTop: 8
   },
   partnerShowButton: {
     flexShrink: 0,
