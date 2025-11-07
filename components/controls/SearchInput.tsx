@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flexDirection: "row",
     alignItems: "center",
+    flex: 1,
     borderWidth: 1,
     borderColor: "#fff",
     borderRadius: 30,
@@ -58,8 +59,8 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     color: "#212529",
-    flex: 1,
     height: 40,
+    flex: 1,
     fontSize: 15,
     paddingEnd: 14,
     paddingStart: 10,

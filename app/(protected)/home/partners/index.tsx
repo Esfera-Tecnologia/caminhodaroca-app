@@ -1,11 +1,12 @@
 import Button from "@/components/Button";
+import FilterButton from "@/components/buttons/FilterButton";
 import SearchInput from "@/components/controls/SearchInput";
 import { EmptyList } from "@/components/EmptyList";
 import { LoadingList } from "@/components/LoadingList";
 import { PartnerFilters, PartnerItemType, usePartners } from "@/hooks/usePartners";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
-import { Feather, FontAwesome } from "@expo/vector-icons";
+import { Feather, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -22,28 +23,37 @@ function PartnerItem({partner}: {partner: PartnerItemType}) {
       <View style={styles.partnerDetails}>
         <Text style={styles.partnerName}>{partner.name}</Text>
         <Text style={styles.partnerLocation}>{partner.city} - {partner.state}</Text>
-        {partner.editable && (
-          <Button
-            onPress={() => router.push({
-              pathname: '/home/partners/[partner]/edit',
-              params: {partner: partner.id}
-            })}
-            variant="success"
-            outline={true}
-            title="Editar parceiro"
-            startIcon={<FontAwesome name="pencil" size={14} color={theme.colors.success} />}
-            textStyle={{fontSize: 13, fontWeight: 600}}
-            style={styles.partnerEditButton}/>
-        )}
-        {! partner.editable && partner.pendingApproval && (
-          <Button
-            disabled
-            variant="warning"
-            outline={true}
-            title="Pendente aprovação"
-            textStyle={{fontSize: 13, fontWeight: 600}}
-            style={styles.partnerEditButton}/>
-        )}
+        <View style={[globalStyles.row, globalStyles.itemsCenter]}>
+          {partner.editable && (
+            <Button
+              onPress={() => router.push({
+                pathname: '/home/partners/[partner]/edit',
+                params: {partner: partner.id}
+              })}
+              variant="success"
+              outline={true}
+              title="Editar parceiro"
+              startIcon={<FontAwesome name="pencil" size={14} color={theme.colors.success} />}
+              textStyle={{fontSize: 13, fontWeight: 600}}
+              style={[styles.partnerEditButton, {marginEnd: 8}]}/>
+          )}
+          {partner.pendingApproval && (
+            <Button
+              onPress={() => router.push({
+                pathname: '/home/partners/[partner]/edit',
+                params: {partner: partner.id}
+              })}
+              variant="warning"
+              outline={true}
+              startIcon={
+                <MaterialCommunityIcons
+                  name="clock-edit-outline"
+                  color={theme.colors.warning}
+                  size={24} />
+              }
+              style={[styles.partnerEditButton, {paddingVertical: 3}]}/>
+          )}
+        </View>
       </View>
       <Pressable
         style={styles.partnerShowButton}
@@ -87,10 +97,11 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Parceiros em destaque</Text>
-      <View style={{marginBottom: 16}}>
+      <View style={[globalStyles.row, globalStyles.itemsCenter, {marginBottom: 16, width: '100%'}]}>
         <SearchInput
           onSearch={(search) => setFilters((old) => ({...old, search: search}))}
           placeholder="Buscar por nome ou município"/> 
+        <FilterButton />
       </View>
       <PartnerList filters={filters}/>
     </View>
@@ -142,6 +153,12 @@ const styles = StyleSheet.create({
   partnerShowButton: {
     flexShrink: 0,
     marginRight: -4
+  },
+  warning: {
+    color: theme.colors.warning,
+    fontSize: 12,
+    fontWeight: 700,
+    marginTop: 4
   },
   partnerLogo: {
     width: 64,

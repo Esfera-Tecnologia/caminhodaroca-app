@@ -3,7 +3,7 @@ import React from "react";
 import { ActivityIndicator, Pressable, PressableProps, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 
 interface ButtonProps extends PressableProps {
-  title: string;
+  title?: string;
   variant?: "primary" | "secondary" | "danger" | "warning" | "success" | "instagram";
   outline?: boolean;
   onPress?: () => void;
@@ -45,8 +45,8 @@ export default function Button({
     >
       <View style={styles.content}>
         {loading && <ActivityIndicator size="small" color="#fff" style={{marginEnd: 6}} />}
-        {startIcon && <View style={styles.icon}>{startIcon}</View>}
-        <Text style={[variantTextStyle, textStyle]}>{title}</Text>
+        {startIcon && <View style={[styles.icon, title ? {marginEnd: 8} : {}]}>{startIcon}</View>}
+        {title && <Text style={[variantTextStyle, textStyle]}>{title}</Text>}
         {endIcon && <View style={styles.icon}>{endIcon}</View>}
       </View>
     </Pressable>
@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
   icon: {
     justifyContent: "center",
     alignItems: "center",
-    marginEnd: 8
   },
   pressed: {
     opacity: 0.85,
