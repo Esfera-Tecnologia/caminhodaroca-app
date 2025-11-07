@@ -4,7 +4,7 @@ import { ActivityIndicator, Pressable, PressableProps, StyleProp, StyleSheet, Te
 
 interface ButtonProps extends PressableProps {
   title?: string;
-  variant?: "primary" | "secondary" | "danger" | "warning" | "success" | "instagram";
+  variant?: "primary" | "secondary" | "danger" | "warning" | "success" | "instagram" | "disabled";
   outline?: boolean;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
@@ -51,7 +51,7 @@ export default function Button({
       <View style={styles.content}>
         {loading && <ActivityIndicator size="small" color="#fff" style={{marginEnd: 6}} />}
         {startIcon && <View style={[styles.icon, title ? {marginEnd: 8} : {}]}>{startIcon}</View>}
-        {title && <Text style={[variantTextStyle, sizeTextStyle, textStyle]}>{title}</Text>}
+        {title && <Text numberOfLines={1} style={[variantTextStyle, sizeTextStyle, textStyle, variant === 'disabled' ? {color: '#888'} : {}]}>{title}</Text>}
         {endIcon && <View style={styles.icon}>{endIcon}</View>}
       </View>
     </Pressable>
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   text: {
     lineHeight: 24,
     color: "#fff",
+    flexShrink: 1
   },
   // Solid variants
   primary: {
@@ -96,6 +97,10 @@ const styles = StyleSheet.create({
   instagram: {
     backgroundColor: "#DD2A7B",
     borderColor: "#DD2A7B",
+  },
+  disabled: {
+    backgroundColor: "#f2f2f2",
+    borderColor: "#e7e7e7ff",
   },
 
   // Outline variants
@@ -133,6 +138,13 @@ const styles = StyleSheet.create({
   },
   outline_warning_text: {
     color: theme.colors.warning,
+  },
+  outline_disabled: {
+    backgroundColor: "transparent",
+    borderColor: "#f2f2f2",
+  },
+  outline_disabled_text: {
+    color: '#888',
   },
   outline_instagram: {
     backgroundColor: "transparent",

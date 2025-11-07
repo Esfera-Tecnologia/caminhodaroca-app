@@ -229,12 +229,24 @@ export const openWhatsapp = async (phone: string, message?: string) => {
   }
 };
 
-export const openLink = async (url: string) => {
-    const supported = await Linking.canOpenURL(url);
+export const openLink = async (input: string) => {
+  if (!input || typeof input !== "string") {
+    Toast.warn("O link não foi informado.");
+    return;
+  }
+  const supported = await Linking.canOpenURL(input);
 
-    if (supported) {
-      await Linking.openURL(url);
-    } else {
-      Toast.error('Não foi possível abrir o link solicitado')
-    }
-  };
+  if (supported) {
+    await Linking.openURL(input);
+  } else {
+    Toast.error('Não foi possível abrir o link solicitado')
+  }
+};
+
+export const openEmail = (email: string, subject: string) => {
+  const url = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+
+  Linking.openURL(url).catch(() => {
+    alert("Não foi possível abrir o aplicativo de e-mail.");
+  });
+};

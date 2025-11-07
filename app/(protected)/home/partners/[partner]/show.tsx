@@ -7,7 +7,7 @@ import env from "@/config.json";
 import { useAuth } from '@/context/AuthContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
-import { openLink } from '@/util';
+import { openEmail, openInstagram, openLink } from '@/util';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import { useLocalSearchParams } from 'expo-router';
@@ -34,6 +34,8 @@ interface PartnerType {
   routes: string;
   circuits: string;
   attractions: string;
+  instagram: string;
+  website: string;
   events: EventType[]
 }
 
@@ -112,7 +114,8 @@ export default function PropertyDetails() {
           Contato e Presença Digital
         </Text>
         <View style={styles.section}>
-          <Button 
+          <Button
+            onPress={() => openEmail(partner.email, 'Caminho da Roça')}
             variant="primary"
             outline={true}
             title={partner.email}
@@ -120,20 +123,32 @@ export default function PropertyDetails() {
             textStyle={{fontSize: 14}}
             style={{flex: 1, borderRadius: 30, marginBottom: 12}}/>
           <View style={[globalStyles.row, globalStyles.itemsCenter]}>
-            <Button 
-              variant="primary"
-              outline={true}
-              title="Instagram"
-              startIcon={<FontAwesome5 name="instagram" size={14} color={theme.colors.primary} />}
-              textStyle={{fontSize: 14}}
-              style={{flex: 1, borderRadius: 30, marginEnd: 8}}/>
             <Button
-              variant="primary"
-              outline={true}
-              title="Site oficial"
-              startIcon={<MaterialCommunityIcons name="web" size={14} color={theme.colors.primary} />}
+              onPress={() => openInstagram(partner.instagram)}
+              variant={partner.instagram ? 'primary' : 'disabled'}
+              outline={!! partner.instagram}
+              title="Instagram"
+              startIcon={
+                <FontAwesome5
+                  color={partner.instagram ? theme.colors.primary : '#888'}
+                  name="instagram"
+                  size={14} />
+              }
               textStyle={{fontSize: 14}}
-              style={{flex: 1, borderRadius: 30}}/>
+              style={{flex: 0.5, borderRadius: 30, marginEnd: 8}}/>
+            <Button
+              onPress={() => openLink(partner.website)}
+               variant={partner.website ? 'primary' : 'disabled'}
+              outline={!! partner.website}
+              title="Site oficial"
+              startIcon={
+                <MaterialCommunityIcons
+                  color={partner.website ? theme.colors.primary : '#888'}
+                  name="web"
+                  size={14} />
+              }
+              textStyle={{fontSize: 14}}
+              style={{flex: 0.5, borderRadius: 30}}/>
           </View>
         </View>
         <Text style={styles.title}>
