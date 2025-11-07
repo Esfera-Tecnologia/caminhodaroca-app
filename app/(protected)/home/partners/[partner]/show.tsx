@@ -1,5 +1,6 @@
 import Badge from '@/components/Badge';
 import Button from '@/components/Button';
+import Logo from '@/components/Logo';
 import RecordLoading from '@/components/RecordLoading';
 import RecordNotFound from '@/components/RecordNotFound';
 import env from "@/config.json";
@@ -9,7 +10,6 @@ import { theme } from '@/theme';
 import { openLink } from '@/util';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
-import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -84,10 +84,7 @@ export default function PropertyDetails() {
     <ScrollView style={styles.container}>
       <View style={[globalStyles.card, {marginVertical: 20}]}>
         <View style={[globalStyles.row, globalStyles.itemsStart, globalStyles.mb3]}>
-          <Image
-            source={{uri: partner.logo}}
-            style={styles.logo}
-            contentFit='cover' />
+          <Logo source={{uri: partner.logo}}/>
           <View style={[{flexShrink: 1, alignItems: 'flex-start', paddingEnd: 16}]}>
             <Text style={styles.name} numberOfLines={2}>{partner.name}</Text>
             <Badge 
@@ -182,15 +179,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f4f4f4',
-  },
-  logo: {
-    borderRadius: 16,
-    width: 76,
-    height: 76,
-    borderWidth: 2,
-    borderColor: '#e5e5e5',
-    marginEnd: 12,
-    marginTop: 6
   },
   name: {
     fontSize: 21,
