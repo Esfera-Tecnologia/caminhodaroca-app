@@ -16,6 +16,7 @@ import { formatter, getDistanceInKm, openInstagram, openLink, openWhatsapp } fro
 import { FontAwesome6, Foundation } from '@expo/vector-icons';
 import axios from 'axios';
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router/build/hooks';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -125,6 +126,10 @@ const PartnerCarouselItem = ({id}: {id: number}) => {
         <Text style={styles.partnerDetails}>Hospedagem</Text>
         <Text style={[styles.partnerDetails, {marginBottom: 8}]}>Cabana</Text>
         <Button
+          onPress={() => router.push({
+            pathname: '/home/partners/[partner]/show',
+            params: {partner: id}
+          })}
           variant="primary"
           outline={true}
           size={'sm'}
