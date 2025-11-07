@@ -69,9 +69,9 @@ const Offcanvas: React.FC<OffcanvasProps> = ({
 
   const offcanvasStyle: ViewStyle = {
     width: offcanvasWidth,
-    height: "100%",
+    height: Dimensions.get("window").height,
     transform: [{ translateX }],
-    ...(direction === "right" ? { right: 0, left: undefined } : {}),
+    ...(direction === "right" ? { right: 0 } : { left: 0 }),
   };
 
   return (
