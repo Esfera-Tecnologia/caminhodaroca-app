@@ -3,7 +3,8 @@ import FilterButton from "@/components/buttons/FilterButton";
 import SearchInput from "@/components/controls/SearchInput";
 import { EmptyList } from "@/components/EmptyList";
 import { LoadingList } from "@/components/LoadingList";
-import { PartnerFilters, PartnerItemType, usePartners } from "@/hooks/usePartners";
+import { PartnerItemType, usePartners } from "@/hooks/usePartners";
+import PartnerAdvancedFilters, { PartnerFilters } from "@/modules/protected/PartnerFilters";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { Feather, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -93,6 +94,7 @@ const PartnerList = ({filters}: {filters?: PartnerFilters}) => {
 
 export default function Index() {
   const [filters, setFilters] =  useState<PartnerFilters>();
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   
   return (
     <View style={styles.container}>
@@ -101,8 +103,14 @@ export default function Index() {
         <SearchInput
           onSearch={(search) => setFilters((old) => ({...old, search: search}))}
           placeholder="Buscar por nome ou município"/> 
-        <FilterButton />
+        <FilterButton onPress={() => setIsFiltersOpen(true)}/>
       </View>
+      <PartnerAdvancedFilters
+        isOpen={isFiltersOpen}
+        onClose={() => setIsFiltersOpen(false)}
+        onApply={setFilters}
+        title="Filtros"
+        direction="right" />
       <PartnerList filters={filters}/>
     </View>
   );

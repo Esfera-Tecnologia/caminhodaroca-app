@@ -1,4 +1,5 @@
 import env from "@/config.json";
+import { PartnerFilters } from "@/modules/protected/PartnerFilters";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Toast } from "toastify-react-native";
@@ -12,10 +13,6 @@ export type PartnerItemType = {
   editable: boolean;
   pendingApproval: boolean;
 };
-
-export type PartnerFilters =  {
-  search: string;
-}
 
 export function usePartners(filters: PartnerFilters | undefined) {
   const [data, setData] = useState<PartnerItemType[]>([]);
