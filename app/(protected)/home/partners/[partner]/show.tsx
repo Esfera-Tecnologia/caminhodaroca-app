@@ -6,6 +6,7 @@ import env from "@/config.json";
 import { useAuth } from '@/context/AuthContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
+import { openLink } from '@/util';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import { Image } from 'expo-image';
@@ -17,6 +18,7 @@ type EventType = {
   id: number;
   name: string;
   description: string;
+  externalLink: string;
 }
 
 interface PartnerType {
@@ -44,7 +46,7 @@ const Event = ({event}: {event: EventType}) => {
       <Text style={styles.eventDescription}>
         {event.description}
       </Text>
-      <Pressable>
+      <Pressable onPress={() => openLink(event.externalLink)}>
         <Text style={{color: theme.colors.primary, fontWeight: 600}}>Ver detalhes do evento</Text>
       </Pressable>
     </View>

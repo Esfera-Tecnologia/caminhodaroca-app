@@ -10,7 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useUserLocation } from '@/context/LocationContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
-import { formatter, getDistanceInKm, openGoogleMaps, openInstagram, openWhatsapp } from '@/util';
+import { formatter, getDistanceInKm, openInstagram, openLink, openWhatsapp } from '@/util';
 import { FontAwesome6, Foundation } from '@expo/vector-icons';
 import axios from 'axios';
 import { Image } from 'expo-image';
@@ -241,7 +241,7 @@ export default function PropertyDetails() {
             outline={true}
             title="Ver no mapa"
             style={{ width: '50%', marginEnd: 8 }}
-            onPress={() => openGoogleMaps(property.link_google_maps)} 
+            onPress={() => openLink(property.link_google_maps)} 
             startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.secondary} />}
           />
           {wasFavorited ? (

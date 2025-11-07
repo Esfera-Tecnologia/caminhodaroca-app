@@ -229,8 +229,12 @@ export const openWhatsapp = async (phone: string, message?: string) => {
   }
 };
 
-export const openGoogleMaps = (url: string) => {
-  Linking.openURL(url).catch(err => {
-    Toast.error('Não foi possível abrir o link do Google Maps.');
-  });
-};
+export const openLink = async (url: string) => {
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Toast.error('Não foi possível abrir o link solicitado')
+    }
+  };
