@@ -50,7 +50,7 @@ function PartnerItem({partner}: {partner: PartnerItemType}) {
                 <MaterialCommunityIcons
                   name="clock-edit-outline"
                   color={theme.colors.warning}
-                  size={24} />
+                  size={21} />
               }
               style={[styles.partnerEditButton, {paddingVertical: 3}]}/>
           )}

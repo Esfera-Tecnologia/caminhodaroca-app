@@ -26,7 +26,6 @@ export default function PartnerAdvancedFilters({ onApply, onClose, isOpen, ...pr
     cities: [],
   });
 
-
   const { categories } = useCategories();
   const { subcategories } = useSubcategories(filters.categories);
   const { cities } = useCities('RJ', true);
