@@ -104,18 +104,6 @@ export default function PartnerRegistration()  {
       <Text style={styles.title}>Localização e Segmentação</Text>
       <Controller
         control={control}
-        name="state"
-        render={({ field: { onChange, value } }) => (
-          <InputGroup label="Estado" error={errors.state}>
-            <Select 
-              options={states}
-              selectedValue={value}
-              onValueChange={onChange} />
-          </InputGroup>
-        )}
-      />
-      <Controller
-        control={control}
         name="city"
         render={({ field: { onChange, value } }) => (
           <InputGroup label="Município" error={errors.city}>

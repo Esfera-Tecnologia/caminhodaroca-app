@@ -18,7 +18,7 @@ type EventType = {
   id: number;
   name: string;
   description: string;
-  externalLink: string;
+  externalLink: string | null;
 }
 
 interface PartnerType {
@@ -46,9 +46,11 @@ const Event = ({event}: {event: EventType}) => {
       <Text style={styles.eventDescription}>
         {event.description}
       </Text>
-      <Pressable onPress={() => openLink(event.externalLink)}>
-        <Text style={{color: theme.colors.primary, fontWeight: 600}}>Ver detalhes do evento</Text>
-      </Pressable>
+      {event.externalLink && (
+        <Pressable onPress={() => openLink(event.externalLink || '')} style={{marginTop: 16}}>
+          <Text style={{color: theme.colors.primary, fontWeight: 600}}>Ver detalhes do evento</Text>
+        </Pressable>
+      )}
     </View>
   )
 }
@@ -241,6 +243,5 @@ const styles = StyleSheet.create({
   eventDescription: {
     fontSize: 16,
     color: "#555",
-    marginBottom: 16
   },
 });

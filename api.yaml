@@ -382,9 +382,6 @@ paths:
                   format: uri
                   nullable: true
                   description: URL opcional do site do parceiro
-                state:
-                  type: string
-                  description: Estado onde o parceiro atua
                 city:
                   type: string
                   description: Cidade onde o parceiro atua
