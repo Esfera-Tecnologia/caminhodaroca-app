@@ -453,13 +453,44 @@ paths:
   /api/partners:
     get:
       summary: Lista de parceiros
-      description: Retorna uma lista de parceiros
+      description: Retorna uma lista de parceiros com filtros opcionais
       parameters:
         - in: query
           name: keyword
           schema:
             type: string
           description: Palavra-chave para busca (nome, cidade ou estado do parceiro)
+
+        - in: query
+          name: city[]
+          schema:
+            type: array
+            items:
+              type: integer
+          style: form
+          explode: true
+          description: Filtra os parceiros pelos IDs das cidades (ex: ?city[]=1&city[]=2)
+
+        - in: query
+          name: categories[]
+          schema:
+            type: array
+            items:
+              type: integer
+          style: form
+          explode: true
+          description: Filtra os parceiros pelas categorias (IDs) especificadas (ex: ?categories[]=3&categories[]=5)
+
+        - in: query
+          name: subcategories[]
+          schema:
+            type: array
+            items:
+              type: integer
+          style: form
+          explode: true
+          description: Filtra os parceiros pelas subcategorias (IDs) especificadas (ex: ?subcategories[]=7&subcategories[]=8)
+
       responses:
         '200':
           description: Lista de parceiros

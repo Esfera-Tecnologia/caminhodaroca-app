@@ -28,7 +28,7 @@ export default function PartnerAdvancedFilters({ onApply, onClose, isOpen, ...pr
 
   const { categories } = useCategories();
   const { subcategories } = useSubcategories(filters.categories);
-  const { cities } = useCities('RJ', true);
+  const { cities } = useCities('RJ', false);
 
   const handleChange = (key: keyof PartnerFilters, value: any) => {
     const newFilters = {...filters, [key]: value};
@@ -61,7 +61,7 @@ export default function PartnerAdvancedFilters({ onApply, onClose, isOpen, ...pr
             options={cities}
             selectedValue={filters.cities}
             onValueChange={(values) =>
-              handleChange("cities", Array.isArray(values) ? values : [values])
+              handleChange("cities", Array.isArray(values) ? values?.map(Number) : [Number(values)])
             } />
         </InputGroup>
         <InputGroup label="Categoria">
