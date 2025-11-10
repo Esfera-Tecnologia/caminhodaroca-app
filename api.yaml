@@ -537,6 +537,113 @@ paths:
                   state: "Rio de Janeiro"
                   editable: false
                   pendingApproval: false
+  /api/partners/{id}:
+    get:
+      summary: Obter detalhes completos de um parceiro
+      description: Retorna as informações detalhadas de um parceiro, incluindo dados de contato, localização, categorias, redes sociais e eventos associados.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do parceiro
+      responses:
+        '200':
+          description: Detalhes do parceiro
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  logo:
+                    type: string
+                    format: uri
+                  city:
+                    type: string
+                  uf:
+                    type: string
+                  category:
+                    type: string
+                    description: Categoria principal do parceiro (ex: Fazenda, Sítio, Pousada, Cabana)
+                  subcategory:
+                    type: string
+                    description: Subcategoria do parceiro (ex: Ecológica, Histórica, Gastronômica, Aventura)
+                  description:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  routes:
+                    type: string
+                    description: Rotas ou caminhos turísticos relacionados ao parceiro
+                  circuits:
+                    type: string
+                    description: Circuitos associados ao parceiro
+                  attractions:
+                    type: string
+                    description: Atrações ou pontos de interesse próximos
+                  instagram:
+                    type: string
+                    format: uri
+                    nullable: true
+                    description: URL do perfil do Instagram (opcional)
+                  website:
+                    type: string
+                    format: uri
+                    nullable: true
+                    description: Website do parceiro (opcional)
+                  events:
+                    type: array
+                    description: Lista de eventos associados ao parceiro
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        externalLink:
+                          type: string
+                          format: uri
+              examples:
+                example1:
+                  value:
+                    id: 1
+                    name: "Pousada Caminho Verde"
+                    logo: "https://picsum.photos/seed/partner1/200/300"
+                    city: "Teresópolis"
+                    uf: "RJ"
+                    category: "Pousada"
+                    subcategory: "Ecológica"
+                    description: "A Pousada Caminho Verde oferece hospedagem tranquila em meio à natureza, com trilhas e culinária regional."
+                    email: "contato@caminhoverde.com"
+                    routes: "Rota das Montanhas"
+                    circuits: "Circuito Verde Serrano"
+                    attractions: "Cachoeira dos Frades, Mirante da Serra"
+                    instagram: "https://www.instagram.com/caminhoverde/"
+                    website: "https://caminhoverde.com/"
+                    events:
+                      - id: 1
+                        name: "Festival da Serra"
+                        description: "Evento gastronômico com produtos locais e música ao vivo."
+                        externalLink: "https://www.google.com.br/"
+                      - id: 2
+                        name: "Trilha Ecológica Noturna"
+                        description: "Passeio guiado pela mata com observação de fauna e flora noturna."
+                        externalLink: "https://www.google.com.br/"
+        '404':
+          description: Parceiro não encontrado
+          content:
+            application/json:
+              example:
+                message: "Parceiro não encontrado"
   /api/register/categories:
     post:
       summary: Cadastro - Etapa 2 (Categoria/Subcategorias)
