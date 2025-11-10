@@ -788,6 +788,27 @@ paths:
                     items:
                       type: string
                       format: uri
+                  relatedPartners:
+                    type: array
+                    description: Lista de parceiros relacionados à propriedade
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        logo:
+                          type: string
+                          format: uri
+                        category:
+                          type: string
+                        subcategory:
+                          type: string
+                        city:
+                          type: string
+                        state:
+                          type: string
               examples:
                 example1:
                   value:
@@ -822,6 +843,21 @@ paths:
                       - "https://picsum.photos/200/300"
                       - "https://picsum.photos/200/300"
                       - "https://picsum.photos/200/300"
+                    relatedPartners:
+                      - id: 1
+                        name: "Sítio Três Irmãos"
+                        logo: "https://picsum.photos/seed/partner1/200/300"
+                        category: "Produção Artesanal"
+                        subcategory: "Laticínios"
+                        city: "Itaboraí"
+                        state: "Rio de Janeiro"
+                      - id: 2
+                        name: "Rancho Verdejante"
+                        logo: "https://picsum.photos/seed/partner2/200/300"
+                        category: "Turismo Rural"
+                        subcategory: "Passeios Ecológicos"
+                        city: "Seropédica"
+                        state: "Rio de Janeiro"
         '404':
           description: Propriedade não encontrada
           content:

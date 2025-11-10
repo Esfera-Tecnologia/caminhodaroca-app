@@ -49,6 +49,16 @@ interface OpeningHours {
   custom?: string | null;
 }
 
+interface Partner {
+  id: number;
+  name: string;
+  logo: string;
+  category: string;
+  subcategory: string;
+  city: string;
+  state: string;
+}
+
 interface Property {
   id: number;
   name: string;
@@ -76,6 +86,7 @@ interface Property {
   link_google_maps: string;
   isFavorited: boolean;
   instagram: string;
+  relatedPartners: Partner[];
 }
 
 function OpeningDays({openingHours}: {openingHours: OpeningHours}) {
@@ -116,19 +127,19 @@ function OpeningDays({openingHours}: {openingHours: OpeningHours}) {
   );
 }
 
-const PartnerCarouselItem = ({id}: {id: number}) => {
+const PartnerCarouselItem = ({partner}: {partner: Partner}) => {
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
       <View style={[styles.partner]}>
-        <Logo source={{uri: 'https://picsum.photos/200/300'}}/>
-        <Text numberOfLines={2} style={styles.partnerName}>Sitio Vale Verde</Text>
-        <Text style={styles.partnerDetails}>Vargem verde</Text>
-        <Text style={styles.partnerDetails}>Hospedagem</Text>
-        <Text style={[styles.partnerDetails, {marginBottom: 8}]}>Cabana</Text>
+        <Logo source={{uri: partner.logo}}/>
+        <Text numberOfLines={2} style={styles.partnerName}>{partner.name}</Text>
+        <Text style={styles.partnerDetails}>{partner.city} - {partner.state}</Text>
+        <Text style={styles.partnerDetails}>{partner.category}</Text>
+        <Text style={[styles.partnerDetails, {marginBottom: 8}]}>{partner.subcategory}</Text>
         <Button
           onPress={() => router.push({
             pathname: '/home/partners/[partner]/show',
-            params: {partner: id}
+            params: {partner: partner.id}
           })}
           variant="primary"
           outline={true}
@@ -305,11 +316,12 @@ export default function PropertyDetails() {
             startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
         </View>
         <Text style={[styles.sectionTitle, {marginBottom: -4}]}>Parceiros Relacionados</Text>
-        <Carousel data={[
-          { id: 1, render: () => <PartnerCarouselItem id={1} /> },
-          { id: 2, render: () => <PartnerCarouselItem id={2} /> },
-          { id: 3, render: () => <PartnerCarouselItem id={3} /> },
-        ]} autoPlay autoPlayInterval={3000} />
+        {property.relatedPartners.length && (
+          <Carousel data={property.relatedPartners.map(partner => (
+            { id: partner.id, render: () => <PartnerCarouselItem partner={partner} /> }
+          ))
+          } autoPlay autoPlayInterval={3000} />
+        )}
       </View>
       <Rating
         initialUserRating={property.user_rating}
