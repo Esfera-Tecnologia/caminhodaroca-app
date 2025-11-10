@@ -540,7 +540,7 @@ paths:
   /api/partners/{id}:
     get:
       summary: Obter detalhes completos de um parceiro
-      description: Retorna as informações detalhadas de um parceiro, incluindo dados de contato, localização, categorias, redes sociais e eventos associados.
+      description: Retorna as informações detalhadas de um parceiro, incluindo dados de contato, localização, categorias, redes sociais e eventos (opcionais) associados.
       parameters:
         - in: path
           name: id
@@ -599,7 +599,8 @@ paths:
                     description: Website do parceiro (opcional)
                   events:
                     type: array
-                    description: Lista de eventos associados ao parceiro
+                    nullable: true
+                    description: Lista de eventos associados ao parceiro (opcional)
                     items:
                       type: object
                       properties:
@@ -638,6 +639,23 @@ paths:
                         name: "Trilha Ecológica Noturna"
                         description: "Passeio guiado pela mata com observação de fauna e flora noturna."
                         externalLink: "https://www.google.com.br/"
+                example2:
+                  value:
+                    id: 2
+                    name: "Sítio Horizonte Azul"
+                    logo: "https://picsum.photos/seed/partner2/200/300"
+                    city: "Paraty"
+                    uf: "RJ"
+                    category: "Sítio"
+                    subcategory: "Histórica"
+                    description: "O Sítio Horizonte Azul é um refúgio histórico com produção artesanal e belas paisagens."
+                    email: "contato@horizonteazul.com"
+                    routes: "Rota Colonial"
+                    circuits: "Circuito Histórico do Litoral"
+                    attractions: "Centro Histórico de Paraty, Praia do Sono"
+                    instagram: null
+                    website: null
+                    events: null
         '404':
           description: Parceiro não encontrado
           content:

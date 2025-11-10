@@ -179,11 +179,15 @@ export default function PropertyDetails() {
             {partner.attractions}
           </Text>
         </View>
-        <Text style={styles.title}>
-          Eventos
-        </Text>
-        {partner.events.map(event => (
-          <Event key={event.id} event={event}/>)
+        {partner.events && partner.events.length > 0 && (
+          <>
+            <Text style={styles.title}>
+              Eventos
+            </Text>
+            {partner.events.map(event => (
+              <Event key={event.id} event={event}/>)
+            )}
+          </>
         )}
       </View>
     </ScrollView>
