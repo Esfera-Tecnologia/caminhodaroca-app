@@ -298,7 +298,7 @@ export default function PropertyDetails() {
               onPress={() => toggleFavorite(property.id)}  />
           )}
         </View>
-        <View style={[globalStyles.row, {marginBottom: 36}]}>
+        <View style={[globalStyles.row]}>
           <Button 
             variant="instagram"
             outline={true}
@@ -315,12 +315,18 @@ export default function PropertyDetails() {
             title="Contato"
             startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
         </View>
-        <Text style={[styles.sectionTitle, {marginBottom: -4}]}>Parceiros Relacionados</Text>
-        {property.relatedPartners.length && (
-          <Carousel data={property.relatedPartners.map(partner => (
-            { id: partner.id, render: () => <PartnerCarouselItem partner={partner} /> }
-          ))
-          } autoPlay autoPlayInterval={3000} />
+        {property.relatedPartners.length ? (
+          <View style={{marginBottom: 36}}>
+            <Text style={[styles.sectionTitle, {marginBottom: -4}]}>Parceiros Relacionados</Text>
+            <Carousel
+              data={property.relatedPartners.map(partner => (
+                { id: partner.id, render: () => <PartnerCarouselItem partner={partner} /> }
+              ))}
+              autoPlay
+              autoPlayInterval={3000} />
+          </View>
+        ) : (
+          <></>
         )}
       </View>
       <Rating

@@ -166,23 +166,36 @@ export const profileUpdateSchema = step1Schema
   })
   .merge(step2Schema);
 
-export const eventSchema = z.object({
-  description: stringSchema,
-  image: z.any().refine((file) => file instanceof File, "Selecione um arquivo válido"),
-  externalLink: z.url('Informe uma URL válida')
-});
+export const eventSchema = z
+  .object({
+    description: stringSchema.optional(),
+    image: z.any().optional(),
+    externalLink: z.string().url('Informe uma URL válida').optional(),
+  })
+  .superRefine((data, ctx) => {
+    const hasAnyField =
+      (data.image && data.image instanceof File) ||
+      (!!data.externalLink && data.externalLink.trim() !== "") ||
+      (!!data.description && data.description.trim() !== "");
+
+    // Se qualquer campo foi preenchido, description vira obrigatória
+    if (hasAnyField && (!data.description || data.description.trim() === "")) {
+      ctx.addIssue({
+        path: ["description"],
+        code: z.ZodIssueCode.custom,
+        message: "Descrição é obrigatória quando houver outros dados do evento.",
+      });
+    }
+  });
 
 export const partnerSchema = z.object({
   name: stringSchema,
   email: emailSchema,
   description: stringSchema,
-  logo: z.any().refine((file) => file instanceof File, "Selecione um arquivo válido"),
+  logo: z.any(),
   instagram: optionalUrl,
   site: optionalUrl,
-  state: stringSchema,
-  city: stringSchema,
-  category: optionalDecimalSchema,
-  subcategory: optionalDecimalSchema,
+  city: z.array(stringSchema),
   routes: stringSchema,
   circuits: stringSchema,
   attractions: stringSchema,

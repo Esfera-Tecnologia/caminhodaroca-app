@@ -1,3 +1,4 @@
+import { PartnerFormData } from "@/app/(auth)/partner";
 import Button from "@/components/Button";
 import ImageSelect from "@/components/controls/ImageSelect";
 import Input from "@/components/controls/Input";
@@ -5,18 +6,18 @@ import InputGroup from "@/components/controls/InputGroup";
 import Select from "@/components/controls/Select";
 import HelperText from "@/components/HelperText";
 import HorizontalLine from "@/components/HorizontalLine";
-import { useStates } from "@/hooks/useStates";
+import { useCities } from "@/hooks/useCities";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function PartnerRegistration()  {
-  const {states} = useStates();
+  const {cities} = useCities('RJ', true);
   const {
     control,
     formState: { errors }
-  } = useFormContext();
+  } = useFormContext<PartnerFormData>();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -101,43 +102,19 @@ export default function PartnerRegistration()  {
         )}
       />
       <HorizontalLine />
-      <Text style={styles.title}>Localização e Segmentação</Text>
+      <Text style={styles.title}>Localização</Text>
       <Controller
         control={control}
         name="city"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Município" error={errors.city}>
-            <Select 
-              options={[]}
+          <InputGroup label="Municípios" error={Array.isArray(errors?.city) ? errors?.city[0] : errors?.city}>
+            <Select
+              isMultiple
+              options={cities}
               selectedValue={value}
-              onValueChange={onChange} />
-          </InputGroup>
-        )}
-      />
-      <Controller
-        control={control}
-        name="category"
-        render={({ field: { onChange, value } }) => (
-          <InputGroup label="Categoria" helper="(opcional)" error={errors.category}>
-            <Select 
-              options={[]}
-              selectedValue={value}
-              onValueChange={onChange} />
-          </InputGroup>
-        )}
-      />
-      <Controller
-        control={control}
-        name="subcategory"
-        render={({ field: { onChange, value } }) => (
-          <InputGroup label="Subcategoria" helper="(opcional)" error={errors.subcategory} margin={0}>
-            <Select 
-              options={[]}
-              selectedValue={value}
-              onValueChange={onChange} />
-          </InputGroup>
-        )}
-      />
+              onValueChange={(values) => onChange(values)} />
+          </InputGroup>  
+      )} />
       <HorizontalLine />
       <Text style={styles.title}>Experiências Oferecidas</Text>
       <Controller
@@ -197,23 +174,24 @@ export default function PartnerRegistration()  {
             </View>
             <Controller
               control={control}
-              name="description"
+              name={`events.${index}.description`}
               render={({ field: { onChange, value } }) => (
-                <InputGroup label="Descrição" error={errors.circuits}>
-                  <Input 
+                <InputGroup label="Descrição" error={errors?.events?.[index]?.description}>
+                  <Input
                     placeholder="Detalhe o evento, datas e público-alvo"
                     multiline={true}
                     style={styles.textarea}
                     value={value}
-                    onChangeText={onChange} />
+                    onChangeText={onChange}
+                  />
                 </InputGroup>
               )}
             />
             <Controller
               control={control}
-              name="image"
+              name={`events.${index}.image`}
               render={({ field: { onChange, value } }) => (
-                <InputGroup label="Imagem do evento" helper="(opcional)" error={errors.circuits}>
+                <InputGroup label="Imagem do evento" helper="(opcional)" error={errors?.events?.[index]?.image}>
                   <ImageSelect
                     value={value}
                     onChange={(uri) => onChange(uri)}
@@ -223,13 +201,19 @@ export default function PartnerRegistration()  {
             />
             <Controller
               control={control}
-              name="externalLink"
+              name={`events.${index}.externalLink`}
               render={({ field: { onChange, value } }) => (
-                <InputGroup label="Link externo" helper="(opcional)" error={errors.subcategory} margin={0}>
+                <InputGroup
+                  label="Link externo"
+                  helper="(opcional)"
+                  error={errors?.events?.[index]?.externalLink}
+                  margin={0}
+                >
                   <Input
                     placeholder="https://link-do-evento.com"
                     onChangeText={onChange}
-                    value={value} />
+                    value={value}
+                  />
                 </InputGroup>
               )}
             />
@@ -237,7 +221,7 @@ export default function PartnerRegistration()  {
         );
       })}
       <Button
-        onPress={() => append({})}
+        onPress={() => append({externalLink: '', description: '', image: null})}
         title="Adicionar outro evento"
         variant="success"
         outline={true}
@@ -284,5 +268,25 @@ const styles = StyleSheet.create({
   removeEvent: {
     color: theme.colors.danger,
     textDecorationLine: "underline"
+  },
+  list: {
+    borderWidth: 1,
+    borderBottomWidth: 0,
+    borderColor: '#dee2e6',
+    borderRadius: 6
+  },
+  listItem: {
+    borderBottomWidth: 1,
+    borderRadius: 6,
+    borderColor: '#dee2e6',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  listItemButton: {
+  },
+  listItemButtonText: {
+    color: theme.colors.primary,
+    fontWeight: 700,
+    textAlign: 'center'
   }
 })

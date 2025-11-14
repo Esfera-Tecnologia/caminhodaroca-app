@@ -385,14 +385,6 @@ paths:
                 city:
                   type: string
                   description: Cidade onde o parceiro atua
-                category:
-                  type: number
-                  nullable: true
-                  description: ID da categoria principal (opcional)
-                subcategory:
-                  type: number
-                  nullable: true
-                  description: ID da subcategoria (opcional)
                 routes:
                   type: string
                   description: Descrição das rotas relacionadas
@@ -429,7 +421,6 @@ paths:
                 - email
                 - description
                 - logo
-                - state
                 - city
                 - routes
                 - circuits
