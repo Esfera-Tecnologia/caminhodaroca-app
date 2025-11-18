@@ -89,7 +89,7 @@ export default function PartnerRegistration()  {
         render={({ field: { onChange, value } }) => (
           <InputGroup label="Instagram" error={errors.instagram}>
             <Input
-              placeholder="https://www.instagram.com/seu-perfil"
+              placeholder="@usuario"
               autoCapitalize="none"
               autoCorrect={false}
               onChangeText={onChange}
