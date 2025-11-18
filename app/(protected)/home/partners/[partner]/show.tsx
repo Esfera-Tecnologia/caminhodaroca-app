@@ -25,10 +25,8 @@ interface PartnerType {
   id: number;
   name: string;
   logo: string;
-  city: string;
+  cities: string;
   uf: string;
-  category: string;
-  subcategory: string;
   description: string;
   email: string;
   routes: string;
@@ -90,16 +88,9 @@ export default function PropertyDetails() {
           <View style={[{flexShrink: 1, alignItems: 'flex-start', paddingEnd: 16}]}>
             <Text style={styles.name} numberOfLines={2}>{partner.name}</Text>
             <Badge 
-              text={`${partner.city} • ${partner.uf}`}
+              text={`${partner.cities}`}
               icon={<FontAwesome5 name="map-marker-alt" size={16} color={theme.colors.primary}/>}
               style={{marginBottom: 6}}/>
-            <Badge
-              text={partner.category}
-              icon={<FontAwesome5 name="tags" size={12} color={theme.colors.primary}/>}
-              style={{marginBottom: 6}}/>
-            <Badge 
-              text={partner.subcategory}
-              icon={<FontAwesome5 name="leaf" size={12} color={theme.colors.primary}/>} />
           </View>
         </View>
         <View style={styles.section}>
@@ -152,15 +143,11 @@ export default function PropertyDetails() {
           </View>
         </View>
         <Text style={styles.title}>
-          Localização e Segmentação
+          Localização
         </Text>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Município</Text>
-          <Text style={{marginBottom: 8}}>{partner.city}</Text>
-          <Text style={styles.sectionTitle}>Categoria</Text>
-          <Text style={{marginBottom: 8}}>{partner.category}</Text>
-          <Text style={styles.sectionTitle}>Subcategoria</Text>
-          <Text>{partner.subcategory}</Text>
+          <Text style={{marginBottom: 8}}>{partner.cities}</Text>
         </View>
         <Text style={styles.title}>
           Experiencias Oferecidas

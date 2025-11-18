@@ -5,15 +5,14 @@ import Card from "@/components/Card";
 import env from "@/config.json";
 import PartnerRegistration from "@/modules/auth/partner/Registration";
 import { globalStyles } from "@/styles/global";
-import { handleRequestError } from "@/util";
+import { handleRequestError, onValidationFail } from "@/util";
 import { partnerSchema } from "@/validation/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { router } from "expo-router";
 import { FormProvider, useForm } from "react-hook-form";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
-import { Toast } from "toastify-react-native";
 import { z } from "zod";
 
 
@@ -52,11 +51,12 @@ export default function Register() {
       formData.append("circuits", data.circuits);
       formData.append("attractions", data.attractions);
 
-      if (data.instagram) formData.append("instagram", data.instagram);
-      if (data.site) formData.append("site", data.site);
-
-      (data.city ?? []).forEach((city, index) => {
-        formData.append(`city[${index}]`, String(city));
+      if (data.instagram) 
+        formData.append("instagram", data.instagram);
+      if (data.site)
+        formData.append("site", data.site);
+      (data.cities ?? []).forEach((city, index) => {
+        formData.append(`cities[${index}]`, String(city));
       });
       if (data.logo) {
         formData.append("logo", {
@@ -77,14 +77,16 @@ export default function Register() {
           } as any);
         }
       });
-      const response = await axios.post(
+      await axios.post(
         `${env.API_URL}/register/partner`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
-      console.log(response);
-      Toast.success('Cadastro realizado com sucesso! Aguarde enquanto os dados são revisados e aprovados pela nossa equipe.');
-      router.dismiss();
+      Alert.alert(
+        'Cadastro realizado com sucesso!',
+        'Aguarde enquanto os dados são revisados e aprovados pela nossa equipe.',
+        [{ text: 'OK', onPress: () => router.dismiss()}]
+      );
     } catch (e) {
       handleRequestError({
         error: e as any,
@@ -106,9 +108,7 @@ export default function Register() {
           <PartnerRegistration />
           <Button
             loading={methods.formState.isSubmitting}
-            onPress={methods.handleSubmit(onSubmitForm, (errors) => {
-              console.log(errors);
-            })}
+            onPress={methods.handleSubmit(onSubmitForm, onValidationFail)}
             title="Enviar cadastro"
             variant="success"/>
         </Card>

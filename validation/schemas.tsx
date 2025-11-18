@@ -15,8 +15,6 @@ export const stringSchema = z
 export const emailSchema = z
   .email(messages.invalidEmail)
 
-export const optionalUrl = z.url("Informe uma URL válida").optional();
-
 export const dateSchema = z
   .string({
     error: messages.required
@@ -170,7 +168,7 @@ export const eventSchema = z
   .object({
     description: stringSchema.optional(),
     image: z.any().optional(),
-    externalLink: z.string().url('Informe uma URL válida').optional(),
+    externalLink: optionalStringSchema,
   })
   .superRefine((data, ctx) => {
     const hasAnyField =
@@ -193,9 +191,11 @@ export const partnerSchema = z.object({
   email: emailSchema,
   description: stringSchema,
   logo: z.any(),
-  instagram: optionalUrl,
-  site: optionalUrl,
-  city: z.array(stringSchema),
+  instagram: optionalStringSchema,
+  site: optionalStringSchema,
+  cities: z.array(naturalNumberSchema, {
+    error: 'Selecione uma opção'
+  }).min(1, 'Selecione ao menos uma opção'),
   routes: stringSchema,
   circuits: stringSchema,
   attractions: stringSchema,

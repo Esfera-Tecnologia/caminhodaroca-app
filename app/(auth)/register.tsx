@@ -9,7 +9,7 @@ import RegistrationFirstStep from "@/modules/auth/register/RegistrationFirstStep
 import RegistrationSecondStep from "@/modules/auth/register/RegistrationSecondStep";
 import RegistrationThirdStep from "@/modules/auth/register/RegistrationThirdStep";
 import { globalStyles } from "@/styles/global";
-import { handleRequestError } from "@/util";
+import { handleRequestError, onValidationFail } from "@/util";
 import { registrationSchema } from "@/validation/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -123,7 +123,7 @@ export default function Register() {
             ) : (
               <Button
                 loading={methods.formState.isSubmitting}
-                onPress={methods.handleSubmit(onSubmitForm)}
+                onPress={methods.handleSubmit(onSubmitForm, onValidationFail)}
                 variant="primary"
                 title="Finalizar Cadastro" />
             )}

@@ -132,6 +132,7 @@ export function handleRequestError<T>({
   const response = error.response.data;
 
   if (typeof response?.errors === 'object' && response?.errors !== null) {
+    Toast.error('Dados inválidos. Por favor, confira os campos e tente novamente.')
     Object.entries(response.errors).forEach(([field, message]) => {
       setError(field as keyof T, {
         type: 'manual',

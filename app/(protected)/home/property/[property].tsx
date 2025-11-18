@@ -53,9 +53,7 @@ interface Partner {
   id: number;
   name: string;
   logo: string;
-  category: string;
-  subcategory: string;
-  city: string;
+  cities: string[];
   state: string;
 }
 
@@ -133,9 +131,11 @@ const PartnerCarouselItem = ({partner}: {partner: Partner}) => {
       <View style={[styles.partner]}>
         <Logo source={{uri: partner.logo}}/>
         <Text numberOfLines={2} style={styles.partnerName}>{partner.name}</Text>
-        <Text style={styles.partnerDetails}>{partner.city} - {partner.state}</Text>
-        <Text style={styles.partnerDetails}>{partner.category}</Text>
-        <Text style={[styles.partnerDetails, {marginBottom: 8}]}>{partner.subcategory}</Text>
+        <Text style={[styles.partnerDetails, {marginBottom: 8}]}>
+          {partner.cities.length > 3
+            ? `${partner.cities[0]} e outras ${partner.cities.length - 1} cidades`
+            : `${partner.cities.join(', ')}`} - {partner.state}
+        </Text>
         <Button
           onPress={() => router.push({
             pathname: '/home/partners/[partner]/show',
@@ -316,7 +316,7 @@ export default function PropertyDetails() {
             startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
         </View>
         {property.relatedPartners.length ? (
-          <View style={{marginBottom: 36}}>
+          <View style={{marginBottom: 36, marginTop: 16}}>
             <Text style={[styles.sectionTitle, {marginBottom: -4}]}>Parceiros Relacionados</Text>
             <Carousel
               data={property.relatedPartners.map(partner => (
@@ -434,6 +434,7 @@ const styles = StyleSheet.create({
   },
   partnerDetails: {
     fontSize: 14,
+    textAlign: 'center',
     color: '#6c757d',
   }
 });

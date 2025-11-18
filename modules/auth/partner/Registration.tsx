@@ -13,7 +13,7 @@ import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function PartnerRegistration()  {
-  const {cities} = useCities('RJ', true);
+  const {cities} = useCities('RJ');
   const {
     control,
     formState: { errors }
@@ -88,7 +88,12 @@ export default function PartnerRegistration()  {
         name="instagram"
         render={({ field: { onChange, value } }) => (
           <InputGroup label="Instagram" error={errors.instagram}>
-            <Input placeholder="https://www.instagram.com/seu-perfil" value={value} onChangeText={onChange} />
+            <Input
+              placeholder="https://www.instagram.com/seu-perfil"
+              autoCapitalize="none"
+              autoCorrect={false}
+              onChangeText={onChange}
+              value={value} />
           </InputGroup>
         )}
       />
@@ -97,7 +102,12 @@ export default function PartnerRegistration()  {
         name="site"
         render={({ field: { onChange, value } }) => (
           <InputGroup label="Site" error={errors.site} margin={0}>
-            <Input placeholder="https://www.seu-site.com.br" value={value} onChangeText={onChange} />
+            <Input 
+              placeholder="https://www.seu-site.com.br"
+              onChangeText={onChange}
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={value} />
           </InputGroup>
         )}
       />
@@ -105,14 +115,14 @@ export default function PartnerRegistration()  {
       <Text style={styles.title}>Localização</Text>
       <Controller
         control={control}
-        name="city"
+        name="cities"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Municípios" error={Array.isArray(errors?.city) ? errors?.city[0] : errors?.city}>
+          <InputGroup label="Municípios" error={Array.isArray(errors?.cities) ? errors?.cities[0] : errors?.cities}>
             <Select
               isMultiple
               options={cities}
               selectedValue={value}
-              onValueChange={(values) => onChange(values)} />
+              onValueChange={(values) => onChange(Array.isArray(values) ? values.map(Number) : [Number(values)])} />
           </InputGroup>  
       )} />
       <HorizontalLine />
@@ -211,6 +221,8 @@ export default function PartnerRegistration()  {
                 >
                   <Input
                     placeholder="https://link-do-evento.com"
+                    autoCapitalize="none"
+                    autoCorrect={false}
                     onChangeText={onChange}
                     value={value}
                   />
