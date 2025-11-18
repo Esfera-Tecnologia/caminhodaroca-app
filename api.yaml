@@ -404,11 +404,13 @@ paths:
                       description:
                         type: string
                         description: Descrição do evento
-                      image:
-                        type: string
-                        format: binary
+                      images:
+                        type: array
                         nullable: true
-                        description: Imagem do evento
+                        description: Lista de imagens do evento
+                        items:
+                          type: string
+                          format: binary
                       externalLink:
                         type: string
                         format: uri
