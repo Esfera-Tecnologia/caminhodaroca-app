@@ -13,6 +13,7 @@ import { router } from "expo-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { z } from "zod";
 
 
@@ -97,24 +98,26 @@ export default function Register() {
   };
 
   return (
-    <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
-      <SystemBars style={{statusBar: 'light', navigationBar: 'dark'}} />
-      <View style={[globalStyles.row, globalStyles.flexCenter, {marginVertical: 40}]}>
-        <BackButton style={{position: 'absolute', left: 0}}/>
-        <Text style={styles.title}>Cadastro de Parceiro</Text>
-      </View>
-      <FormProvider {...methods}>
-        <Card>
-          <PartnerRegistration />
-          <Button
-            loading={methods.formState.isSubmitting}
-            onPress={methods.handleSubmit(onSubmitForm, onValidationFail)}
-            title="Enviar cadastro"
-            variant="success"/>
-        </Card>
-        <AppVersion style={{marginBottom: 20}} />
-      </FormProvider>
-    </ScrollView>
+    <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }}>
+      <ScrollView style={{flex: 1}} contentContainerStyle={styles.container}>
+        <SystemBars style={{statusBar: 'light', navigationBar: 'dark'}} />
+        <View style={[globalStyles.row, globalStyles.flexCenter, {marginVertical: 40}]}>
+          <BackButton style={{position: 'absolute', left: 0}}/>
+          <Text style={styles.title}>Cadastro de Parceiro</Text>
+        </View>
+        <FormProvider {...methods}>
+          <Card>
+            <PartnerRegistration />
+            <Button
+              loading={methods.formState.isSubmitting}
+              onPress={methods.handleSubmit(onSubmitForm, onValidationFail)}
+              title="Enviar cadastro"
+              variant="success"/>
+          </Card>
+          <AppVersion style={{marginBottom: 20}} />
+        </FormProvider>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
