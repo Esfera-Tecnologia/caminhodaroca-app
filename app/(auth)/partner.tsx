@@ -70,7 +70,7 @@ export default function Register() {
         formData.append(`events[${index}][externalLink]`, event.externalLink ?? "");
 
         if (event.image) {
-          formData.append(`events[${index}][image][0]`, {
+          formData.append(`events[${index}][images][0]`, {
             uri: event.image,
             name: `event_${index}.jpg`,
             type: "image/jpeg",
