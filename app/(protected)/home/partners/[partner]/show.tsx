@@ -225,6 +225,8 @@ const styles = StyleSheet.create({
   },
   event: {
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#f2f2f2',
     marginBottom: 16,
     boxShadow: [{
       offsetX: 0,
@@ -241,7 +243,7 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 0,
     borderBottomStartRadius: 0,
     borderBottomWidth: 1,
-    borderColor: 'lightgray',
+    borderColor: '#f2f2f2',
   },
   eventName: {
     fontSize: 16,

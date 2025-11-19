@@ -128,8 +128,8 @@ export function handleRequestError<T>({
   setError,
   fallbackField,
 }: HandleRequestErrorOptions<T>) {
-  const status = error.response.status;
-  const response = error.response.data;
+  const status = error.response?.status;
+  const response = error.response?.data;
 
   if (typeof response?.errors === 'object' && response?.errors !== null) {
     Toast.error('Dados inválidos. Por favor, confira os campos e tente novamente.')
