@@ -57,7 +57,7 @@ export default function PartnerRegistration()  {
         control={control}
         name="logo"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Logotipo" error={errors.logo}>
+          <InputGroup label="Logotipo*" error={errors.logo}>
             <ImageSelect
               value={value}
               onChange={(uri) => onChange(uri)}
@@ -117,7 +117,7 @@ export default function PartnerRegistration()  {
         control={control}
         name="cities"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Municípios" error={Array.isArray(errors?.cities) ? errors?.cities[0] : errors?.cities}>
+          <InputGroup label="Municípios*" error={Array.isArray(errors?.cities) ? errors?.cities[0] : errors?.cities}>
             <Select
               isMultiple
               options={cities}
@@ -184,6 +184,18 @@ export default function PartnerRegistration()  {
             </View>
             <Controller
               control={control}
+              name={`events.${index}.name`}
+              render={({ field: { onChange, value } }) => (
+                <InputGroup label="Nome" error={errors?.events?.[index]?.name}>
+                  <Input
+                    placeholder="Nome do evento"
+                    value={value}
+                    onChangeText={onChange} />
+                </InputGroup>
+              )}
+            />
+            <Controller
+              control={control}
               name={`events.${index}.description`}
               render={({ field: { onChange, value } }) => (
                 <InputGroup label="Descrição" error={errors?.events?.[index]?.description}>
@@ -199,14 +211,13 @@ export default function PartnerRegistration()  {
             />
             <Controller
               control={control}
-              name={`events.${index}.image`}
+              name={`events.${index}.images.0`}
               render={({ field: { onChange, value } }) => (
-                <InputGroup label="Imagem do evento" helper="(opcional)" error={errors?.events?.[index]?.image}>
+                <InputGroup label="Imagem do evento" helper="(opcional)" error={errors?.events?.[index]?.images?.[0]}>
                   <ImageSelect
                     value={value}
-                    onChange={(uri) => onChange(uri)}
-                  />
-                  <HelperText>Formato PNG ou JPG. Tamanho recomendado: 512x512px.</HelperText>
+                    onChange={(uri) => onChange(uri)} />
+                  <HelperText>Formato PNG ou JPG. Tamanho recomendado: 300x150px.</HelperText>
                 </InputGroup>
               )}
             />
@@ -234,7 +245,7 @@ export default function PartnerRegistration()  {
         );
       })}
       <Button
-        onPress={() => append({externalLink: '', description: '', image: null})}
+        onPress={() => append({externalLink: '', description: '', images: undefined})}
         title="Adicionar outro evento"
         variant="success"
         outline={true}

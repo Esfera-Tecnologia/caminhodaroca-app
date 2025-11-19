@@ -4,12 +4,12 @@ import Logo from '@/components/Logo';
 import RecordLoading from '@/components/RecordLoading';
 import RecordNotFound from '@/components/RecordNotFound';
 import env from "@/config.json";
-import { useAuth } from '@/context/AuthContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
 import { openEmail, openInstagram, openLink } from '@/util';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
+import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -17,6 +17,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 type EventType = {
   id: number;
   name: string;
+  images: string[];
   description: string;
   externalLink: string | null;
 }
@@ -40,17 +41,24 @@ interface PartnerType {
 const Event = ({event}: {event: EventType}) => {
   return (
     <View style={styles.event}>
-      <Text style={styles.eventName}>
-        {event.name}
-      </Text>
-      <Text style={styles.eventDescription}>
-        {event.description}
-      </Text>
-      {event.externalLink && (
-        <Pressable onPress={() => openLink(event.externalLink || '')} style={{marginTop: 16}}>
-          <Text style={{color: theme.colors.primary, fontWeight: 600}}>Ver detalhes do evento</Text>
-        </Pressable>
+      {event.images.length > 0 && (
+        <Image source={{uri: event.images[0]}} style={styles.eventLogo}/>
       )}
+      <View style={{padding: 16}}>
+        {event.name && (
+          <Text style={styles.eventName}>
+            {event.name}
+          </Text>
+        )}
+        <Text style={styles.eventDescription}>
+          {event.description}
+        </Text>
+        {event.externalLink && (
+          <Pressable onPress={() => openLink(event.externalLink || '')} style={{marginTop: 16}}>
+            <Text style={{color: theme.colors.primary, fontWeight: 600}}>Ver detalhes do evento</Text>
+          </Pressable>
+        )}
+      </View>
     </View>
   )
 }
@@ -58,7 +66,6 @@ export default function PropertyDetails() {
   const { partner: partnerId } = useLocalSearchParams();
   const [loading, setLoading] = useState(true);
   const [partner, setPartner] = useState<PartnerType | null>(null);
-  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -218,7 +225,6 @@ const styles = StyleSheet.create({
   },
   event: {
     borderRadius: 14,
-    padding: 16,
     marginBottom: 16,
     boxShadow: [{
       offsetX: 0,
@@ -227,6 +233,15 @@ const styles = StyleSheet.create({
       spreadDistance: 0,
       color: 'rgba(0,0,0,0.06)'
     }]
+  },
+  eventLogo: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
+    borderBottomEndRadius: 0,
+    borderBottomStartRadius: 0,
+    borderBottomWidth: 1,
+    borderColor: 'lightgray',
   },
   eventName: {
     fontSize: 16,

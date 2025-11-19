@@ -32,7 +32,7 @@ export default function Register() {
       events: [
         {
           description: undefined,
-          image: undefined,
+          images: undefined,
           externalLink: undefined,
         }
       ]
@@ -45,7 +45,7 @@ export default function Register() {
         const hasData =
           (event.description && event.description.trim() !== '') ||
           (event.externalLink && event.externalLink.trim() !== '') ||
-          (event.image && event.image !== null && event.image !== "");
+          (event.images && event.images[0] !== null && event.images[0] !== '');
 
         return hasData;
       });
@@ -72,12 +72,13 @@ export default function Register() {
         } as any);
       }
       cleanedEvents.forEach((event, index) => {
+        formData.append(`events[${index}][name]`, event.name ?? "");
         formData.append(`events[${index}][description]`, event.description ?? "");
         formData.append(`events[${index}][externalLink]`, event.externalLink ?? "");
 
-        if (event.image) {
+        if (event.images) {
           formData.append(`events[${index}][images][0]`, {
-            uri: event.image,
+            uri: event.images[0],
             name: `event_${index}.jpg`,
             type: "image/jpeg",
           } as any);

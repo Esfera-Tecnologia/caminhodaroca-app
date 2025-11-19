@@ -166,23 +166,34 @@ export const profileUpdateSchema = step1Schema
 
 export const eventSchema = z
   .object({
+    name: stringSchema.optional(),
     description: stringSchema.optional(),
-    image: z.any().optional(),
+    images: z.array(z.any().optional()).optional(),
     externalLink: optionalStringSchema,
   })
   .superRefine((data, ctx) => {
     const hasAnyField =
-      (data.image && data.image instanceof File) ||
+      (data.images && data.images[0] instanceof File) ||
+      (!!data.name && data.name.trim() !== "") ||
       (!!data.externalLink && data.externalLink.trim() !== "") ||
       (!!data.description && data.description.trim() !== "");
 
-    // Se qualquer campo foi preenchido, description vira obrigatória
-    if (hasAnyField && (!data.description || data.description.trim() === "")) {
-      ctx.addIssue({
-        path: ["description"],
-        code: z.ZodIssueCode.custom,
-        message: "Descrição é obrigatória quando houver outros dados do evento.",
-      });
+    // Se qualquer campo foi preenchido, nome e descrição vira obrigatória
+    if (hasAnyField) {
+      if(!data.name || data.name.trim() === "") {
+        ctx.addIssue({
+          path: ["name"],
+          code: z.ZodIssueCode.custom,
+          message: "Nome é obrigatório quando houver outros dados do evento.",
+        });
+      }
+      if(!data.description || data.description.trim() === "") {
+        ctx.addIssue({
+          path: ["description"],
+          code: z.ZodIssueCode.custom,
+          message: "Descrição é obrigatória quando houver outros dados do evento.",
+        });
+      }
     }
   });
 
