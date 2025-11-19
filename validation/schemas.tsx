@@ -200,4 +200,7 @@ export const partnerSchema = z.object({
   circuits: stringSchema,
   attractions: stringSchema,
   events: z.array(eventSchema).optional(),
+  termsAccepted: z.literal(true, {
+    message: 'Voce precisa aceitar os termos de uso para continuar'
+  })
 });

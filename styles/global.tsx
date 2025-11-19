@@ -92,5 +92,10 @@ export const globalStyles = StyleSheet.create({
         color: "rgba(0,0,0,0.075)"
       },
     ],
+  },
+  link: {
+    textDecorationLine: 'underline',
+    color: theme.colors.primary,
+    fontWeight: 600
   }
 });

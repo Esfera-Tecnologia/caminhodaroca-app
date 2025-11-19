@@ -2,6 +2,9 @@ import AppVersion from "@/components/AppVersion";
 import BackButton from "@/components/BackButton";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
+import ErrorMessage from "@/components/controls/ErrorMessage";
+import StyledCheckbox from "@/components/controls/StyledCheckbox";
+import Terms from "@/components/Terms";
 import env from "@/config.json";
 import PartnerRegistration from "@/modules/auth/partner/Registration";
 import { globalStyles } from "@/styles/global";
@@ -10,8 +13,9 @@ import { partnerSchema } from "@/validation/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { router } from "expo-router";
-import { FormProvider, useForm } from "react-hook-form";
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Alert, Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { z } from "zod";
@@ -20,6 +24,7 @@ import { z } from "zod";
 export type PartnerFormData = z.infer<typeof partnerSchema>;
 
 export default function Register() {
+  const [termsModalVisible, setTermsModalVisible] = useState(false);
   const methods = useForm<PartnerFormData>({
     resolver: zodResolver(partnerSchema),
     mode: "onChange",
@@ -108,6 +113,29 @@ export default function Register() {
         <FormProvider {...methods}>
           <Card>
             <PartnerRegistration />
+            <Controller
+              control={methods.control}
+              name="termsAccepted"
+              render={({ field: { onChange, value } }) => (
+                <View style={{marginBottom: 22}}>
+                  <View style={[globalStyles.row, globalStyles.itemsCenter]}>
+                    <StyledCheckbox 
+                      size={'md'}
+                      value={value}
+                      style={{ marginEnd: 8 }}
+                      onValueChange={(checked: boolean) => onChange(checked)} />
+                    <View style={globalStyles.row}>
+                      <Text style={[globalStyles.textBase, {flexShrink: 1}]}>Eu concordo com os {" "}</Text>
+                      <Pressable style={{padding: 0}} onPress={() => setTermsModalVisible(true)}>
+                        <Text style={globalStyles.link}>termos de uso</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                  {methods.formState.errors.termsAccepted && 
+                    <ErrorMessage>{methods.formState.errors.termsAccepted.message}</ErrorMessage>
+                  }
+                </View>
+              )} />
             <Button
               loading={methods.formState.isSubmitting}
               onPress={methods.handleSubmit(onSubmitForm, onValidationFail)}
@@ -117,6 +145,21 @@ export default function Register() {
           <AppVersion style={{marginBottom: 20}} />
         </FormProvider>
       </ScrollView>
+      <Modal
+        animationType="slide"
+        visible={termsModalVisible}
+        onRequestClose={() => {
+          setTermsModalVisible(!termsModalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Terms style={{flex: 1, padding: 20}}/>
+            <Pressable style={styles.modalClose} onPress={() => setTermsModalVisible(false)}>
+              <Text>Fechar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
@@ -132,4 +175,18 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 500,
   },
+  centeredView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  modalView: {
+    backgroundColor: "#fff"
+  },
+  modalClose: {
+    backgroundColor: "lightgray",
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 })
