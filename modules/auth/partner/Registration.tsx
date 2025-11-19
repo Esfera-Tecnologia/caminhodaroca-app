@@ -206,6 +206,7 @@ export default function PartnerRegistration()  {
                     value={value}
                     onChange={(uri) => onChange(uri)}
                   />
+                  <HelperText>Formato PNG ou JPG. Tamanho recomendado: 512x512px.</HelperText>
                 </InputGroup>
               )}
             />
