@@ -146,8 +146,8 @@ export default function Home() {
           <View>
             <Text style={styles.welcomeTitle}>Bem-vindo!</Text>
             <Text style={styles.welcomeDescription}>
-              Notamos que seu você realizou o cadastro através da plataforma web.
-              Acesse o seu perfil para completar os seus dados.
+              Notamos que seu cadastro está incompleto. Acesse o seu perfil
+              para preencher os seus dados!
             </Text>
             <Button title="Continuar" onPress={() => {
               setShowWelcomeModal(false)

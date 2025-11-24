@@ -45,8 +45,7 @@ export default function Register() {
         const hasData =
           (event.description && event.description.trim() !== '') ||
           (event.externalLink && event.externalLink.trim() !== '') ||
-          (event.images && event.images[0] !== null && event.images[0] !== '');
-
+          (event.images && event.images.length > 0 && !! event.images[0]);
         return hasData;
       });
       const formData = new FormData();
