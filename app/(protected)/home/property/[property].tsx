@@ -12,7 +12,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useUserLocation } from '@/context/LocationContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
-import { formatter, getDistanceInKm, openInstagram, openLink, openWhatsapp } from '@/util';
+import { formatter, getDistanceInKm, openInstagram, openLink, openWhatsapp, truncatedJoinedCities } from '@/util';
 import { FontAwesome6, Foundation } from '@expo/vector-icons';
 import axios from 'axios';
 import { Image } from 'expo-image';
@@ -132,9 +132,7 @@ const PartnerCarouselItem = ({partner}: {partner: Partner}) => {
         <Logo source={{uri: partner.logo}}/>
         <Text numberOfLines={2} style={styles.partnerName}>{partner.name}</Text>
         <Text style={[styles.partnerDetails, {marginBottom: 8}]}>
-          {partner.cities.length > 3
-            ? `${partner.cities[0]} e outras ${partner.cities.length - 1} cidades`
-            : `${partner.cities.join(', ')}`} - {partner.state}
+          {truncatedJoinedCities(partner.cities, partner.state)}
         </Text>
         <Button
           onPress={() => router.push({

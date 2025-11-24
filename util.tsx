@@ -251,3 +251,16 @@ export const openEmail = (email: string, subject: string) => {
     alert("Não foi possível abrir o aplicativo de e-mail.");
   });
 };
+
+export const truncatedJoinedCities = (data: Record<number, string>, state: string) => {
+  const cities = Object.values(data);
+  return cities.length > 3
+    ? `${cities[0]} e outras ${cities.length - 1} cidades`
+    : `${cities.join(', ')} - ${state}`
+}
+
+export const cleanObject = (obj: any) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([_, v]) => v !== null && v !== undefined)
+  );
+}

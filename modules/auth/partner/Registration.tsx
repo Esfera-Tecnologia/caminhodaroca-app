@@ -1,4 +1,5 @@
 import { PartnerFormData } from "@/app/(auth)/partner";
+import { PartnerUpdateFormData } from "@/app/(protected)/home/partners/[partner]/edit";
 import Button from "@/components/Button";
 import ImageSelect from "@/components/controls/ImageSelect";
 import Input from "@/components/controls/Input";
@@ -252,6 +253,52 @@ export default function PartnerRegistration()  {
         style={{marginBottom: 24}} />
     </View>
   )
+}
+
+export const preparePartnerDataForSubmission = (data: PartnerFormData | PartnerUpdateFormData) => {
+  const cleanedEvents = (data.events ?? []).filter(event => {
+    const hasData =
+      (event.description && event.description.trim() !== '') ||
+      (event.externalLink && event.externalLink.trim() !== '') ||
+      (event.images && event.images.length > 0 && !! event.images[0]);
+    return hasData;
+  });
+  const formData = new FormData();
+  formData.append("name", data.name);
+  formData.append("email", data.email);
+  formData.append("description", data.description);
+  formData.append("routes", data.routes);
+  formData.append("circuits", data.circuits);
+  formData.append("attractions", data.attractions);
+
+  if (data.instagram) 
+    formData.append("instagram", data.instagram);
+  if (data.site)
+    formData.append("site", data.site);
+  (data.cities ?? []).forEach((city, index) => {
+    formData.append(`cities[${index}]`, String(city));
+  });
+  if (data.logo) {
+    formData.append("logo", {
+      uri: data.logo,
+      name: "logo.jpg",
+      type: "image/jpeg",
+    } as any);
+  }
+  cleanedEvents.forEach((event, index) => {
+    formData.append(`events[${index}][name]`, event.name ?? "");
+    formData.append(`events[${index}][description]`, event.description ?? "");
+    formData.append(`events[${index}][externalLink]`, event.externalLink ?? "");
+
+    if (event.images?.length && event.images[0] !== undefined) {
+      formData.append(`events[${index}][images][0]`, {
+        uri: event.images[0],
+        name: `event_${index}.jpg`,
+        type: "image/jpeg",
+      } as any);
+    }
+  });
+  return formData;
 }
 
 const styles = StyleSheet.create({

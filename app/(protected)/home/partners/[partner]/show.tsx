@@ -4,9 +4,10 @@ import Logo from '@/components/Logo';
 import RecordLoading from '@/components/RecordLoading';
 import RecordNotFound from '@/components/RecordNotFound';
 import env from "@/config.json";
+import { EventType, PartnerType } from '@/interfaces';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
-import { openEmail, openInstagram, openLink } from '@/util';
+import { openEmail, openInstagram, openLink, truncatedJoinedCities } from '@/util';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import { Image } from 'expo-image';
@@ -14,29 +15,7 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-type EventType = {
-  id: number;
-  name: string;
-  images: string[];
-  description: string;
-  externalLink: string | null;
-}
 
-interface PartnerType {
-  id: number;
-  name: string;
-  logo: string;
-  cities: string;
-  uf: string;
-  description: string;
-  email: string;
-  routes: string;
-  circuits: string;
-  attractions: string;
-  instagram: string;
-  website: string;
-  events: EventType[]
-}
 
 const Event = ({event}: {event: EventType}) => {
   return (
@@ -68,7 +47,7 @@ export default function PropertyDetails() {
   const [partner, setPartner] = useState<PartnerType | null>(null);
 
   useEffect(() => {
-    const fetchProperty = async () => {
+    const fetchPartner = async () => {
       try {
         const response = await axios.get(`${env.API_URL}/partners/${partnerId}`);
         setPartner(response.data);
@@ -78,7 +57,7 @@ export default function PropertyDetails() {
         setLoading(false);
       }
     };
-    fetchProperty();
+    fetchPartner();
   }, [partnerId]);
 
   if (loading) {
@@ -95,7 +74,7 @@ export default function PropertyDetails() {
           <View style={[{flexShrink: 1, alignItems: 'flex-start', paddingEnd: 16}]}>
             <Text style={styles.name} numberOfLines={2}>{partner.name}</Text>
             <Badge 
-              text={`${partner.cities}`}
+              text={truncatedJoinedCities(partner.cities, 'RJ')}
               icon={<FontAwesome5 name="map-marker-alt" size={16} color={theme.colors.primary}/>}
               style={{marginBottom: 6}}/>
           </View>
@@ -154,7 +133,7 @@ export default function PropertyDetails() {
         </Text>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Município</Text>
-          <Text style={{marginBottom: 8}}>{partner.cities}</Text>
+          <Text style={{marginBottom: 8}}>{Object.values(partner.cities).join(', ')}</Text>
         </View>
         <Text style={styles.title}>
           Experiencias Oferecidas

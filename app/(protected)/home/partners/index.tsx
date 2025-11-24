@@ -3,10 +3,12 @@ import FilterButton from "@/components/buttons/FilterButton";
 import SearchInput from "@/components/controls/SearchInput";
 import { EmptyList } from "@/components/EmptyList";
 import { LoadingList } from "@/components/LoadingList";
-import { PartnerItemType, usePartners } from "@/hooks/usePartners";
+import { usePartners } from "@/hooks/usePartners";
+import { PartnerItemType } from "@/interfaces";
 import PartnerAdvancedFilters, { PartnerFilters } from "@/modules/protected/PartnerFilters";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
+import { truncatedJoinedCities } from "@/util";
 import { Feather, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
@@ -22,8 +24,12 @@ function PartnerItem({partner}: {partner: PartnerItemType}) {
         style={styles.partnerLogo}
         transition={1000} />
       <View style={styles.partnerDetails}>
-        <Text style={styles.partnerName}>{partner.name}</Text>
-        <Text style={styles.partnerLocation}>{partner.city} - {partner.state}</Text>
+        <Text style={styles.partnerName}>
+          {partner.name}
+        </Text>
+        <Text style={styles.partnerLocation}>
+          {truncatedJoinedCities(partner.cities, partner.state)}
+        </Text>
         <View style={[globalStyles.row, globalStyles.itemsCenter]}>
           {partner.editable && (
             <Button
