@@ -118,9 +118,21 @@
 
     .event-card {
       background-color: #ffffff;
-      border-radius: 14px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      border: 1px solid #f1f1f1;
+    }
+
+    .event-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .event-content {
       padding: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
     }
 
     .event-card h3 {
@@ -194,8 +206,7 @@
         <h1>Fazenda Boa Vista</h1>
         <div>
           <span class="info-chip"><i class="fas fa-map-marker-alt"></i> Pedra de Guaratiba • Rio de Janeiro</span>
-          <span class="info-chip"><i class="fas fa-tags"></i> Hospedagem Rural</span>
-          <span class="info-chip"><i class="fas fa-leaf"></i> Cabana</span>
+   
         </div>
       </div>
     </div>
@@ -235,18 +246,24 @@
     <div class="section-title">Eventos</div>
     <div class="events-grid">
       <div class="event-card">
-        <h3>Festival Sabores da Roça</h3>
-        <p>Degustação de produtos típicos, música ao vivo regional e oficinas de culinária rural.</p>
-        <a href="https://www.fazendaboavista.com/eventos/sabores" target="_blank" rel="noopener">
-          Ver detalhes do evento
-        </a>
+        <img src="assets/galeria/foto2.jpg" alt="Festival Sabores da Roça">
+        <div class="event-content">
+          <h3>Festival Sabores da Roça</h3>
+          <p>Degustação de produtos típicos, música ao vivo regional e oficinas de culinária rural.</p>
+          <a href="https://www.fazendaboavista.com/eventos/sabores" target="_blank" rel="noopener">
+            Ver detalhes do evento
+          </a>
+        </div>
       </div>
       <div class="event-card">
-        <h3>Lua Cheia na Fazenda</h3>
-        <p>Passeio noturno guiado com observação astronômica e contação de histórias ao redor da fogueira.</p>
-        <a href="https://www.fazendaboavista.com/eventos/luacheia" target="_blank" rel="noopener">
-          Ver detalhes do evento
-        </a>
+        <img src="assets/galeria/foto3.jpg" alt="Lua Cheia na Fazenda">
+        <div class="event-content">
+          <h3>Lua Cheia na Fazenda</h3>
+          <p>Passeio noturno guiado com observação astronômica e contação de histórias ao redor da fogueira.</p>
+          <a href="https://www.fazendaboavista.com/eventos/luacheia" target="_blank" rel="noopener">
+            Ver detalhes do evento
+          </a>
+        </div>
       </div>
     </div>
   </div>
