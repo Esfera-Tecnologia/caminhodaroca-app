@@ -291,11 +291,16 @@ export const preparePartnerDataForSubmission = (data: PartnerFormData | PartnerU
     formData.append(`events[${index}][externalLink]`, event.externalLink ?? "");
 
     if (event.images?.length && event.images[0] !== undefined) {
-      formData.append(`events[${index}][images][0]`, {
-        uri: event.images[0],
-        name: `event_${index}.jpg`,
-        type: "image/jpeg",
-      } as any);
+      const image = event.images[0];
+      const isLocalImage = image.startsWith("file://") || image.startsWith("content://");
+
+      if (isLocalImage) {
+        formData.append(`events[${index}][images][0]`, {
+          uri: image,
+          name: `event_${index}.jpg`,
+          type: "image/jpeg",
+        } as any);
+      }
     }
   });
   return formData;
