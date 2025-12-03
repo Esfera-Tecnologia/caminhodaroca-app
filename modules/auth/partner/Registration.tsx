@@ -219,7 +219,8 @@ export default function PartnerRegistration({partner}: {partner?: PartnerType}) 
                 <InputGroup label="Imagem do evento" helper="(opcional)" error={errors?.events?.[index]?.images?.[0]}>
                   <ImageSelect
                     value={value}
-                    onChange={(uri) => onChange(uri)} />
+                    onChange={(uri) => onChange(uri)}
+                    preview={partner?.events?.[index]?.images?.[0]}/>
                   <HelperText>Formato PNG ou JPG. Tamanho recomendado: 300x150px.</HelperText>
                 </InputGroup>
               )}
