@@ -87,7 +87,7 @@ export default function PropertyDetails() {
       <ScrollView style={styles.container}>
         <FormProvider {...methods}>
         <View style={[globalStyles.card, {marginVertical: 20}]}>
-          <PartnerRegistration />
+          <PartnerRegistration partner={partner}/>
           <Button
             loading={methods.formState.isSubmitting}
             onPress={methods.handleSubmit(onSubmitForm, onValidationFail)}

@@ -4,10 +4,11 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props = {
   value?: string | null;
+  preview?: string;
   onChange?: (uri: string | null) => void;
 };
 
-export default function ImageSelect({ value, onChange }: Props) {
+export default function ImageSelect({ value, onChange, preview }: Props) {
   const [image, setImage] = useState<string | null>(null);
 
   const pickImage = async () => {
@@ -31,9 +32,9 @@ export default function ImageSelect({ value, onChange }: Props) {
         <Text style={styles.buttonLabel}>Escolher</Text>
         <Text style={styles.buttonText} numberOfLines={1} >{image ? image.split("/").pop() : 'Nenhuma imagem selecionada'}</Text>
       </Pressable>
-      {value && (
+      {(value || preview) && (
         <Image
-          source={{ uri: value }}
+          source={{ uri: value || preview }}
           style={styles.preview}
         />
       )}

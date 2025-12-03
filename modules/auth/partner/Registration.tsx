@@ -8,12 +8,13 @@ import Select from "@/components/controls/Select";
 import HelperText from "@/components/HelperText";
 import HorizontalLine from "@/components/HorizontalLine";
 import { useCities } from "@/hooks/useCities";
+import { PartnerType } from "@/interfaces";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function PartnerRegistration()  {
+export default function PartnerRegistration({partner}: {partner?: PartnerType})  {
   const {cities} = useCities('RJ');
   const {
     control,
@@ -62,6 +63,7 @@ export default function PartnerRegistration()  {
             <ImageSelect
               value={value}
               onChange={(uri) => onChange(uri)}
+              preview={partner?.logo}
             />
             <HelperText>Formato PNG ou JPG. Tamanho recomendado: 512x512px.</HelperText>
           </InputGroup>
