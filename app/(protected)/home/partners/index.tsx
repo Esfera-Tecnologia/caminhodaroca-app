@@ -9,7 +9,7 @@ import PartnerAdvancedFilters, { PartnerFilters } from "@/modules/protected/Part
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { truncatedJoinedCities } from "@/util";
-import { Feather, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -30,39 +30,23 @@ function PartnerItem({partner}: {partner: PartnerItemType}) {
         <Text style={styles.partnerLocation}>
           {truncatedJoinedCities(partner.cities, partner.state)}
         </Text>
-        <View style={[globalStyles.row, globalStyles.itemsCenter]}>
-          {partner.editable && (
-            <Button
-              onPress={() => router.push({
-                pathname: '/home/partners/[partner]/edit',
-                params: {partner: partner.id}
-              })}
-              variant="success"
-              outline={true}
-              size="sm"
-              title="Editar parceiro"
-              startIcon={<FontAwesome name="pencil" size={14} color={theme.colors.success} />}
-              textStyle={{fontWeight: 600}}
-              style={[{marginTop: 8, marginEnd: 8}]}/>
-          )}
-          {partner.pendingApproval && (
-            <Button
-              onPress={() => router.push({
-                pathname: '/home/partners/[partner]/edit',
-                params: {partner: partner.id}
-              })}
-              variant="warning"
-              outline={true}
-              size="sm"
-              startIcon={
-                <MaterialCommunityIcons
-                  name="clock-edit-outline"
-                  color={theme.colors.warning}
-                  size={21} />
-              }
-              style={[{marginTop: 8, paddingVertical: 3}]}/>
-          )}
-        </View>
+        {partner.editable && (
+          <Button
+            onPress={() => router.push({
+              pathname: '/home/partners/[partner]/edit',
+              params: {partner: partner.id}
+            })}
+            variant="success"
+            outline={true}
+            size="sm"
+            title="Editar parceiro"
+            startIcon={<FontAwesome name="pencil" size={14} color={theme.colors.success} />}
+            textStyle={{fontWeight: 600}}
+            style={[{marginTop: 4}]}/>
+        )}
+        {partner.pendingApproval && (
+          <Text style={{color: theme.colors.warning, fontSize: 12, marginTop: 4}}>Alterações pendentes</Text>
+        )}
       </View>
       <Pressable
         style={styles.partnerShowButton}
