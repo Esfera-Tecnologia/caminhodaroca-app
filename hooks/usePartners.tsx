@@ -38,7 +38,8 @@ export function usePartners(filters: PartnerFilters | undefined) {
           if (error.response?.status === 404) {
             setData([]);
           } else {
-            Toast.error('Não foi possível obter a lista de propriedades no momento');
+            console.log(error.response?.data.message);
+            Toast.error('Não foi possível obter a lista de parceiros no momento');
           }
         } else {
           console.error('Erro inesperado:', error);

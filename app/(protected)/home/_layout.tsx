@@ -30,10 +30,11 @@ export default function TabLayout() {
     handlePress();
     setModalVisible(false);
   }
-  const handleLogout = () => {
-    onLogout();
+  const handleLogout = async () => {
+    await onLogout();
     setModalVisible(false);
-    router.push('/home/property');
+    router.dismissAll();
+    router.push('/entry');
   };
   return (
     <LocationProvider>
