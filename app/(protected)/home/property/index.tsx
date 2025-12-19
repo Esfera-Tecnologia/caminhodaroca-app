@@ -83,7 +83,6 @@ export default function Home() {
 
   useEffect(() => {
     if (!location) return;
-    setFilters((prev) => ({ ...prev, useCurrentLocation: true }));
     (async () => {
       try {
         const [address] = await Location.reverseGeocodeAsync({

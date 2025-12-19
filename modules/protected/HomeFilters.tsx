@@ -60,11 +60,6 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
     onApply(filters);
     onClose();
   }
-  useEffect(() => {
-    if(userLocation) {
-      setFilters((prev) => ({ ...prev, useCurrentLocation: true }));
-    }
-  }, [userLocation])
 
   useEffect(() => {
     if(filters.useCurrentLocation && filters.propertyLocationId !== undefined) {

@@ -39,7 +39,7 @@ export default function PropertyDetails() {
           ...cleanObject(partnerData),
           events: partnerData.events.length > 0 
             ? partnerData.events
-            : [{description: undefined, images: undefined, externalLink: undefined}],
+            : [{description: undefined, images: undefined, externalLink: ''}],
           logo: undefined,
           cities: Object.keys(partnerData.cities).map(Number)
         });
