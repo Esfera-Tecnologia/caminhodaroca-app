@@ -289,6 +289,7 @@ export const preparePartnerDataForSubmission = (data: PartnerFormData | PartnerU
     } as any);
   }
   cleanedEvents.forEach((event, index) => {
+    formData.append(`events[${index}][eventId]`, event.eventId ?? "");
     formData.append(`events[${index}][name]`, event.name ?? "");
     formData.append(`events[${index}][description]`, event.description ?? "");
     formData.append(`events[${index}][externalLink]`, event.externalLink ?? "");

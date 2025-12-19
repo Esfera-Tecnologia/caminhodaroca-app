@@ -158,7 +158,7 @@ export default function PropertyDetails() {
               Eventos
             </Text>
             {partner.events.map(event => (
-              <Event key={event.id} event={event}/>)
+              <Event key={event.eventId} event={event}/>)
             )}
           </>
         )}

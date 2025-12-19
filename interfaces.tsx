@@ -1,5 +1,5 @@
 export type EventType = {
-  id: number;
+  eventId: number;
   name: string;
   images: string[];
   description: string;

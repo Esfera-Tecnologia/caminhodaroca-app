@@ -166,6 +166,7 @@ export const profileUpdateSchema = step1Schema
 
 export const eventSchema = z
   .object({
+    eventId: z.any(),
     name: stringSchema.optional(),
     description: stringSchema.optional(),
     images: z.array(z.any().optional()).optional(),
