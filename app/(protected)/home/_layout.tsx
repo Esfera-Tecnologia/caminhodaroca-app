@@ -120,7 +120,7 @@ export default function TabLayout() {
       <Modal animationType="slide" visible={modalVisible} onRequestClose={() => setModalVisible(false)} >
         <SystemBars style="dark" />
         <SafeAreaView style={{flex: 1}}>
-          <View style={styles.header}>
+          <View style={[styles.header, { paddingTop: insets.top }]}>
             <Text style={styles.title}>Minha Conta</Text>
             <Pressable onPress={() => setModalVisible(false)}>
               <Feather name="x" size={24} color="rgba(0,0,0,0.5)" />
