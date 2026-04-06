@@ -44,6 +44,19 @@
     .rating i {
       color: #ffc107;
     }
+    .visited-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0 0;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #fff4cc, #ffe39a);
+      color: #8a5d00;
+      font-size: 0.78rem;
+      font-weight: 700;
+      box-shadow: 0 6px 14px rgba(178, 132, 18, 0.18);
+    }
     .property-buttons .btn {
       border-radius: 14px;
       font-size: 14px;
@@ -96,12 +109,12 @@
     .gallery-container {
       border-top: 1px solid #eee;
     }
-    .modal-content {
+    #imagemModal .modal-content {
       background-color: rgba(0,0,0,0.95);
       border: none;
       box-shadow: none;
     }
-    .modal-body img {
+    #imagemModal .modal-body img {
       max-height: 80vh;
     }
     .related-partner-card {
@@ -148,18 +161,101 @@
       border-radius: 12px;
       object-fit: cover;
     }
+    .list-option-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1px solid #dce6e2;
+      border-radius: 14px;
+      background: #f8faf9;
+      margin-bottom: 10px;
+    }
+    .list-option-card .form-check {
+      margin: 0;
+      flex: 1;
+    }
+    .list-option-card .form-check-label {
+      cursor: pointer;
+    }
+    .list-option-title {
+      font-weight: 700;
+      color: #24312d;
+    }
+    .list-option-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .list-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(0, 109, 96, 0.1);
+      color: #006d60;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .remove-list-button {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #f1c8cf;
+      border-radius: 999px;
+      background: #fff4f6;
+      color: #c94c5b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .remove-list-button:hover {
+      background: #ffe8ec;
+      color: #b8475b;
+    }
+    .create-list-box {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid #e4ece8;
+    }
+    .save-lists-button {
+      min-width: 182px;
+    }
+    #modalListas .modal-content {
+      background: #ffffff;
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
+    }
+    #modalListas .modal-header {
+      border-bottom: 1px solid #edf1ef;
+      padding: 18px 20px 14px;
+    }
+    #modalListas .modal-body {
+      padding: 18px 20px 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #f6faf8 100%);
+    }
   </style>
 </head>
 <body>
   <div class="top-bar">Detalhes da Propriedade</div>
-  <img src="assets/capa.jpg" class="cover-img" alt="Imagem da propriedade" />
+  <img id="propertyCover" src="assets/capa.jpg" class="cover-img" alt="Imagem da propriedade" />
  
   <div class="property-card">
     <div class="d-flex align-items-center mb-2">
-      <img src="assets/logo1.png" class="property-logo me-3" alt="Logo">
+      <img id="propertyLogo" src="assets/logo1.png" class="property-logo me-3" alt="Logo">
       <div>
-        <h5 class="mb-0 fw-bold">Fazenda Boa Vista</h5>
-        <div class="rating">
+        <h5 id="propertyName" class="mb-0 fw-bold">Fazenda Boa Vista</h5>
+        <div id="propertyVisited" class="visited-highlight">
+          <i class="fas fa-check-circle"></i>
+          Visita realizada
+        </div>
+        <div id="propertyRating" class="rating">
           <i class="fas fa-star"></i>
           <i class="fas fa-star"></i>
           <i class="fas fa-star"></i>
@@ -169,33 +265,33 @@
       </div>
     </div>
 
-    <p class="mb-1 text-muted"><i class="fas fa-map-marker-alt me-1"></i> Pedra de Guaratiba, Rio de Janeiro</p>
-    <p class="mb-2 text-muted"><i class="fas fa-route me-1"></i> 12 km de distância</p>
-    <p class="mb-1">Categoria: <strong>Hospedagem Rural</strong></p>
-    <p class="mb-2">Subcategoria: <strong>Cabana</strong></p>
+    <p class="mb-1 text-muted"><i class="fas fa-map-marker-alt me-1"></i> <span id="propertyLocation">Pedra de Guaratiba, Rio de Janeiro</span></p>
+    <p class="mb-2 text-muted"><i class="fas fa-route me-1"></i> <span id="propertyDistance">12 km de distância</span></p>
+    <p class="mb-1">Categoria: <strong id="propertyCategory">Hospedagem Rural</strong></p>
+    <p class="mb-2">Subcategoria: <strong id="propertySubcategory">Cabana</strong></p>
 
-    <p class="text-muted">
+    <p id="propertyDescription" class="text-muted">
       A Fazenda Boa Vista oferece uma experiência autêntica no campo, com acomodações rústicas, gastronomia local e belas paisagens naturais.
     </p>
 
     <h6 class="section-title">Horários de Funcionamento</h6>
-    <div class="info-box">
+    <div id="propertyHours" class="info-box">
       Segunda a Sexta: 08:00 às 18:00<br>
       Sábado e Domingo: 09:00 às 17:00
     </div>
 
     <h6 class="section-title">Produtos Disponíveis</h6>
-    <div class="info-box">
+    <div id="propertyProducts" class="info-box">
       Queijos artesanais, doces caseiros, ovos caipiras, hortaliças orgânicas.
     </div>
 
     <h6 class="section-title">Acessibilidade</h6>
-    <div class="info-box">
+    <div id="propertyAccessibility" class="info-box">
       Acesso para cadeirantes, estacionamento com vaga prioritária, banheiro adaptado.
     </div>
 
     <h6 class="section-title">Política Pet Friendly</h6>
-    <div class="info-box">
+    <div id="propertyPetPolicy" class="info-box">
       Permitida a entrada de animais de pequeno e médio porte. Levar guia obrigatória.
     </div>
 
@@ -211,18 +307,24 @@
 
     <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
       <!-- Ver no Mapa -->
-      <a href="https://www.google.com/maps?q=-22.9083,-43.1964" target="_blank"
+      <a id="propertyMapLink" href="https://www.google.com/maps?q=-22.9083,-43.1964" target="_blank"
          class="btn btn-outline-success d-flex align-items-center px-3">
         <i class="fas fa-map-location-dot me-2"></i> Ver no Mapa
       </a>
 
       <!-- Favoritar -->
-      <button class="btn btn-outline-secondary d-flex align-items-center px-3" id="btn-favoritar">
-        <i class="fas fa-heart me-2" id="icon-fav" style="color: gray;"></i> Favoritar
+      <button class="btn btn-outline-secondary d-flex align-items-center px-3 save-lists-button" id="btn-manage-lists" type="button" data-bs-toggle="modal" data-bs-target="#modalListas">
+        <i class="fas fa-heart me-2" id="icon-fav" style="color: #c94c5b;"></i>
+        <span id="saveButtonLabel">Salvar em listas</span>
+      </button>
+
+      <!-- Ler QR Code -->
+      <button class="btn btn-outline-success d-flex align-items-center px-3" type="button">
+        <i class="fas fa-qrcode me-2"></i> Ler QR Code
       </button>
 
       <!-- WhatsApp -->
-      <a href="https://wa.me/5541988455315" target="_blank"
+      <a id="propertyContactLink" href="https://wa.me/5541988455315" target="_blank"
          class="btn btn-outline-success d-flex align-items-center px-3">
         <i class="fab fa-whatsapp me-2"></i> Contato
       </a>
@@ -339,17 +441,295 @@
     </div>
   </div>
 
+  <div class="modal fade" id="modalListas" tabindex="-1" aria-labelledby="modalListasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h5 class="modal-title fw-bold" id="modalListasLabel">Salvar em listas</h5>
+            <small class="text-muted">Selecione qual lista de favoritos deseja salvar.</small>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="listsOptions">
+            <div class="list-option-card">
+              <div class="form-check">
+                <input class="form-check-input list-checkbox" type="checkbox" value="Favoritos" id="listFavorites" checked>
+                <label class="form-check-label" for="listFavorites">
+                  <span class="list-option-title">Favoritos</span>
+                </label>
+              </div>
+              <div class="list-option-meta">
+                <span class="list-badge">12</span>
+              </div>
+            </div>
+            <div class="list-option-card" data-removable-list="true">
+              <div class="form-check">
+                <input class="form-check-input list-checkbox" type="checkbox" value="Caminho do vinho" id="listWine" checked>
+                <label class="form-check-label" for="listWine">
+                  <span class="list-option-title">Caminho do vinho</span>
+                </label>
+              </div>
+              <div class="list-option-meta">
+                <span class="list-badge">4</span>
+                <button type="button" class="remove-list-button" aria-label="Remover lista Caminho do vinho">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <div class="list-option-card" data-removable-list="true">
+              <div class="form-check">
+                <input class="form-check-input list-checkbox" type="checkbox" value="Fim de semana em família" id="listFamily">
+                <label class="form-check-label" for="listFamily">
+                  <span class="list-option-title">Fim de semana em família</span>
+                </label>
+              </div>
+              <div class="list-option-meta">
+                <span class="list-badge">7</span>
+                <button type="button" class="remove-list-button" aria-label="Remover lista Fim de semana em família">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="create-list-box">
+            <label for="newListName" class="form-label fw-semibold">Criar nova lista</label>
+            <div class="input-group">
+              <input type="text" id="newListName" class="form-control" placeholder="Ex: Cafés da manhã na roça">
+              <button class="btn btn-success" type="button" id="createListButton">Criar</button>
+            </div>
+            <div class="form-text">Ao criar sua nova lista ela será adicionada em sua lista de favoritos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap JS obrigatório para modal funcionar -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Scripts personalizados -->
   <script>
-    const favBtn = document.getElementById('btn-favoritar');
-    const favIcon = document.getElementById('icon-fav');
+    const propertyCatalog = {
+      'fazenda-boa-vista': {
+        name: 'Fazenda Boa Vista',
+        cover: 'assets/capa.jpg',
+        logo: 'assets/logo1.png',
+        location: 'Pedra de Guaratiba, Rio de Janeiro',
+        distance: '12 km de distância',
+        category: 'Hospedagem Rural',
+        subcategory: 'Cabana',
+        description: 'A Fazenda Boa Vista oferece uma experiência autêntica no campo, com acomodações rústicas, gastronomia local e belas paisagens naturais.',
+        hours: 'Segunda a Sexta: 08:00 às 18:00<br>Sábado e Domingo: 09:00 às 17:00',
+        products: 'Queijos artesanais, doces caseiros, ovos caipiras, hortaliças orgânicas.',
+        accessibility: 'Acesso para cadeirantes, estacionamento com vaga prioritária, banheiro adaptado.',
+        petPolicy: 'Permitida a entrada de animais de pequeno e médio porte. Levar guia obrigatória.',
+        mapUrl: 'https://www.google.com/maps?q=-22.9368,-43.6614',
+        contactUrl: 'https://wa.me/5541988455315',
+        visited: true,
+        ratingHtml: `
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <i class="far fa-star"></i>
+        `
+      },
+      'sitio-vale-verde': {
+        name: 'Sítio Vale Verde',
+        cover: 'assets/tela2.jpg',
+        logo: 'assets/logo2.png',
+        location: 'Vargem Grande, Rio de Janeiro',
+        distance: '18 km de distância',
+        category: 'Experiência Rural',
+        subcategory: 'Vivência gastronômica',
+        description: 'O Sítio Vale Verde recebe visitantes para vivências no campo, degustações sazonais e experiências voltadas ao turismo rural da região.',
+        hours: 'Terça a Sexta: 09:00 às 17:00<br>Sábado e Domingo: 09:00 às 18:00',
+        products: 'Compotas artesanais, geleias, mel, café da roça e cestas sazonais.',
+        accessibility: 'Estacionamento reservado, circulação em piso regular nas áreas principais e atendimento assistido.',
+        petPolicy: 'Permitida a entrada de animais de pequeno porte nas áreas externas, com guia.',
+        mapUrl: 'https://www.google.com/maps?q=-22.9715,-43.4603',
+        contactUrl: 'https://wa.me/5541999990002',
+        visited: false,
+        ratingHtml: `
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="far fa-star"></i>
+          <i class="far fa-star"></i>
+        `
+      },
+      'chacara-do-sol': {
+        name: 'Chácara do Sol',
+        cover: 'assets/tela1.jpg',
+        logo: 'assets/logo3.png',
+        location: 'Campo Grande, Rio de Janeiro',
+        distance: '25 km de distância',
+        category: 'Lazer Rural',
+        subcategory: 'Visitação',
+        description: 'A Chácara do Sol reúne espaços ao ar livre, produção local e programação para famílias que querem aproveitar um dia de contato com a natureza.',
+        hours: 'Quarta a Sexta: 10:00 às 17:00<br>Sábado e Domingo: 09:00 às 18:00',
+        products: 'Hortaliças frescas, doces caseiros, mudas, plantas ornamentais e artesanato local.',
+        accessibility: 'Entrada principal com rampa, banheiro adaptado e equipe de apoio para recepção.',
+        petPolicy: 'Aceita pets de pequeno e médio porte em áreas abertas, com guia obrigatória.',
+        mapUrl: 'https://www.google.com/maps?q=-22.8782,-43.5571',
+        contactUrl: 'https://wa.me/5541999990003',
+        visited: false,
+        ratingHtml: `
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <i class="far fa-star"></i>
+          <i class="far fa-star"></i>
+        `
+      }
+    };
 
-    favBtn.addEventListener('click', function () {
-      favIcon.style.color = (favIcon.style.color === 'red') ? 'gray' : 'red';
+    const params = new URLSearchParams(window.location.search);
+    const propertyId = params.get('id') || 'fazenda-boa-vista';
+    const property = propertyCatalog[propertyId] || propertyCatalog['fazenda-boa-vista'];
+
+    document.title = `${property.name} | Caminho da Roça`;
+    document.getElementById('propertyCover').src = property.cover;
+    document.getElementById('propertyCover').alt = `Imagem da propriedade ${property.name}`;
+    document.getElementById('propertyLogo').src = property.logo;
+    document.getElementById('propertyLogo').alt = property.name;
+    document.getElementById('propertyName').textContent = property.name;
+    document.getElementById('propertyLocation').textContent = property.location;
+    document.getElementById('propertyDistance').textContent = property.distance;
+    document.getElementById('propertyCategory').textContent = property.category;
+    document.getElementById('propertySubcategory').textContent = property.subcategory;
+    document.getElementById('propertyDescription').textContent = property.description;
+    document.getElementById('propertyHours').innerHTML = property.hours;
+    document.getElementById('propertyProducts').textContent = property.products;
+    document.getElementById('propertyAccessibility').textContent = property.accessibility;
+    document.getElementById('propertyPetPolicy').textContent = property.petPolicy;
+    document.getElementById('propertyMapLink').href = property.mapUrl;
+    document.getElementById('propertyContactLink').href = property.contactUrl;
+    document.getElementById('propertyRating').innerHTML = property.ratingHtml;
+    document.getElementById('propertyVisited').style.display = property.visited ? 'inline-flex' : 'none';
+
+    const favIcon = document.getElementById('icon-fav');
+    const saveButtonLabel = document.getElementById('saveButtonLabel');
+    const listsOptions = document.getElementById('listsOptions');
+    const createListButton = document.getElementById('createListButton');
+    const newListName = document.getElementById('newListName');
+    const favoritesCheckbox = document.getElementById('listFavorites');
+
+    function getSelectedLists() {
+      return [...document.querySelectorAll('.list-checkbox:checked')].map(input => input.value);
+    }
+
+    function removeList(option) {
+      if (!option || !option.hasAttribute('data-removable-list')) {
+        return;
+      }
+
+      favoritesCheckbox.checked = true;
+      option.remove();
+      renderSavedLists();
+    }
+
+    function attachListOptionHandlers(option) {
+      const input = option.querySelector('.list-checkbox');
+      if (input) {
+        input.addEventListener('change', renderSavedLists);
+      }
+
+      const removeButton = option.querySelector('.remove-list-button');
+      if (removeButton) {
+        removeButton.addEventListener('click', function () {
+          removeList(option);
+        });
+      }
+    }
+
+    function renderSavedLists() {
+      const selectedLists = getSelectedLists();
+      if (!selectedLists.length) {
+        favIcon.style.color = '#7d8783';
+        saveButtonLabel.textContent = 'Salvar em listas';
+        return;
+      }
+
+      favIcon.style.color = selectedLists.includes('Favoritos') ? '#c94c5b' : '#006d60';
+      saveButtonLabel.textContent = selectedLists.length > 1 ? `Salvar em listas (${selectedLists.length})` : 'Salvar em listas';
+    }
+
+    function createListOption(name) {
+      const safeId = `list-${name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-')}`;
+      const option = document.createElement('div');
+      option.className = 'list-option-card';
+      option.setAttribute('data-removable-list', 'true');
+
+      const formCheck = document.createElement('div');
+      formCheck.className = 'form-check';
+
+      const input = document.createElement('input');
+      input.className = 'form-check-input list-checkbox';
+      input.type = 'checkbox';
+      input.value = name;
+      input.id = safeId;
+      input.checked = true;
+
+      const label = document.createElement('label');
+      label.className = 'form-check-label';
+      label.htmlFor = safeId;
+
+      const title = document.createElement('strong');
+      title.className = 'list-option-title';
+      title.textContent = name;
+
+      label.appendChild(title);
+      formCheck.appendChild(input);
+      formCheck.appendChild(label);
+
+      const meta = document.createElement('div');
+      meta.className = 'list-option-meta';
+
+      const badge = document.createElement('span');
+      badge.className = 'list-badge';
+      badge.textContent = 'Nova';
+
+      const removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.className = 'remove-list-button';
+      removeButton.setAttribute('aria-label', `Remover lista ${name}`);
+      removeButton.innerHTML = '<i class="fas fa-trash"></i>';
+
+      option.appendChild(formCheck);
+      meta.appendChild(badge);
+      meta.appendChild(removeButton);
+      option.appendChild(meta);
+      listsOptions.appendChild(option);
+      attachListOptionHandlers(option);
+    }
+
+    document.querySelectorAll('.list-option-card').forEach(option => {
+      attachListOptionHandlers(option);
     });
+
+    createListButton.addEventListener('click', function () {
+      const listName = newListName.value.trim();
+      if (!listName) {
+        newListName.focus();
+        return;
+      }
+
+      const existingInput = [...document.querySelectorAll('.list-checkbox')].find(input => input.value.toLowerCase() === listName.toLowerCase());
+      if (existingInput) {
+        existingInput.checked = true;
+      } else {
+        createListOption(listName);
+      }
+
+      newListName.value = '';
+      renderSavedLists();
+    });
+
+    renderSavedLists();
 
     document.addEventListener('DOMContentLoaded', function () {
       const thumbs = document.querySelectorAll('.gallery-thumb');

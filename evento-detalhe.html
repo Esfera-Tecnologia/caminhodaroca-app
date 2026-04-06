@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhe do Evento | Caminho da Roça</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      margin: 0;
+      padding-bottom: 82px;
+    }
+
+    .top-bar {
+      background-color: #006d60;
+      color: white;
+      padding: 14px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .event-cover {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .event-card {
+      background: white;
+      border-radius: 22px;
+      margin: -42px 16px 16px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      position: relative;
+      z-index: 2;
+    }
+
+    .event-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #e9f5f2;
+      color: #006d60;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .event-card h1 {
+      margin: 0 0 10px;
+      color: #006d60;
+      font-size: 1.5rem;
+      line-height: 1.18;
+      font-weight: 700;
+    }
+
+    .event-subtitle {
+      color: #66706c;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      margin-bottom: 18px;
+    }
+
+    .event-info-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .event-info-box {
+      border-radius: 16px;
+      background: #f8faf9;
+      border: 1px solid #e0e8e5;
+      padding: 13px 14px;
+    }
+
+    .event-info-box strong {
+      display: block;
+      color: #006d60;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .event-info-box span {
+      color: #5f6b67;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .section-title {
+      color: #006d60;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .event-description {
+      color: #4f5e59;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      margin-bottom: 22px;
+    }
+
+    .event-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 50px;
+      border-radius: 16px;
+      background: #006d60;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .event-action:hover {
+      background: #005348;
+      color: #fff;
+    }
+
+    .event-properties-section {
+      margin-bottom: 22px;
+    }
+
+    .event-properties-helper {
+      color: #6b7772;
+      font-size: 0.88rem;
+      margin-bottom: 12px;
+    }
+
+    .event-properties-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .event-property-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid #e0e8e5;
+      background: #f8faf9;
+      color: #006d60;
+      text-decoration: none;
+      font-weight: 700;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .event-property-link:hover {
+      background: #edf6f3;
+      border-color: #cfe0da;
+      color: #005348;
+    }
+
+    .event-property-link span {
+      min-width: 0;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background-color: #ffffff;
+      border-top: 1px solid #ddd;
+      box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      color: #888;
+      font-size: 12px;
+      text-align: center;
+      flex: 1;
+      transition: color 0.2s;
+    }
+
+    .bottom-nav a.active {
+      color: #006D60;
+      font-weight: 600;
+    }
+
+    .bottom-nav i {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">Detalhe do Evento</div>
+  <img id="eventCover" src="assets/tela2.jpg" class="event-cover" alt="">
+
+  <main class="event-card">
+    <div class="event-badge" id="eventBadge">
+      <i class="fas fa-calendar-days"></i>
+      18 a 20 Jul
+    </div>
+
+    <h1 id="eventTitle">Festival Sabores da Roça</h1>
+    <p class="event-subtitle" id="eventSubtitle">Um encontro com gastronomia, música e experiências do turismo rural na região.</p>
+
+    <div class="event-info-grid">
+      <div class="event-info-box">
+        <strong>Quando</strong>
+        <span id="eventWhen">18 a 20 de julho, das 10h às 18h</span>
+      </div>
+      <div class="event-info-box">
+        <strong>Onde</strong>
+        <span id="eventWhere">Vargem Grande, Rio de Janeiro</span>
+      </div>
+      <div class="event-info-box">
+        <strong>Organização</strong>
+        <span id="eventOrganizer">Programa Caminho da Roça</span>
+      </div>
+    </div>
+
+    <div class="section-title">Sobre o evento</div>
+    <p class="event-description" id="eventDescription">
+      O Festival Sabores da Roça reúne produtores locais, expositores, vivências gastronômicas e programação cultural
+      para quem quer conhecer melhor a produção rural da região.
+    </p>
+
+    <section class="event-properties-section" id="eventPropertiesSection" hidden>
+      <div class="section-title">Propriedades vinculadas</div>
+      <p class="event-properties-helper">Toque no nome da propriedade para abrir a página de detalhes.</p>
+      <div class="event-properties-list" id="eventProperties"></div>
+    </section>
+
+    <a id="eventAction" href="https://caminhodaroca.senar-rio.com.br/" target="_blank" rel="noopener" class="event-action">
+      <i class="fas fa-arrow-up-right-from-square"></i>
+      Acessar página do evento
+    </a>
+  </main>
+
+  <div class="bottom-nav">
+    <a href="home.html">
+      <i class="fas fa-home"></i>
+      Início
+    </a>
+    <a href="mapa.html">
+      <i class="fas fa-map-marked-alt"></i>
+      Mapa
+    </a>
+    <a href="parceiros.html">
+      <i class="fas fa-handshake"></i>
+      Parceiros
+    </a>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#modalMinhaConta">
+      <i class="fas fa-user"></i>
+      Minha Conta
+    </a>
+  </div>
+
+  <div class="modal fade" id="modalMinhaConta" tabindex="-1" aria-labelledby="modalMinhaContaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between align-items-center">
+          <h5 class="modal-title fw-bold" id="modalMinhaContaLabel">Minha Conta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img src="https://i.pravatar.cc/150?img=1" alt="Foto do usuário" class="rounded-circle mb-2" width="100" height="100">
+          <h6 class="fw-bold">João da Silva</h6>
+
+          <div class="list-group mt-4">
+            <a href="cadastro.html" class="list-group-item list-group-item-action border-0 border-bottom d-flex align-items-center py-3 px-4 bg-white" style="border-color: #eee;">
+              <i class="fas fa-user text-success me-3 fs-5"></i>
+              <span class="fw-medium">Meus Dados</span>
+            </a>
+            <a href="termodeuso.html" class="list-group-item list-group-item-action border-0 border-bottom d-flex align-items-center py-3 px-4 bg-white" style="border-color: #eee;">
+              <i class="fas fa-file-alt text-success me-3 fs-5"></i>
+              <span class="fw-medium">Termo de Uso</span>
+            </a>
+            <a href="index.html" class="list-group-item list-group-item-action border-0 d-flex align-items-center py-3 px-4 text-danger bg-white">
+              <i class="fas fa-sign-out-alt me-3 fs-5"></i>
+              <span class="fw-medium">Sair</span>
+            </a>
+          </div>
+
+          <p class="text-muted mt-5 small">Versão 1.0.0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/eventos-data.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('id');
+    const event = window.CaminhoEvents.getEventById(eventId);
+    const links = document.querySelectorAll('.bottom-nav a');
+    const currentPage = location.pathname.split('/').pop();
+
+    document.title = `${event.title} | Caminho da Roça`;
+    document.getElementById('eventCover').src = event.image;
+    document.getElementById('eventCover').alt = event.title;
+    document.getElementById('eventBadge').innerHTML = `<i class="fas fa-calendar-days"></i> ${event.dateLabel}`;
+    document.getElementById('eventTitle').textContent = event.title;
+    document.getElementById('eventSubtitle').textContent = event.subtitle;
+    document.getElementById('eventWhen').textContent = event.whenLabel;
+    document.getElementById('eventWhere').textContent = `${event.location}, ${event.city}`;
+    document.getElementById('eventOrganizer').textContent = event.organizer;
+    document.getElementById('eventDescription').textContent = event.description;
+    document.getElementById('eventAction').href = event.externalUrl;
+
+    const eventPropertiesSection = document.getElementById('eventPropertiesSection');
+    const eventProperties = document.getElementById('eventProperties');
+
+    if (Array.isArray(event.properties) && event.properties.length > 0) {
+      eventProperties.innerHTML = event.properties.map(property => `
+        <a href="propriedade.html?id=${property.id}" class="event-property-link">
+          <span>${property.name}</span>
+          <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </a>
+      `).join('');
+      eventPropertiesSection.hidden = false;
+    }
+
+    links.forEach(link => {
+      const linkPage = link.getAttribute('href');
+      if (linkPage === currentPage) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>

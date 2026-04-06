@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#287a6d">
+  <title>Acesso | Caminho da Ro&ccedil;a</title>
+  <link rel="manifest" href="manifest.json">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --visitor-green: #287a6d;
+      --visitor-green-dark: #1f645a;
+      --visitor-green-soft: #e9f5f2;
+      --partner-green: #62b55a;
+      --partner-green-dark: #4a9744;
+      --partner-green-soft: #edf8ea;
+      --white: #ffffff;
+      --ink: #21403a;
+      --muted: #6a817b;
+      --line: #dce8e3;
+      --shadow-soft: 0 12px 30px rgba(16, 47, 42, 0.12);
+      --radius-xl: 22px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: var(--visitor-green);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    .app-shell {
+      min-height: 100dvh;
+      max-width: 420px;
+      margin: 0 auto;
+      padding: calc(18px + env(safe-area-inset-top)) 16px calc(22px + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-area {
+      text-align: center;
+      padding: 8px 6px 10px;
+    }
+
+    .brand-area img {
+      width: 300px;
+      max-width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .brand-area h1 {
+      margin: 0 0 8px;
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: 1.06;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-area p {
+      margin: 0 auto;
+      max-width: 270px;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 0.92rem;
+      line-height: 1.36;
+    }
+
+    .screen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .main-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 16px 16px;
+      color: var(--ink);
+    }
+
+    .main-card h2 {
+      margin: 0 0 8px;
+      font-size: 1.55rem;
+      font-weight: 600;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .main-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--visitor-green-soft);
+      color: var(--visitor-green);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 12px;
+      margin: 16px 0 18px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      border: 1px solid #e3ece8;
+      border-radius: 16px;
+      padding: 14px 15px;
+      background: linear-gradient(180deg, #ffffff, #f8fbfa);
+      box-shadow: 0 4px 12px rgba(23, 63, 56, 0.05);
+    }
+
+    .feature-item i {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #eef7f4, #e6f3ef);
+      color: var(--visitor-green);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-item span {
+      color: var(--ink);
+      font-size: 0.94rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .btn-main,
+    .btn-alt,
+    .btn-link-soft {
+      width: 100%;
+      min-height: 50px;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-main:active,
+    .btn-alt:active,
+    .btn-link-soft:active,
+    .partner-card__cta:active,
+    .back-inline:active,
+    .top-back:active {
+      transform: scale(0.985);
+    }
+
+    .btn-main {
+      background: var(--visitor-green);
+      color: var(--white);
+      border: 1px solid var(--visitor-green);
+    }
+
+    .btn-main:hover {
+      background: var(--visitor-green-dark);
+      border-color: var(--visitor-green-dark);
+      color: var(--white);
+    }
+
+    .btn-alt {
+      background: var(--white);
+      color: var(--visitor-green);
+      border: 1px solid var(--line);
+    }
+
+    .btn-alt:hover {
+      background: var(--visitor-green-soft);
+      color: var(--visitor-green);
+      border-color: #cfe1db;
+    }
+
+    .btn-link-soft {
+      min-height: auto;
+      padding: 2px 6px 0;
+      color: var(--visitor-green-dark);
+      border: 0;
+    }
+
+    .partner-card {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .partner-card__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+      width: fit-content;
+    }
+
+    .partner-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+    }
+
+    .partner-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.84rem;
+      line-height: 1.42;
+    }
+
+    .partner-card__cta {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.14);
+      color: var(--white);
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      padding: 0 12px;
+      font-weight: 600;
+      gap: 12px;
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    .partner-card__cta:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--white);
+    }
+
+    .partner-card__cta i:last-child {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.18);
+      flex-shrink: 0;
+    }
+
+    .partner-screen .brand-area p {
+      max-width: 300px;
+    }
+
+    .back-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 0;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.92);
+      padding: 0;
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+
+    .partner-main-card {
+      background: var(--white);
+      color: var(--ink);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 16px 16px;
+    }
+
+    .partner-main-card .section-badge {
+      background: var(--partner-green-soft);
+      color: var(--partner-green-dark);
+    }
+
+    .partner-main-card p {
+      color: var(--muted);
+    }
+
+    .partner-main-card h2 {
+      color: var(--ink);
+    }
+
+    .difference-list {
+      display: grid;
+      gap: 10px;
+      margin: 16px 0 18px;
+    }
+
+    .difference-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border-radius: var(--radius-lg);
+      padding: 13px 14px;
+      background: #fbfdfb;
+      border: 1px solid #dcebdd;
+    }
+
+    .difference-item i {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: var(--partner-green-soft);
+      color: var(--partner-green-dark);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .difference-item strong {
+      display: block;
+      font-size: 0.92rem;
+      margin-bottom: 3px;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .difference-item span {
+      display: block;
+      font-size: 0.84rem;
+      line-height: 1.42;
+      color: var(--muted);
+    }
+
+    .difference-link {
+      color: #a14639;
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .difference-link:hover {
+      color: #8d3c30;
+      text-decoration: underline;
+    }
+
+    .notice-card {
+      border-radius: var(--radius-lg);
+      padding: 13px 14px;
+      background: #fff7e3;
+      border: 1px solid #efd39b;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .notice-card i {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: #fbe7b5;
+      color: #c38827;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .notice-card span {
+      color: #7d6330;
+      font-size: 0.85rem;
+      line-height: 1.42;
+      font-weight: 400;
+    }
+
+    .difference-item--blocked {
+      background: #fff1ee;
+      border-color: #efb4aa;
+    }
+
+    .difference-item--blocked i {
+      background: #fbdcd6;
+      color: #c05645;
+    }
+
+    .difference-item--blocked strong {
+      color: #913d31;
+    }
+
+    .difference-item--blocked span {
+      color: #7d625a;
+      font-weight: 400;
+    }
+
+    .difference-item--blocked .difference-link {
+      color: #a14639;
+    }
+
+    .difference-item--blocked .difference-link:hover {
+      color: #8d3c30;
+    }
+
+    .partner-actions .btn-main {
+      background: var(--partner-green);
+      color: var(--partner-green-dark);
+      border-color: var(--partner-green);
+      color: var(--white);
+    }
+
+    .partner-actions .btn-main:hover {
+      background: var(--partner-green-dark);
+      border-color: var(--partner-green-dark);
+      color: var(--white);
+    }
+
+    .partner-actions .btn-alt {
+      background: var(--white);
+      color: var(--partner-green-dark);
+      border-color: #d8ead5;
+    }
+
+    .partner-actions .btn-alt:hover {
+      background: var(--partner-green-soft);
+      color: var(--partner-green-dark);
+      border-color: #cfe5c5;
+    }
+
+    .version {
+      margin-top: auto;
+      padding-top: 18px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.84rem;
+      font-weight: 500;
+    }
+
+    @media (min-width: 768px) {
+      .app-shell {
+        box-shadow: 0 24px 60px rgba(0, 33, 28, 0.22);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <section class="screen active" id="visitanteScreen">
+      <div class="brand-area">
+        <img src="assets/logo-caminho.png" alt="Logo Caminho da Ro&ccedil;a">
+        <h1>Como deseja entrar?</h1>
+      </div>
+
+      <section class="main-card">
+        <div class="section-badge">
+          <i class="fa-solid fa-map-location-dot"></i>
+          Quero visitar
+        </div>
+        <h2>Conhe&ccedil;a propriedades rurais</h2>
+        <p>Entre para descobrir experi&ecirc;ncias, visualizar detalhes e navegar pelo mapa da regi&atilde;o.</p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <i class="fa-solid fa-leaf"></i>
+            <span>Ver propriedades e experi&ecirc;ncias pr&oacute;ximas</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-heart"></i>
+            <span>Salvar favoritos e acompanhar lugares</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a href="login.html?perfil=visitante" class="btn-main">Entrar</a>
+          <a href="cadastro.html" class="btn-alt">Criar conta</a>
+          <a href="home.html" class="btn-link-soft">Continuar sem login</a>
+        </div>
+      </section>
+
+      <section class="partner-card">
+        <div class="partner-card__eyebrow">
+          <i class="fa-solid fa-store"></i>
+          Quero divulgar
+        </div>
+        <h3>Quero divulgar minhas experi&ecirc;ncias</h3>
+        <p>Rotas, circuitos, atrativos e eventos possuem um acesso pr&oacute;prio.</p>
+        <button class="partner-card__cta" type="button" id="openPartnerScreen">
+          <span>Saiba mais</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </section>
+    </section>
+
+    <section class="screen partner-screen" id="parceiroScreen">
+      <button class="back-inline" type="button" id="backToVisitor">
+        <i class="fa-solid fa-arrow-left"></i>
+        Voltar para visitante
+      </button>
+
+      <div class="brand-area">
+        <img src="assets/logo-caminho.png" alt="Logo Caminho da Ro&ccedil;a">
+        <h1>Divulgue suas experi&ecirc;ncias</h1>
+       </div>
+
+      <section class="partner-main-card">
+       
+        <h2>Entenda a diferen&ccedil;a antes de continuar</h2>
+       
+        <div class="difference-list">
+          <div class="difference-item">
+            <i class="fa-solid fa-circle-check"></i>
+            <div>
+              <strong>Quem entra aqui</strong>
+             
+               <span>Este espa&ccedil;o &eacute; para quem deseja apresentar experi&ecirc;ncias oferecidas, rotas, circuitos, atrativos e eventos dentro do Caminho da Ro&ccedil;a.</span>
+
+            </div>
+          </div>
+          <div class="difference-item difference-item--blocked">
+            <i class="fa-solid fa-circle-xmark"></i>
+            <div>
+              <strong>Quem n&atilde;o entra aqui</strong>
+              <span>
+                N&atilde;o use esta &aacute;rea para cadastrar propriedade rural. Caso queira cadastrar uma propriedade,
+                <a href="https://caminhodaroca.senar-rio.com.br/cadastro-propriedade-publica" target="_blank" rel="noopener" class="difference-link">
+                  clique aqui
+                </a>.
+                <i class="fa-solid fa-file-circle-plus"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="notice-card">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>Se o seu objetivo &eacute; explorar lugares para visitar, volte para o acesso do visitante.</span>
+        </div>
+
+        <div class="actions partner-actions">
+          <a href="login.html?perfil=parceiro" class="btn-main">Entrar para divulgar</a>
+          <a href="cadastro-parceiro.html" class="btn-alt">Cadastrar meu espaço</a>
+        </div>
+      </section>
+    </section>
+
+    <div class="version">Vers&atilde;o 1.0.0</div>
+  </main>
+
+  <script>
+    const visitanteScreen = document.getElementById("visitanteScreen");
+    const parceiroScreen = document.getElementById("parceiroScreen");
+    const openPartnerScreen = document.getElementById("openPartnerScreen");
+    const backToVisitor = document.getElementById("backToVisitor");
+
+    function showVisitor() {
+      visitanteScreen.classList.add("active");
+      parceiroScreen.classList.remove("active");
+    }
+
+    function showPartner() {
+      visitanteScreen.classList.remove("active");
+      parceiroScreen.classList.add("active");
+    }
+
+    openPartnerScreen.addEventListener("click", showPartner);
+    backToVisitor.addEventListener("click", showVisitor);
+  </script>
+</body>
+</html>

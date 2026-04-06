@@ -1,4 +1,4 @@
-const CACHE_NAME = 'caminhodaroca-cache-v1';
+const CACHE_NAME = 'caminhodaroca-cache-v3';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -7,6 +7,10 @@ const urlsToCache = [
   '/cadastro.html',
   '/cadastro-parceiro.html',
   '/home.html',
+  '/eventos.html',
+  '/eventos-calendario.html',
+  '/evento-detalhe.html',
+  '/assets/eventos-data.js',
   '/parceiros.html',
   '/parceiro-detalhe.html',
   '/editar-parceiro.html',

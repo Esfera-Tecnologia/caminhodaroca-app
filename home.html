@@ -140,8 +140,205 @@
 #btnFiltroAvancado:hover {
   background-color: #005348;
 }
-.input-group input::placeholder {
+    .input-group input::placeholder {
   color: #aaa;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.section-head h2,
+.section-head h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #006D60;
+}
+
+.section-link {
+  color: #006D60;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.section-link:hover {
+  color: #005348;
+}
+
+.events-section {
+  padding: 0 16px;
+  margin-top: 18px;
+}
+
+.event-highlight-card {
+  position: relative;
+  min-height: 214px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  display: block;
+  text-decoration: none;
+}
+
+.event-highlight-card img {
+  width: 100%;
+  height: 214px;
+  object-fit: cover;
+  display: block;
+}
+
+.event-highlight-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.78));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+.event-chip-row {
+  position: absolute;
+  top: 2px;
+  left: 16px;
+  right: 52px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.event-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.event-highlight-title {
+  color: #fff;
+  font-size: 1.18rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.event-highlight-text {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.event-carousel .carousel-indicators {
+  margin-bottom: -6px;
+}
+
+.event-carousel .carousel-indicators [data-bs-target] {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.event-carousel .carousel-control-prev,
+.event-carousel .carousel-control-next {
+  width: 38px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.95;
+}
+
+.event-carousel .carousel-control-prev-icon,
+.event-carousel .carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.36);
+  border-radius: 999px;
+  background-size: 58%;
+  width: 34px;
+  height: 34px;
+}
+
+.properties-summary {
+  padding: 0 16px;
+  margin-top: 22px;
+}
+
+.saved-lists-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.saved-list-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #edf6f3;
+  color: #006D60;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.saved-list-tag.is-system {
+  background: #ffe8ec;
+  color: #b8475b;
+}
+
+.properties-empty-state {
+  display: none;
+  margin-top: 12px;
+  padding: 18px 16px;
+  border: 1px dashed #c6d5cf;
+  border-radius: 16px;
+  text-align: center;
+  color: #64716c;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.properties-empty-state.is-visible {
+  display: block;
+}
+
+.favorite-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #e25563;
+  z-index: 2;
+}
+
+.visited-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff4cc, #ffe39a);
+  color: #8a5d00;
+  font-size: 0.72rem;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(178, 132, 18, 0.16);
 }
 
 /* Modal slide-in right */
@@ -218,14 +415,80 @@
   </div>
   
 
+  <section class="events-section">
+    <div class="section-head">
+      <h2>Eventos em destaque</h2>
+      <a href="eventos.html" class="section-link">Ver todos</a>
+    </div>
+
+    <div id="eventosCarousel" class="carousel slide event-carousel" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#eventosCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Evento 1"></button>
+        <button type="button" data-bs-target="#eventosCarousel" data-bs-slide-to="1" aria-label="Evento 2"></button>
+        <button type="button" data-bs-target="#eventosCarousel" data-bs-slide-to="2" aria-label="Evento 3"></button>
+      </div>
+
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <a href="evento-detalhe.html?id=festival-sabores-roca" class="event-highlight-card">
+            <img src="assets/tela2.jpg" alt="Festival Sabores da Roça">
+            <div class="event-highlight-overlay">
+              <div class="event-chip-row">
+                <span class="event-chip"><i class="fas fa-calendar-days"></i> 18 a 20 Jul</span>
+                <span class="event-chip"><i class="fas fa-location-dot"></i> Vargem Grande</span>
+              </div>
+              <div class="event-highlight-title">Festival Sabores da Roça</div>
+              <p class="event-highlight-text">Degustações, música ao vivo e experiências gastronômicas com produtores locais.</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="carousel-item">
+          <a href="evento-detalhe.html?id=feira-colheita-artesanato" class="event-highlight-card">
+            <img src="assets/tela1.jpg" alt="Feira da Colheita e Artesanato">
+            <div class="event-highlight-overlay">
+              <div class="event-chip-row">
+                <span class="event-chip"><i class="fas fa-calendar-days"></i> 27 Jul</span>
+                <span class="event-chip"><i class="fas fa-location-dot"></i> Campo Grande</span>
+              </div>
+              <div class="event-highlight-title">Feira da Colheita e Artesanato</div>
+              <p class="event-highlight-text">Sabores do campo, artesanato local e oficinas abertas ao público na região.</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="carousel-item">
+          <a href="evento-detalhe.html?id=circuito-colheita" class="event-highlight-card">
+            <img src="assets/tela3.jpg" alt="Circuito da Colheita">
+            <div class="event-highlight-overlay">
+              <div class="event-chip-row">
+                <span class="event-chip"><i class="fas fa-calendar-days"></i> 03 Ago</span>
+                <span class="event-chip"><i class="fas fa-location-dot"></i> Pedra de Guaratiba</span>
+              </div>
+              <div class="event-highlight-title">Circuito da Colheita</div>
+              <p class="event-highlight-text">Vivência de colheita, visita guiada e almoço rural com ingredientes frescos.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#eventosCarousel" data-bs-slide="prev" aria-label="Evento anterior">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#eventosCarousel" data-bs-slide="next" aria-label="Próximo evento">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+  </section>
+
 <!-- Título da seção -->
-<div class="px-3 mt-4 mb-2">
+<div class="properties-summary">
     <p class="mb-0 text-muted fw-semibold small">
       <i class="fas fa-leaf me-1 text-success"></i>
-      Encontramos <strong>3 propriedades</strong> próximas da sua localização.
+      <span id="propertiesSummaryText">Encontramos <strong>3 propriedades</strong> próximas da sua localização.</span>
     </p>
   </div>
-    
+
   <!-- CONTAINER PRINCIPAL -->
   <div class="container py-3">
    
@@ -236,8 +499,11 @@
     <!-- CARDS DE PROPRIEDADES COM ESTRELAS -->
         <div id="lista-propriedades">
 
-            <a href="propriedade.html" class="text-decoration-none text-reset">
+            <a href="propriedade.html?id=fazenda-boa-vista" class="text-decoration-none text-reset property-entry" data-list-memberships="favoritos,caminho-do-vinho">
             <div class="card shadow-sm mb-3 position-relative" style="border-left: 5px solid #006D60;">
+                <span class="favorite-badge" aria-label="Favorita">
+                  <i class="fas fa-heart"></i>
+                </span>
                 <div class="row g-0 align-items-center">
                 <div class="col-4">
                     <img src="assets/logo1.png" class="img-fluid rounded-start" alt="Fazenda Boa Vista">
@@ -256,6 +522,14 @@
                         <small><i class="fas fa-map-marker-alt me-1"></i> Pedra de Guaratiba</small><br>
                         <small><i class="fas fa-route me-1"></i> 12 km de distância</small>
                     </p>
+                    <div class="visited-tag" aria-label="Visita realizada">
+                        <i class="fas fa-check-circle"></i>
+                        Visita realizada
+                    </div>
+                    <div class="saved-lists-preview">
+                        <span class="saved-list-tag is-system"><i class="fas fa-heart"></i> Favoritos</span>
+                        <span class="saved-list-tag">Caminho do vinho</span>
+                    </div>
                     </div>
                 </div>
                 </div>
@@ -265,8 +539,11 @@
             </div>
             </a>
         
-            <a href="propriedade.html" class="text-decoration-none text-reset">
+            <a href="propriedade.html?id=sitio-vale-verde" class="text-decoration-none text-reset property-entry" data-list-memberships="favoritos">
             <div class="card shadow-sm mb-3 position-relative" style="border-left: 5px solid #006D60;">
+                <span class="favorite-badge" aria-label="Favorita">
+                  <i class="fas fa-heart"></i>
+                </span>
                 <div class="row g-0 align-items-center">
                 <div class="col-4">
                     <img src="assets/logo2.png" class="img-fluid rounded-start" alt="Sítio Vale Verde">
@@ -285,6 +562,9 @@
                         <small><i class="fas fa-map-marker-alt me-1"></i> Vargem Grande</small><br>
                         <small><i class="fas fa-route me-1"></i> 18 km de distância</small>
                     </p>
+                    <div class="saved-lists-preview">
+                        <span class="saved-list-tag is-system"><i class="fas fa-heart"></i> Favoritos</span>
+                    </div>
                     </div>
                 </div>
                 </div>
@@ -294,7 +574,7 @@
             </div>
             </a>
         
-            <a href="propriedade.html" class="text-decoration-none text-reset">
+            <a href="propriedade.html?id=chacara-do-sol" class="text-decoration-none text-reset property-entry" data-list-memberships="fim-de-semana-em-familia">
             <div class="card shadow-sm mb-3 position-relative" style="border-left: 5px solid #006D60;">
                 <div class="row g-0 align-items-center">
                 <div class="col-4">
@@ -314,6 +594,9 @@
                         <small><i class="fas fa-map-marker-alt me-1"></i> Campo Grande</small><br>
                         <small><i class="fas fa-route me-1"></i> 25 km de distância</small>
                     </p>
+                    <div class="saved-lists-preview">
+                        <span class="saved-list-tag">Fim de semana em família</span>
+                    </div>
                     </div>
                 </div>
                 </div>
@@ -324,10 +607,14 @@
             </a>
         
         </div>
+
+        <div id="propertiesEmptyState" class="properties-empty-state">
+          Nenhuma propriedade aparece nesta lista no protótipo atual.
+        </div>
   
   </div>
 
-  <!-- BOTTOM NAVIGATION BAR (colar aqui antes do </body>) -->
+  <!-- Barra de navegação inferior -->
   <div class="bottom-nav">
     <a href="home.html">
       <i class="fas fa-home"></i>
@@ -392,10 +679,12 @@
           </select>
         </div>
         <div class="mb-3">
-          <label for="favoritos" class="form-label">Favoritos</label>
+          <label for="favoritos" class="form-label">Lista salva</label>
           <select id="favoritos" class="form-select">
-            <option>Todos</option>
-            <option>Apenas favoritos</option>
+            <option value="all">Todas</option>
+            <option value="favoritos">Favoritos</option>
+            <option value="caminho-do-vinho">Caminho do vinho</option>
+            <option value="fim-de-semana-em-familia">Fim de semana em família</option>
           </select>
         </div>
         <button class="btn btn-success w-100" type="submit">Aplicar filtros</button>
@@ -446,6 +735,47 @@
   <script>
     const links = document.querySelectorAll('.bottom-nav a');
     const currentPage = location.pathname.split('/').pop();
+    const propertyEntries = document.querySelectorAll('.property-entry');
+    const listFilterSelect = document.getElementById('favoritos');
+    const propertiesSummaryText = document.getElementById('propertiesSummaryText');
+    const propertiesEmptyState = document.getElementById('propertiesEmptyState');
+    const filtersForm = document.querySelector('#filtroOffcanvas form');
+    const filtroOffcanvasElement = document.getElementById('filtroOffcanvas');
+    const filtroOffcanvas = filtroOffcanvasElement ? bootstrap.Offcanvas.getOrCreateInstance(filtroOffcanvasElement) : null;
+
+    function getFilterLabel(filterId) {
+      const labels = {
+        all: 'sua localização',
+        favoritos: 'Favoritos',
+        'caminho-do-vinho': 'Caminho do vinho',
+        'fim-de-semana-em-familia': 'Fim de semana em família'
+      };
+
+      return labels[filterId] || 'sua localização';
+    }
+
+    function applyListFilter(filterId) {
+      let visibleCount = 0;
+
+      propertyEntries.forEach(entry => {
+        const memberships = (entry.dataset.listMemberships || '').split(',').filter(Boolean);
+        const isVisible = filterId === 'all' || memberships.includes(filterId);
+        entry.style.display = isVisible ? '' : 'none';
+        if (isVisible) {
+          visibleCount += 1;
+        }
+      });
+
+      listFilterSelect.value = filterId;
+      propertiesEmptyState.classList.toggle('is-visible', visibleCount === 0);
+
+      const propertyWord = visibleCount === 1 ? 'propriedade' : 'propriedades';
+      if (filterId === 'all') {
+        propertiesSummaryText.innerHTML = `Encontramos <strong>${visibleCount} ${propertyWord}</strong> próximas da sua localização.`;
+      } else {
+        propertiesSummaryText.innerHTML = `Encontramos <strong>${visibleCount} ${propertyWord}</strong> na lista <strong>${getFilterLabel(filterId)}</strong>.`;
+      }
+    }
   
     links.forEach(link => {
       const linkPage = link.getAttribute('href');
@@ -453,6 +783,16 @@
         link.classList.add('active');
       }
     });
+
+    filtersForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      applyListFilter(listFilterSelect.value);
+      if (filtroOffcanvas) {
+        filtroOffcanvas.hide();
+      }
+    });
+
+    applyListFilter('all');
   </script>
 </body>
 </html>

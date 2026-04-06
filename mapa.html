@@ -158,6 +158,7 @@
 
   const propriedades = [
     {
+      id: "fazenda-boa-vista",
       nome: "Fazenda Boa Vista",
       bairro: "Pedra de Guaratiba",
       distancia: "12 km",
@@ -166,6 +167,7 @@
       imagem: "assets/logo1.png"
     },
     {
+      id: "sitio-vale-verde",
       nome: "Sítio Vale Verde",
       bairro: "Vargem Grande",
       distancia: "18 km",
@@ -174,6 +176,7 @@
       imagem: "assets/logo2.png"
     },
     {
+      id: "chacara-do-sol",
       nome: "Chácara do Sol",
       bairro: "Campo Grande",
       distancia: "25 km",
@@ -204,7 +207,7 @@
           <small><i class="fas fa-map-marker-alt me-1 text-muted"></i> ${p.bairro}</small><br>
           <small><i class="fas fa-route me-1 text-muted"></i> ${p.distancia}</small>
         </p>
-        <a href="propriedade.html" class="btn btn-sm btn-outline-success w-100 mt-1">Visualizar</a>
+        <a href="propriedade.html?id=${p.id}" class="btn btn-sm btn-outline-success w-100 mt-1">Visualizar</a>
       </div>
     `);
     bounds.push([p.lat, p.lng]);
