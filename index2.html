@@ -47,20 +47,20 @@
       min-height: 100dvh;
       max-width: 420px;
       margin: 0 auto;
-      padding: calc(18px + env(safe-area-inset-top)) 16px calc(22px + env(safe-area-inset-bottom));
+      padding: calc(14px + env(safe-area-inset-top)) 18px calc(28px + env(safe-area-inset-bottom));
       display: flex;
       flex-direction: column;
     }
 
     .brand-area {
       text-align: center;
-      padding: 8px 6px 10px;
+      padding: 4px 6px 12px;
     }
 
     .brand-area img {
-      width: 300px;
+      width: 290px;
       max-width: 100%;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .brand-area h1 {
@@ -83,7 +83,7 @@
       display: none;
       flex: 1;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .screen.active {
@@ -94,12 +94,12 @@
       background: var(--white);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-soft);
-      padding: 18px 16px 16px;
+      padding: 20px 18px 18px;
       color: var(--ink);
     }
 
     .main-card h2 {
-      margin: 0 0 8px;
+      margin: 0 0 10px;
       font-size: 1.55rem;
       font-weight: 600;
       line-height: 1.08;
@@ -128,19 +128,52 @@
 
     .feature-list {
       display: grid;
-      gap: 12px;
-      margin: 16px 0 18px;
+      gap: 14px;
+      margin: 20px 0 20px;
     }
 
     .feature-item {
       display: flex;
-      align-items: center;
-      gap: 13px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
       border: 1px solid #e3ece8;
       border-radius: 16px;
-      padding: 14px 15px;
+      padding: 17px 16px;
       background: linear-gradient(180deg, #ffffff, #f8fbfa);
       box-shadow: 0 4px 12px rgba(23, 63, 56, 0.05);
+      text-decoration: none;
+      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      appearance: none;
+      border: 1px solid #dce8e3;
+    }
+
+    .feature-item:hover {
+      border-color: #bdd7d0;
+      box-shadow: 0 8px 18px rgba(23, 63, 56, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .feature-item:focus-visible {
+      outline: 3px solid rgba(40, 122, 109, 0.2);
+      outline-offset: 2px;
+      border-color: var(--visitor-green);
+    }
+
+    .feature-item:active {
+      transform: scale(0.99);
+      box-shadow: 0 4px 12px rgba(23, 63, 56, 0.08);
+    }
+
+    .feature-item__main {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      min-width: 0;
+      flex: 1;
     }
 
     .feature-item i {
@@ -162,9 +195,54 @@
       line-height: 1.4;
     }
 
+    .feature-copy {
+      display: grid;
+      gap: 5px;
+      flex: 1;
+    }
+
+    .feature-copy strong {
+      color: var(--ink);
+      font-size: 0.96rem;
+      line-height: 1.3;
+    }
+
+    .feature-copy span {
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 400;
+      line-height: 1.42;
+    }
+
+    .feature-item__footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .feature-item__arrow {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(40, 122, 109, 0.1);
+      color: var(--visitor-green-dark);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .feature-item:hover .feature-item__arrow,
+    .feature-item:focus-visible .feature-item__arrow {
+      background: rgba(40, 122, 109, 0.16);
+      color: var(--visitor-green);
+    }
+
     .actions {
       display: grid;
-      gap: 10px;
+      gap: 12px;
+      margin-top: 4px;
     }
 
     .btn-main,
@@ -217,7 +295,7 @@
 
     .btn-link-soft {
       min-height: auto;
-      padding: 2px 6px 0;
+      padding: 6px 6px 0;
       color: var(--visitor-green-dark);
       border: 0;
     }
@@ -299,18 +377,29 @@
       max-width: 300px;
     }
 
+    .partner-screen {
+      gap: 10px;
+    }
+
+    .partner-screen .brand-area {
+      padding: 0 6px 4px;
+    }
+
     .back-inline {
       display: inline-flex;
+      align-self: flex-start;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
       border: 0;
-      background: transparent;
-      color: rgba(255, 255, 255, 0.92);
+      background: none;
+      color: white;
       padding: 0;
-      font-size: 0.92rem;
+      font-size: 1.5rem;
       font-weight: 600;
-      margin-bottom: 10px;
-      width: fit-content;
+      margin-bottom: 2px;
+      width: auto;
+      height: auto;
+      border-radius: 0;
     }
 
     .partner-main-card {
@@ -318,7 +407,8 @@
       color: var(--ink);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-soft);
-      padding: 18px 16px 16px;
+      padding: 20px 18px 18px;
+      margin-bottom: 14px;
     }
 
     .partner-main-card .section-badge {
@@ -336,8 +426,8 @@
 
     .difference-list {
       display: grid;
-      gap: 10px;
-      margin: 16px 0 18px;
+      gap: 12px;
+      margin: 18px 0 20px;
     }
 
     .difference-item {
@@ -477,7 +567,7 @@
 
     .version {
       margin-top: auto;
-      padding-top: 18px;
+      padding-top: 22px;
       text-align: center;
       color: rgba(255, 255, 255, 0.72);
       font-size: 0.84rem;
@@ -500,22 +590,39 @@
       </div>
 
       <section class="main-card">
-        <div class="section-badge">
-          <i class="fa-solid fa-map-location-dot"></i>
-          Quero visitar
-        </div>
-        <h2>Conhe&ccedil;a propriedades rurais</h2>
-        <p>Entre para descobrir produtos, serviços, visualizar detalhes e navegar pelo mapa da regi&atilde;o.</p>
+        <h2>Sou turista e quero viver experi&ecirc;ncias rurais</h2>
+        <p>Descubra destinos, viv&ecirc;ncias, produtos e roteiros perto de voc&ecirc;.</p>
 
         <div class="feature-list">
-          <div class="feature-item">
-            <i class="fa-solid fa-leaf"></i>
-            <span>Ver propriedades pr&oacute;ximas</span>
-          </div>
-          <div class="feature-item">
-            <i class="fa-solid fa-heart"></i>
-            <span>Salvar favoritos e acompanhar lugares</span>
-          </div>
+          <a
+            class="feature-item"
+            href="https://caminhodaroca.senar-rio.com.br/cadastro-propriedade-publica"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="feature-item__main">
+              <i class="fa-solid fa-store"></i>
+              <div class="feature-copy">
+                <strong>Divulgue seu neg&oacute;cio</strong>
+                <span>Cadastre sua propriedade, produtos artesanais, servi&ccedil;o, ag&ecirc;ncia de viagem, servi&ccedil;os etc.</span>
+              </div>
+            </div>
+            <div class="feature-item__footer" aria-hidden="true">
+              <span class="feature-item__arrow"><i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <button class="feature-item" type="button" id="openPartnerScreen">
+            <div class="feature-item__main">
+              <i class="fa-solid fa-building-columns"></i>
+              <div class="feature-copy">
+                <strong>Sou uma institui&ccedil;&atilde;o e quero apoiar o turismo da minha regi&atilde;o</strong>
+                <span>Cadastre atividades e programa&ccedil;&otilde;es do munic&iacute;pio na sua regi&atilde;o (secretarias de turismo, associa&ccedil;&otilde;es, cons&oacute;rcios regionais etc.)</span>
+              </div>
+            </div>
+            <div class="feature-item__footer" aria-hidden="true">
+              <span class="feature-item__arrow"><i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </button>
         </div>
 
         <div class="actions">
@@ -524,69 +631,40 @@
           <a href="home.html" class="btn-link-soft">Continuar sem login</a>
         </div>
       </section>
-
-      <section class="partner-card">
-        <div class="partner-card__eyebrow">
-          <i class="fa-solid fa-store"></i>
-          Quero divulgar
-        </div>
-        <h3>Quero divulgar experi&ecirc;ncias</h3>
-        <p>Rotas, circuitos, atrativos e eventos possuem um acesso pr&oacute;prio.</p>
-        <button class="partner-card__cta" type="button" id="openPartnerScreen">
-          <span>Saiba mais</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
-      </section>
     </section>
 
     <section class="screen partner-screen" id="parceiroScreen">
-      <button class="back-inline" type="button" id="backToVisitor">
-        <i class="fa-solid fa-arrow-left"></i>
-        Voltar para visitante
+      <button class="back-inline" type="button" id="backToVisitor" aria-label="Voltar para visitante">
+        &larr;
       </button>
 
       <div class="brand-area">
         <img src="assets/logo-caminho.png" alt="Logo Caminho da Ro&ccedil;a">
-        <h1>Divulgue suas experi&ecirc;ncias</h1>
-       </div>
+      </div>
 
       <section class="partner-main-card">
-       
-        <h2>Entenda a diferen&ccedil;a antes de continuar</h2>
-       
+        <h2>Entenda a diferen&ccedil;a antes de continuar:</h2>
+
         <div class="difference-list">
           <div class="difference-item">
             <i class="fa-solid fa-circle-check"></i>
             <div>
-              <strong>Quem entra aqui</strong>
-             
-               <span>Este espa&ccedil;o &eacute; para quem deseja apresentar experi&ecirc;ncias como rotas, circuitos, atrativos e eventos dentro do Caminho da Ro&ccedil;a.</span>
-
+              <strong>Sou neg&oacute;cio rural</strong>
+              <span>Essa op&ccedil;&atilde;o &eacute; para quem tem seu pr&oacute;prio neg&oacute;cio rural e quer divulgar no Caminho da Ro&ccedil;a (hospedagem, day-use, roteiros, atrativos, circuitos, produtos artesanais etc.).</span>
             </div>
           </div>
-          <div class="difference-item difference-item--blocked">
-            <i class="fa-solid fa-circle-xmark"></i>
+          <div class="difference-item">
+            <i class="fa-solid fa-building-columns"></i>
             <div>
-              <strong>Quem n&atilde;o entra aqui</strong>
-              <span>
-                N&atilde;o use esta &aacute;rea para cadastrar propriedade rural. Caso queira cadastrar uma propriedade,
-                <a href="https://caminhodaroca.senar-rio.com.br/cadastro-propriedade-publica" target="_blank" rel="noopener" class="difference-link">
-                  clique aqui
-                </a>.
-                <i class="fa-solid fa-file-circle-plus"></i>
-              </span>
+              <strong>Sou institui&ccedil;&atilde;o</strong>
+              <span>Essa op&ccedil;&atilde;o &eacute; para entidades que desejam apoiar o turismo da regi&atilde;o (secretarias de turismo, associa&ccedil;&otilde;es, cons&oacute;rcios regionais etc.).</span>
             </div>
           </div>
-        </div>
-
-        <div class="notice-card">
-          <i class="fa-solid fa-circle-info"></i>
-          <span>Se o seu objetivo &eacute; explorar lugares para visitar, volte para o acesso do visitante.</span>
         </div>
 
         <div class="actions partner-actions">
           <a href="login.html?perfil=parceiro" class="btn-main">Entrar para divulgar</a>
-          <a href="cadastro-parceiro.html" class="btn-alt">Cadastrar meu espaço</a>
+          <a href="cadastro-parceiro.html" class="btn-alt">Cadastrar meu espa&ccedil;o</a>
         </div>
       </section>
     </section>
