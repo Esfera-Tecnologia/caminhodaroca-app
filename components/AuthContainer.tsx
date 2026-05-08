@@ -4,6 +4,7 @@ import { Href } from "expo-router";
 import React, { PropsWithChildren } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AppVersion from "./AppVersion";
 import BackButton from "./BackButton";
 
@@ -16,9 +17,10 @@ interface AuthContainerProps extends PropsWithChildren {
   logoMargin?: number;
 }
 export default function AuthContainer({title, children, logoMargin = 100, withBackButton = false, backRoute}: AuthContainerProps) {
+  const insets = useSafeAreaInsets();
   return (
     <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }}>
-      <ScrollView style={{flex: 1}} contentContainerStyle={[styles.container]} alwaysBounceVertical={false} bounces={false}>
+      <ScrollView style={{flex: 1}} contentContainerStyle={[styles.container, {paddingTop: insets.top + 24,  paddingBottom: insets.bottom + 24}]} alwaysBounceVertical={false} bounces={false}>
         <Image style={[styles.logo, {marginBottom: logoMargin}]} source={logo} contentFit="contain" />
         {withBackButton && (
           <BackButton style={{position: 'absolute', top: 48, left: 12}} backRoute={backRoute} />
