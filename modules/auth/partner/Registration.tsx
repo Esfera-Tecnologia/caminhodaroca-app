@@ -28,13 +28,13 @@ export default function PartnerRegistration({partner}: {partner?: PartnerType}) 
 
   return (
     <View>
-      <Text style={styles.title}>Informações do Parceiro</Text>
+      <Text style={styles.title}>Informações da Instituição</Text>
       <Controller
         control={control}
         name="name"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Nome do parceiro*" error={errors.name}>
-            <Input placeholder="Nome do parceiro ou marca" value={value} onChangeText={onChange} />
+          <InputGroup label="Nome da instituição*" error={errors.name}>
+            <Input placeholder="Nome da instituição" value={value} onChangeText={onChange} />
           </InputGroup>
         )}
       />

@@ -67,7 +67,7 @@ export default function Register() {
         <SystemBars style={{statusBar: 'light', navigationBar: 'dark'}} />
         <View style={[globalStyles.row, globalStyles.flexCenter, {marginVertical: 40}]}>
           <BackButton style={{position: 'absolute', left: 0}}/>
-          <Text style={styles.title}>Cadastro de Parceiro</Text>
+          <Text style={styles.title}>Cadastro de Instituição</Text>
         </View>
         <FormProvider {...methods}>
           <Card>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     color: '#fff',
     fontWeight: 500,
   },
