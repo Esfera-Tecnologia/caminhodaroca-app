@@ -96,7 +96,7 @@ export default function EntryScreen() {
           <Pressable style={({pressed}) => [pressed && authStyles.pressedAlt, authStyles.button, authStyles.buttonAlt]} onPress={() => router.push('/register')}>
             <Text style={[authStyles.buttonText, authStyles.buttonAltText]}>Criar conta</Text>
           </Pressable>
-          <Pressable style={({pressed}) => [pressed && authStyles.pressedLink, authStyles.button, authStyles.buttonLink]} onPress={() => router.push('/login')}>
+          <Pressable style={({pressed}) => [pressed && authStyles.pressedLink, authStyles.button, authStyles.buttonLink]} onPress={() => router.push('/home/property')}>
             <Text style={[authStyles.buttonText, authStyles.buttonLinkText]}>Continuar sem login</Text>
           </Pressable>
         </View>
