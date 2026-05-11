@@ -5,6 +5,7 @@ import { EventFilterType, HomeEventType, useEvents } from "@/hooks/useEvents";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { formatDatePeriod } from "@/util";
+import { FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -26,14 +27,25 @@ const EventItem = ({ event }: { event: HomeEventType }) => (
     )}
     <View style={styles.eventInfo}>
       <View style={styles.eventBadge}>
+        <FontAwesome6 name="calendar-days" size={14} color="#006D60" />
         <Text style={styles.eventPeriod}>{formatDatePeriod(event.start_date || '', event.end_date || undefined)}</Text>
       </View>
       <Text style={styles.eventName} numberOfLines={2}>{event.name}</Text>
       <Text style={styles.eventDescription} numberOfLines={3}>{event.description}</Text>
       <View style={styles.eventFooter}>
-        {event.location ? <Text style={styles.eventLocation}>{event.location}</Text> : null}
-        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push({ pathname: '/(protected)/home/events' })}>
-          <Text style={styles.eventLocation}>Ver todos</Text>
+        {event.location ? (
+          <View style={styles.textWithIcon}>
+            <FontAwesome6 name="location-dot" size={14} color="#6b7773" />
+            <Text style={styles.eventLocation}>
+              {event.location}
+            </Text>
+          </View>
+        ) : null}
+        <TouchableOpacity style={styles.textWithIcon} activeOpacity={0.7} onPress={() => router.push({ pathname: '/(protected)/home/events' })}>
+          <Text style={styles.eventLocation}>
+            Ver detalhes
+          </Text>
+          <FontAwesome5 name="chevron-right" size={14} color="#6b7773"/>
         </TouchableOpacity>
       </View>
     </View>
@@ -183,6 +195,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   eventBadge: {
+    flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
     paddingHorizontal: 10,
@@ -212,6 +225,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight:600,
     color: '#6b7773',
+  },
+  textWithIcon: {
+    display:'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   eventFooter: {
     width: '100%',
