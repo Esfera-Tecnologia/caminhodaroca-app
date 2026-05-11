@@ -13,7 +13,7 @@ import { PropertyItemType, useProperties } from "@/hooks/useProperties";
 import HomeFilters, { PropertyFilters } from "@/modules/protected/HomeFilters";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
-import { formatter } from "@/util";
+import { formatDatePeriod, formatter } from "@/util";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image, ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -69,7 +69,7 @@ const EventCarouselItem = ({ event }: { event: HomeEventType }) => {
       <View style={styles.eventContent}>
         <View style={styles.eventBadges}>
           <View style={styles.eventBadge}>
-            <Text style={styles.eventLocation} numberOfLines={1}>{formatEventDate(event.start_date || '', event.end_date || '')}</Text>
+            <Text style={styles.eventLocation} numberOfLines={1}>{formatDatePeriod(event.start_date || '', event.end_date || '')}</Text>
           </View>
           <View style={styles.eventBadge}>
             <Text style={styles.eventLocation} numberOfLines={1}>{event.location}</Text>
@@ -85,35 +85,10 @@ const EventCarouselItem = ({ event }: { event: HomeEventType }) => {
   );
 };
 
-function formatEventDate(startDate: string, endDate?: string) {
-  const start = new Date(startDate);
-  const end = endDate ? new Date(endDate) : null;
-  const sameDay =
-    end &&
-    start.getDate() === end.getDate() &&
-    start.getMonth() === end.getMonth() &&
-    start.getFullYear() === end.getFullYear();
-  const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
-    month: 'short',
-  });
-  const startMonth = monthFormatter.format(start);
-  const endMonth = end ? monthFormatter.format(end) : null;
 
-  // Apenas uma data
-  if (!end || sameDay) {
-    return `${start.getDate()} ${startMonth}`;
-  }
-  // Mesmo mês
-  if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
-    return `${start.getDate()} a ${end.getDate()} ${startMonth}`;
-  }
-  // Meses diferentes
-  return `${start.getDate()} ${startMonth} a ${end.getDate()} ${endMonth}`;
-}
 
 const EventsCarousel = () => {
-  const { data: events, loading: eventsLoading } = useEvents();
-  console.log(events);
+  const { data: events, loading: eventsLoading } = useEvents({ filter: 'upcoming' });
   if (eventsLoading) {
     return <Text style={styles.eventLoading}>Carregando eventos...</Text>;
   }
@@ -222,7 +197,7 @@ export default function Home() {
         </View>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Eventos em destaque</Text>
-          <TouchableOpacity activeOpacity={0.7} onPress={() => {}}>
+          <TouchableOpacity activeOpacity={0.7} onPress={() => router.push({ pathname: '/(protected)/home/events' })}>
             <Text style={styles.sectionLink}>Ver todos</Text>
           </TouchableOpacity>
         </View>

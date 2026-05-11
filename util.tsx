@@ -264,3 +264,29 @@ export const cleanObject = (obj: any) => {
     Object.entries(obj).filter(([_, v]) => v !== null && v !== undefined)
   );
 }
+
+export function formatDatePeriod(startDate: string, endDate?: string) {
+  const start = new Date(startDate);
+  const end = endDate ? new Date(endDate) : null;
+  const sameDay =
+    end &&
+    start.getDate() === end.getDate() &&
+    start.getMonth() === end.getMonth() &&
+    start.getFullYear() === end.getFullYear();
+  const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
+    month: 'short',
+  });
+  const startMonth = monthFormatter.format(start);
+  const endMonth = end ? monthFormatter.format(end) : null;
+
+  // Apenas uma data
+  if (!end || sameDay) {
+    return `${start.getDate()} ${startMonth}`;
+  }
+  // Mesmo mês
+  if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+    return `${start.getDate()} a ${end.getDate()} ${startMonth}`;
+  }
+  // Meses diferentes
+  return `${start.getDate()} ${startMonth} a ${end.getDate()} ${endMonth}`;
+}
