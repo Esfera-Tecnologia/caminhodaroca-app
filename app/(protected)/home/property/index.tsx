@@ -88,28 +88,36 @@ const EventCarouselItem = ({ event }: { event: HomeEventType }) => {
 
 
 const EventsCarousel = () => {
+
   const { data: events, loading: eventsLoading } = useEvents({ filter: 'upcoming' });
-  if (eventsLoading) {
-    return <Text style={styles.eventLoading}>Carregando eventos...</Text>;
-  }
-  if (!events.length) {
-    return <Text style={styles.eventEmpty}>Nenhum evento em destaque encontrado no momento.</Text>;
+  if (eventsLoading || !events.length) {
+    return;
   }
   return (
-    <Carousel
-      data={events.map((event) => ({
-        id: event.id,
-        render: () => <EventCarouselItem event={event} />,
-      }))}
-      height={220}
-      autoPlay
-      autoPlayInterval={5000}
-      loop
-      showIndicators
-      indicatorWrapperStyle={{ bottom: 4}}
-      nextControlStyle={{ right: 0 }}
-      prevControlStyle={{ left: 0 }}
-    />
+    <>
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Eventos em destaque</Text>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => router.push({ pathname: '/(protected)/home/events' })}>
+          <Text style={styles.sectionLink}>Ver todos</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.carouselContainer}>
+        <Carousel
+          data={events.map((event) => ({
+            id: event.id,
+            render: () => <EventCarouselItem event={event} />,
+          }))}
+          height={220}
+          autoPlay
+          autoPlayInterval={5000}
+          loop
+          showIndicators
+          indicatorWrapperStyle={{ bottom: 4 }}
+          nextControlStyle={{ right: 0 }}
+          prevControlStyle={{ left: 0 }}
+        />
+      </View>
+    </>
   );
 };
 
@@ -195,15 +203,7 @@ export default function Home() {
             <Ionicons name="options-outline" size={22} color="#00796B" />
           </TouchableOpacity>
         </View>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Eventos em destaque</Text>
-          <TouchableOpacity activeOpacity={0.7} onPress={() => router.push({ pathname: '/(protected)/home/events' })}>
-            <Text style={styles.sectionLink}>Ver todos</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.carouselContainer}>
-          <EventsCarousel />
-        </View>
+        <EventsCarousel />
       </View>
       <PropertiesList filters={filters} />
       <HomeFilters 
