@@ -22,20 +22,22 @@ import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const PropertyItem = ({property}: {property: PropertyItemType}) => {
-  const {location: userLocation} = useUserLocation();
+const PropertyItem = ({ property }: { property: PropertyItemType }) => {
+  const { location: userLocation } = useUserLocation();
   return (
     <Pressable style={[styles.card, globalStyles.shadowSm]} onPress={() => router.push({
       pathname: '/home/property/[property]',
-      params: {property: property.id
-    }})}>
-      <Image source={{uri: property.logo}} style={styles.image} />
+      params: {
+        property: property.id
+      }
+    })}>
+      <Image source={{ uri: property.logo }} style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.name} numberOfLines={2}>{property.name}</Text>
-        <Review length={5} review={property.rating}/>
+        <Review length={5} review={property.rating} />
         <View style={[globalStyles.row, globalStyles.itemsCenter]}>
-          <FontAwesome6 name="location-dot" size={12} color={theme.colors.body} style={{marginStart: 2}} />
-          <Text style={[styles.details, {marginStart: 6}]}>{property.location.city}</Text>
+          <FontAwesome6 name="location-dot" size={12} color={theme.colors.body} style={{ marginStart: 2 }} />
+          <Text style={[styles.details, { marginStart: 6 }]}>{property.location.city}</Text>
         </View>
         {userLocation && (
           <View style={[globalStyles.row, globalStyles.itemsCenter]}>
@@ -46,7 +48,7 @@ const PropertyItem = ({property}: {property: PropertyItemType}) => {
           </View>
         )}
       </View>
-      <FontAwesome6 name="chevron-right" size={16} color={theme.colors.secondary} style={{marginEnd: 12}} />
+      <FontAwesome6 name="chevron-right" size={16} color={theme.colors.secondary} style={{ marginEnd: 12 }} />
     </Pressable>
   )
 }
@@ -54,7 +56,7 @@ const PropertyItem = ({property}: {property: PropertyItemType}) => {
 const EventCarouselItem = ({ event }: { event: HomeEventType }) => {
   return (
     <ImageBackground
-      source={{uri: event.image_url}}
+      source={{ uri: event.image_url }}
       style={styles.eventSlide}
       contentFit="cover">
       <LinearGradient
@@ -64,22 +66,22 @@ const EventCarouselItem = ({ event }: { event: HomeEventType }) => {
         ]}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
-        style={{height: '100%'}}
+        style={{ height: '100%' }}
       >
-      <View style={styles.eventContent}>
-        <View style={styles.eventBadges}>
-          <View style={styles.eventBadge}>
-            <Text style={styles.eventLocation} numberOfLines={1}>{formatDatePeriod(event.start_date || '', event.end_date || '')}</Text>
+        <View style={styles.eventContent}>
+          <View style={styles.eventBadges}>
+            <View style={styles.eventBadge}>
+              <Text style={styles.eventLocation} numberOfLines={1}>{formatDatePeriod(event.start_date || '', event.end_date || '')}</Text>
+            </View>
+            <View style={styles.eventBadge}>
+              <Text style={styles.eventLocation} numberOfLines={1}>{event.location}</Text>
+            </View>
           </View>
-          <View style={styles.eventBadge}>
-            <Text style={styles.eventLocation} numberOfLines={1}>{event.location}</Text>
+          <View>
+            <Text style={styles.eventTitle} numberOfLines={2}>{event.name}</Text>
+            <Text style={styles.eventDescription} numberOfLines={3}>{event.description}</Text>
           </View>
         </View>
-        <View>
-          <Text style={styles.eventTitle} numberOfLines={2}>{event.name}</Text>
-          <Text style={styles.eventDescription} numberOfLines={3}>{event.description}</Text>
-        </View>
-      </View>
       </LinearGradient>
     </ImageBackground>
   );
@@ -121,26 +123,27 @@ const EventsCarousel = () => {
   );
 };
 
-const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
-  const { data, loading: propertiesLoading } = useProperties(filters);
-  const {loading: userLocationLoading} = useUserLocation();
+const PropertiesList = ({ filters }: { filters?: PropertyFilters }) => {
+  const { data } = useProperties(filters);
+  const { loading: userLocationLoading } = useUserLocation();
   return (
-    <View style={{flex: 1}}>
-      {! propertiesLoading  && ! userLocationLoading ? (
+    <View style={{ flex: 1 }}>
+      {!userLocationLoading ? (
         <FlatList
-          contentContainerStyle={{ paddingHorizontal: 16 }}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}
           style={{ flex: 1 }}
           data={data}
+          ListHeaderComponent={<EventsCarousel />}
           ListEmptyComponent={
-            <EmptyList text="Infelizmente, não pudemos encontrar nenhuma
-              propriedade próxima a sua localização no momento" />
+            <EmptyList text="Infelizmente, não pudemos encontrar nenhuma propriedade próxima a sua localização no momento" />
           }
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => ( <PropertyItem property={item} /> )}
+          renderItem={({ item }) => (<PropertyItem property={item} />)}
         />
       ) : (
-        <View style={{marginHorizontal: 16}}>
-          <LoadingList text="Carregando lista de propriedades..."/>
+        <View style={{ marginHorizontal: 16 }}>
+          <EventsCarousel />
+          <LoadingList text="Carregando lista de propriedades..." />
         </View>
       )}
     </View>
@@ -149,10 +152,10 @@ const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
 
 export default function Home() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const [filters, setFilters] =  useState<PropertyFilters>();
+  const [filters, setFilters] = useState<PropertyFilters>();
   const [userCity, setUserCity] = useState<string | null>('Rio de Janeiro');
   const { user, showWelcomeModal, setShowWelcomeModal } = useAuth();
-  const {location, loading: userLocationLoading} = useUserLocation();
+  const { location, loading: userLocationLoading } = useUserLocation();
 
   useEffect(() => {
     if (!location) return;
@@ -181,7 +184,7 @@ export default function Home() {
             <TextPlaceholder />
           </>
         ) : (
-          <Text style={{lineHeight: 20}}>
+          <Text style={{ lineHeight: 20 }}>
             {location ? (
               <>
                 <Text>Buscando propriedades próximas à sua localização:{" "}</Text>
@@ -197,16 +200,15 @@ export default function Home() {
         )}
       </View>
       <View style={styles.content}>
-        <View style={[globalStyles.row, globalStyles.itemsCenter, {marginBottom: 16}]}>
+        <View style={[globalStyles.row, globalStyles.itemsCenter, { marginBottom: 16 }]}>
           <SearchProperties onSearch={(search) => setFilters((filters) => ({ ...filters, keyword: search }))} />
           <TouchableOpacity style={styles.filters} onPress={() => setIsFiltersOpen(true)}>
             <Ionicons name="options-outline" size={22} color="#00796B" />
           </TouchableOpacity>
         </View>
-        <EventsCarousel />
       </View>
       <PropertiesList filters={filters} />
-      <HomeFilters 
+      <HomeFilters
         isOpen={isFiltersOpen}
         onClose={() => setIsFiltersOpen(false)}
         onApply={setFilters}
@@ -215,7 +217,7 @@ export default function Home() {
       <DefaultModal
         visible={!!showWelcomeModal}
         onClose={() => setShowWelcomeModal(false)}>
-        <View style={{padding: 8}}>
+        <View style={{ padding: 8 }}>
           <View>
             <Text style={styles.welcomeTitle}>Bem-vindo!</Text>
             <Text style={styles.welcomeDescription}>
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#0000002D",
     borderLeftColor: theme.colors.primary,
   },
-  image: { 
+  image: {
     width: 120,
     height: '100%',
     minHeight: 120,
@@ -301,7 +303,7 @@ const styles = StyleSheet.create({
     marginStart: 8,
     width: 40,
     height: 40,
-    borderRadius:20,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: theme.colors.primary
   },
@@ -382,7 +384,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   welcomeDescription: {
-    fontSize: 14, 
+    fontSize: 14,
     marginBottom: 16,
   }
 });
