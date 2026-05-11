@@ -11,6 +11,7 @@ export type HomeEventType = {
   location?: string;
   start_date?: string | null;
   end_date?: string | null;
+  expired?: boolean | null;
   url?: string;
 };
 

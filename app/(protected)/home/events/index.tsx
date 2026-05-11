@@ -26,9 +26,16 @@ const EventItem = ({ event }: { event: HomeEventType }) => (
       </View>
     )}
     <View style={styles.eventInfo}>
-      <View style={styles.eventBadge}>
-        <FontAwesome6 name="calendar-days" size={14} color="#006D60" />
-        <Text style={styles.eventPeriod}>{formatDatePeriod(event.start_date || '', event.end_date || undefined)}</Text>
+      <View style={styles.eventBadges}>
+        <View style={styles.eventBadge}>
+          <FontAwesome6 name="calendar-days" size={14} color="#006D60" />
+          <Text style={styles.eventPeriod}>{formatDatePeriod(event.start_date || '', event.end_date || undefined)}</Text>
+        </View>
+        {event.expired && (
+          <View style={[styles.eventBadge, {backgroundColor: '#fde8e4'}]}>
+            <Text style={[styles.eventPeriod, {color: '#b95142'}]}>Expirado</Text>
+          </View>
+        )}
       </View>
       <Text style={styles.eventName} numberOfLines={2}>{event.name}</Text>
       <Text style={styles.eventDescription} numberOfLines={3}>{event.description}</Text>
@@ -193,6 +200,11 @@ const styles = StyleSheet.create({
   eventInfo: {
     alignItems: 'flex-start',
     padding: 16,
+  },
+  eventBadges: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   eventBadge: {
     flexDirection: 'row',
