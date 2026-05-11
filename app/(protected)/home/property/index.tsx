@@ -131,6 +131,9 @@ const EventsCarousel = () => {
       autoPlayInterval={5000}
       loop
       showIndicators
+      indicatorWrapperStyle={{ bottom: 4}}
+      nextControlStyle={{ right: 0 }}
+      prevControlStyle={{ left: 0 }}
     />
   );
 };

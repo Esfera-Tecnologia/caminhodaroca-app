@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  ViewStyle,
   ViewToken
 } from "react-native";
 
@@ -24,6 +25,9 @@ type Props = {
   loop?: boolean;
   showIndicators?: boolean;
   initialIndex?: number;
+  indicatorWrapperStyle?: ViewStyle
+  nextControlStyle?: ViewStyle
+  prevControlStyle?: ViewStyle
 };
 
 export default function Carousel({
@@ -34,6 +38,10 @@ export default function Carousel({
   loop = true,
   showIndicators = true,
   initialIndex = 0,
+  indicatorWrapperStyle = undefined,
+  nextControlStyle = undefined,
+  prevControlStyle = undefined
+
 }: Props) {
   const flatListRef = useRef<Animated.FlatList<CarouselItem> | null>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -96,7 +104,7 @@ export default function Carousel({
   const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 50 });
 
   const indicators = () => (
-    <View style={styles.indicatorWrapper} pointerEvents="none">
+    <View style={[styles.indicatorWrapper, indicatorWrapperStyle]} pointerEvents="none">
       {data.map((_, i) => {
         const opacity = scrollX.interpolate({
           inputRange: [(i - 1) * SCREEN_WIDTH, i * SCREEN_WIDTH, (i + 1) * SCREEN_WIDTH],
@@ -141,9 +149,9 @@ export default function Carousel({
 
       {showIndicators && indicators()}
 
-      <View style={styles.controlsContainer} pointerEvents="box-none">
+      <View style={[styles.controlsContainer]} pointerEvents="box-none">
         <TouchableOpacity
-          style={[styles.controlButton, { left: -2 }]}
+          style={[styles.controlButton, { left: -2, ...prevControlStyle }]}
           onPress={() => {
             const prev = currentIndex - 1;
             if (prev < 0) {
@@ -155,7 +163,7 @@ export default function Carousel({
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.controlButton, { right: -2 }]}
+          style={[styles.controlButton, { right: -2, ...nextControlStyle }]}
           onPress={() => {
             const next = currentIndex + 1;
             if (next >= data.length) {
