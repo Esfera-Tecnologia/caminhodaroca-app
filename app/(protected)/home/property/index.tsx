@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import Carousel from "@/components/Carousel";
 import SearchProperties from "@/components/controls/SearchProperties";
 import DefaultModal from "@/components/DefaultModal";
 import { EmptyList } from "@/components/EmptyList";
@@ -7,13 +8,15 @@ import Review from "@/components/Review";
 import TextPlaceholder from "@/components/TextPlaceholder";
 import { useAuth } from "@/context/AuthContext";
 import { useUserLocation } from "@/context/LocationContext";
+import { HomeEventType, useEvents } from "@/hooks/useEvents";
 import { PropertyItemType, useProperties } from "@/hooks/useProperties";
 import HomeFilters, { PropertyFilters } from "@/modules/protected/HomeFilters";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { formatter } from "@/util";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
+import { Image, ImageBackground } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import * as Location from 'expo-location';
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -47,6 +50,90 @@ const PropertyItem = ({property}: {property: PropertyItemType}) => {
     </Pressable>
   )
 }
+
+const EventCarouselItem = ({ event }: { event: HomeEventType }) => {
+  return (
+    <ImageBackground
+      source={{uri: event.image_url}}
+      style={styles.eventSlide}
+      contentFit="cover">
+      <LinearGradient
+        colors={[
+          'rgba(0,0,0,0.08)',
+          'rgba(0,0,0,0.78)'
+        ]}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={{height: '100%'}}
+      >
+      <View style={styles.eventContent}>
+        <View style={styles.eventBadges}>
+          <View style={styles.eventBadge}>
+            <Text style={styles.eventLocation} numberOfLines={1}>{formatEventDate(event.start_date || '', event.end_date || '')}</Text>
+          </View>
+          <View style={styles.eventBadge}>
+            <Text style={styles.eventLocation} numberOfLines={1}>{event.location}</Text>
+          </View>
+        </View>
+        <View>
+          <Text style={styles.eventTitle} numberOfLines={2}>{event.name}</Text>
+          <Text style={styles.eventDescription} numberOfLines={3}>{event.description}</Text>
+        </View>
+      </View>
+      </LinearGradient>
+    </ImageBackground>
+  );
+};
+
+function formatEventDate(startDate: string, endDate?: string) {
+  const start = new Date(startDate);
+  const end = endDate ? new Date(endDate) : null;
+  const sameDay =
+    end &&
+    start.getDate() === end.getDate() &&
+    start.getMonth() === end.getMonth() &&
+    start.getFullYear() === end.getFullYear();
+  const monthFormatter = new Intl.DateTimeFormat('pt-BR', {
+    month: 'short',
+  });
+  const startMonth = monthFormatter.format(start);
+  const endMonth = end ? monthFormatter.format(end) : null;
+
+  // Apenas uma data
+  if (!end || sameDay) {
+    return `${start.getDate()} ${startMonth}`;
+  }
+  // Mesmo mês
+  if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+    return `${start.getDate()} a ${end.getDate()} ${startMonth}`;
+  }
+  // Meses diferentes
+  return `${start.getDate()} ${startMonth} a ${end.getDate()} ${endMonth}`;
+}
+
+const EventsCarousel = () => {
+  const { data: events, loading: eventsLoading } = useEvents();
+  console.log(events);
+  if (eventsLoading) {
+    return <Text style={styles.eventLoading}>Carregando eventos...</Text>;
+  }
+  if (!events.length) {
+    return <Text style={styles.eventEmpty}>Nenhum evento em destaque encontrado no momento.</Text>;
+  }
+  return (
+    <Carousel
+      data={events.map((event) => ({
+        id: event.id,
+        render: () => <EventCarouselItem event={event} />,
+      }))}
+      height={220}
+      autoPlay
+      autoPlayInterval={5000}
+      loop
+      showIndicators
+    />
+  );
+};
 
 const PropertiesList = ({filters}: {filters?: PropertyFilters}) => {
   const { data, loading: propertiesLoading } = useProperties(filters);
@@ -129,6 +216,15 @@ export default function Home() {
           <TouchableOpacity style={styles.filters} onPress={() => setIsFiltersOpen(true)}>
             <Ionicons name="options-outline" size={22} color="#00796B" />
           </TouchableOpacity>
+        </View>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Eventos em destaque</Text>
+          <TouchableOpacity activeOpacity={0.7} onPress={() => {}}>
+            <Text style={styles.sectionLink}>Ver todos</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.carouselContainer}>
+          <EventsCarousel />
         </View>
       </View>
       <PropertiesList filters={filters} />
@@ -230,6 +326,77 @@ const styles = StyleSheet.create({
     borderRadius:20,
     borderWidth: 1,
     borderColor: theme.colors.primary
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 700,
+    color: theme.colors.success,
+  },
+  sectionLink: {
+    fontSize: 14,
+    color: theme.colors.primary,
+    fontWeight: '600',
+  },
+  carouselContainer: {
+    marginBottom: 16,
+  },
+  eventSlide: {
+    minHeight: 200,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  eventImage: {
+    width: '100%',
+    height: 140,
+  },
+  eventContent: {
+    height: '100%',
+    padding: 16,
+    justifyContent: 'space-between'
+  },
+  eventBadges: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  eventBadge: {
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+  },
+  eventLocation: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 700,
+  },
+  eventTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 8,
+    color: '#fff'
+  },
+  eventDescription: {
+    fontSize: 14,
+    color: '#fff',
+  },
+  eventLoading: {
+    color: theme.colors.body,
+    fontSize: 14,
+    paddingBottom: 16,
+  },
+  eventEmpty: {
+    color: theme.colors.body,
+    fontSize: 14,
+    paddingBottom: 16,
   },
   welcomeTitle: {
     fontSize: 18,
