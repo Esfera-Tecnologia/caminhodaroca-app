@@ -116,6 +116,12 @@ export default function TabLayout() {
             href: null
           }}
         />
+        <Tabs.Screen
+          name="events"
+          options={{
+            href: null
+          }}
+        />
       </Tabs>
       <Modal animationType="slide" visible={modalVisible} onRequestClose={() => setModalVisible(false)} >
         <SystemBars style="dark" />
