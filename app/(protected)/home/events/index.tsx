@@ -48,7 +48,7 @@ const EventItem = ({ event }: { event: HomeEventType }) => (
             </Text>
           </View>
         ) : null}
-        <TouchableOpacity style={styles.textWithIcon} activeOpacity={0.7} onPress={() => router.push({ pathname: '/(protected)/home/events' })}>
+        <TouchableOpacity style={styles.textWithIcon} activeOpacity={0.7} onPress={() => router.push({ pathname: '/(protected)/home/events/[event]', params: { event: event.id } })}>
           <Text style={styles.eventLocation}>
             Ver detalhes
           </Text>
