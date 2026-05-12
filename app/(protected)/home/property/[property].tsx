@@ -14,7 +14,7 @@ import { useUserLocation } from '@/context/LocationContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
 import { formatter, getDistanceInKm, openInstagram, openLink, openWhatsapp, truncatedJoinedCities } from '@/util';
-import { FontAwesome, FontAwesome6, Foundation } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome6 } from '@expo/vector-icons';
 import axios from 'axios';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
@@ -262,12 +262,12 @@ export default function PropertyDetails() {
         </View>
         <Text style={styles.sectionTitle}>Galeria de Fotos</Text>
         <ImageGallery property={property} />
-        <View style={[globalStyles.row, { marginBottom: 8 }]}>
+        <View style={[globalStyles.row, { marginBottom: 8, gap: 8}]}>
           <Button 
             variant="success"
             outline={true}
             title="Ver no mapa"
-            style={{ width: '50%', marginEnd: 8 }}
+            style={{ flex: 1 }}
             onPress={() => openLink(property.link_google_maps)} 
             startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success} />}
           />
@@ -275,17 +275,17 @@ export default function PropertyDetails() {
             variant="success"
             outline={true}
             title="Ler QR Code"
-            style={{ width: '50%' }}
+            style={{ flex: 1 }}
             onPress={() => openInstagram(property.instagram)} 
             startIcon={<FontAwesome6 name="qrcode" size={16} color={theme.colors.success} />}
           />
         </View>
-        <View style={[globalStyles.row, { marginBottom: 8 }]}>
+        <View style={[globalStyles.row, { marginBottom: 8, gap: 8 }]}>
           <Button 
             variant="instagram"
             outline={true}
             title="Instagram"
-            style={{ width: '50%', marginEnd: 8 }}
+            style={{ flex: 1 }}
             onPress={() => openInstagram(property.instagram)} 
             startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.instagram} />}
           />
@@ -293,16 +293,15 @@ export default function PropertyDetails() {
             onPress={() => openWhatsapp(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
             variant="success"
             outline={true}
-            style={{width: '50%' }}
+            style={{ flex: 1}}
             title="Contato"
             startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
         </View>
         <Button
           variant="secondary"
           outline={true}
-          style={{width: '100%'}}
+          style={{width: '100%',  margin: 0}}
           title={`Salvar em listas (${property.favorite_list_ids?.length ?? property.favorite_count})`}
-          startIcon={<Foundation name="heart" size={16} color={(property.favorite_list_ids?.length || property.favorite_count) > 0 ? theme.colors.danger : "#7d8783"} />}
           onPress={handleOpenFavoriteModal}
         />
         {property.relatedPartners.length ? (
