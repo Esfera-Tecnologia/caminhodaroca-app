@@ -4,7 +4,7 @@ import { theme } from '@/theme';
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ToastManager, { Toast } from 'toastify-react-native';
@@ -140,6 +140,24 @@ export default function FavoriteListsModal({
     }
   };
 
+  const confirmDeleteList = (listId: number, listName: string) => {
+    Alert.alert(
+      "Excluir Lista",
+      `Tem certeza que deseja excluir a lista "${listName}"? Todos os favoritos salvos apenas nela serão perdidos.`,
+      [
+        {
+          text: "Cancelar",
+          style: "cancel"
+        },
+        {
+          text: "Excluir",
+          style: "destructive",
+          onPress: () => deleteList(listId)
+        }
+      ]
+    );
+  };
+
   return (
     <Modal
       statusBarTranslucent
@@ -193,7 +211,7 @@ export default function FavoriteListsModal({
                               {!list.is_default && (
                                 <TouchableOpacity
                                   style={styles.removeListButton}
-                                  onPress={() => deleteList(list.id)}>
+                                  onPress={() => confirmDeleteList(list.id, list.name)}>
                                   <FontAwesome6 name="trash" size={16} color="#c94c5b" />
                                 </TouchableOpacity>
                               )}
