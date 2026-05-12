@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: theme.colors.success,
+    backgroundColor: '#62B55A',
   },
   calendarCount: {
     minWidth: 22,
