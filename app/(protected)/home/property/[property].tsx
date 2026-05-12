@@ -1,6 +1,7 @@
 import Button from '@/components/Button';
 import Carousel from '@/components/Carousel';
 import { ExpandableText } from '@/components/ExpandableText';
+import FavoriteListsModal from '@/components/FavoriteListsModal';
 import ImageGallery from '@/components/ImageGallery';
 import Logo from '@/components/Logo';
 import Rating from '@/components/Rating';
@@ -63,6 +64,7 @@ interface Property {
   logo: string;
   rating: number;
   user_rating: number;
+  favorite_count: number;
   type: string;
   phone: string;
   location: {
@@ -85,6 +87,7 @@ interface Property {
   isFavorited: boolean;
   instagram: string;
   relatedPartners: Partner[];
+  favorite_list_ids?: number[];
 }
 
 function OpeningDays({openingHours}: {openingHours: OpeningHours}) {
@@ -153,7 +156,7 @@ export default function PropertyDetails() {
   const { property: propertyId } = useLocalSearchParams();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
-  const [wasFavorited, setWasFavorited] = useState(true);
+  const [favoriteModalVisible, setFavoriteModalVisible] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -169,7 +172,6 @@ export default function PropertyDetails() {
         if (data.logo) {
           await Image.prefetch(data.logo);
         }
-        setWasFavorited(data.isFavorited);
         setProperty(data);
       } catch (error) {
         console.log('Erro ao buscar propriedade:', error);
@@ -180,27 +182,12 @@ export default function PropertyDetails() {
     fetchProperty();
   }, [propertyId]);
 
-  const toggleFavorite = async (propertyId: number) => {
-    if(! user) {
+  const handleOpenFavoriteModal = () => {
+    if (!user) {
       Toast.warn("Para acessar essa funcionalidade, você precisa estar logado.");
-      return null;
+      return;
     }
-    try {
-      const response = await axios.post(`${env.API_URL}/properties/${propertyId}/favorite`);
-      setWasFavorited(!wasFavorited);
-      Toast.success(response.data.message);
-    } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          Toast.error("Usuário não autenticado");
-        } else if (error.response?.status === 404) {
-          Toast.error("Propriedade não encontrada");
-        } else {
-          Toast.error("Erro ao alternar favorito");
-        }
-      }
-      return null;
-    }
+    setFavoriteModalVisible(true);
   };
 
   if (loading) {
@@ -209,6 +196,8 @@ export default function PropertyDetails() {
   if (!property) {
     return <RecordNotFound />;
   }
+  console.log(property);
+
   return (
     <ScrollView style={styles.container}>
       <Image
@@ -272,31 +261,23 @@ export default function PropertyDetails() {
         <ImageGallery property={property} />
         <View style={[globalStyles.row, { marginBottom: 8 }]}>
           <Button 
-            variant="secondary"
+            variant="success"
             outline={true}
             title="Ver no mapa"
             style={{ width: '50%', marginEnd: 8 }}
             onPress={() => openLink(property.link_google_maps)} 
-            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.secondary} />}
+            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success} />}
           />
-          {wasFavorited ? (
-            <Button 
-              variant="success"
-              style={{width: '50%'}}
-              title= "Desfavoritar"
-              startIcon={<Foundation name="heart" size={16} color={"#fff"} />}
-              onPress={() => toggleFavorite(property.id)}  />
-          ) : (
-            <Button 
-              variant="secondary"
-              outline={true}
-              style={{width: '50%'}}
-              title="Favoritar"
-              startIcon={<Foundation name="heart" size={16} color={theme.colors.secondary} />}
-              onPress={() => toggleFavorite(property.id)}  />
-          )}
+          <Button 
+            variant="success"
+            outline={true}
+            title="Ler QR Code"
+            style={{ width: '50%' }}
+            onPress={() => openInstagram(property.instagram)} 
+            startIcon={<FontAwesome6 name="qrcode" size={16} color={theme.colors.success} />}
+          />
         </View>
-        <View style={[globalStyles.row]}>
+        <View style={[globalStyles.row, { marginBottom: 8 }]}>
           <Button 
             variant="instagram"
             outline={true}
@@ -313,6 +294,14 @@ export default function PropertyDetails() {
             title="Contato"
             startIcon={<FontAwesome6 name="whatsapp" size={16} color={theme.colors.success}/>} />
         </View>
+        <Button
+          variant="secondary"
+          outline={true}
+          style={{width: '100%'}}
+          title={`Salvar em listas (${property.favorite_list_ids?.length ?? property.favorite_count})`}
+          startIcon={<Foundation name="heart" size={16} color={(property.favorite_list_ids?.length || property.favorite_count) > 0 ? theme.colors.danger : "#7d8783"} />}
+          onPress={handleOpenFavoriteModal}
+        />
         {property.relatedPartners.length ? (
           <View style={{marginBottom: 36, marginTop: 16}}>
             <Text style={[styles.sectionTitle, {marginBottom: -4}]}>Parceiros Relacionados</Text>
@@ -335,6 +324,13 @@ export default function PropertyDetails() {
           user_rating: userRating
         })}
         propertyId={property.id} />
+      <FavoriteListsModal
+        visible={favoriteModalVisible}
+        propertyId={property.id}
+        initialSelectedListIds={property.favorite_list_ids || []}
+        onClose={() => setFavoriteModalVisible(false)}
+        onUpdateListIds={(newIds) => setProperty({ ...property, favorite_list_ids: newIds, favorite_count: newIds.length })}
+      />
     </ScrollView>
   );
 }
