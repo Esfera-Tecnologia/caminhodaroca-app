@@ -196,8 +196,6 @@ export default function PropertyDetails() {
   if (!property) {
     return <RecordNotFound />;
   }
-  console.log(property);
-
   return (
     <ScrollView style={styles.container}>
       <Image

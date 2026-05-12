@@ -316,8 +316,8 @@ const styles = StyleSheet.create({
   },
   filterLabel: {
     fontSize: 13,
-    fontWeight: '600',
     color: '#5a6a66',
+    fontWeight: 600,
     textAlign: 'center',
   },
   filterLabelActive: {
