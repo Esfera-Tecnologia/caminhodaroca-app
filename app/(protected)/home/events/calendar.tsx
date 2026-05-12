@@ -1,14 +1,14 @@
-import { LoadingList } from "@/components/LoadingList";
 import { CalendarStatsType, useCalendarStats } from "@/hooks/useCalendarStats";
 import { HomeEventType, useEvents } from "@/hooks/useEvents";
 import { theme } from "@/theme";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Octicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useMemo, useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 
 const WEEKDAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+const CELL_GAP = 5; // gap entre as células do calendário (px)
 const MONTHS = [
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
@@ -62,13 +62,15 @@ const EventListItem = ({ event }: { event: HomeEventType }) => {
           {event.location || 'Sem localização'}
         </Text>
       </View>
-      <MaterialCommunityIcons name="chevron-right" size={20} color={theme.colors.primary} />
+      <Octicons name="chevron-right" size={20} color={'#62B55A'} />
     </TouchableOpacity>
   );
 };
 
 export default function EventsCalendarScreen() {
   const router = useRouter();
+  const { width: screenWidth } = useWindowDimensions();
+  const cellSize = (screenWidth - 18 * 2 - 14 * 2 - CELL_GAP * 6) / 7;
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
@@ -129,7 +131,11 @@ export default function EventsCalendarScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={styles.title}>Calendário</Text>
       <Text style={styles.description}>
         Veja os eventos do mês. Dias com programação aparecem marcados no calendário.
@@ -153,111 +159,109 @@ export default function EventsCalendarScreen() {
         </View>
       </View>
 
-      {calendarLoading ? (
-        <LoadingList text="Carregando calendário..." />
-      ) : (
-        <>
-          <View style={styles.calendarCard}>
-            <View style={styles.monthHeader}>
+      <View style={styles.calendarCard}>
+        <View style={styles.monthHeader}>
+          <TouchableOpacity
+            style={styles.monthNav}
+            onPress={handlePrevMonth}
+          >
+            <Octicons name="chevron-left" size={20} color={theme.colors.primary} style={{marginRight: 2}}/>
+          </TouchableOpacity>
+
+          <Text style={styles.monthLabel}>
+            {MONTHS[month - 1]} de {year}
+          </Text>
+
+          <TouchableOpacity
+            style={styles.monthNav}
+            onPress={handleNextMonth}
+          >
+            <Octicons name="chevron-right" size={20} color={theme.colors.primary} style={{marginLeft: 2}}/>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.weekdayRow}>
+          {WEEKDAYS.map((weekday) => (
+            <Text key={weekday} style={styles.weekday}>
+              {weekday}
+            </Text>
+          ))}
+        </View>
+
+        <View style={styles.calendarGrid}>
+          {calendarDays.map((dayObj, idx) => {
+            if (dayObj.day === null) {
+              return <View key={`empty-${idx}`} style={[styles.calendarDay, styles.calendarDayDisabled, { width: cellSize }]} />;
+            }
+
+            const stat = !calendarLoading ? statsMap.get(dayObj.date!) : undefined;
+            const hasEvent = stat && stat.count > 0;
+            const isSelected = selectedDate === dayObj.date;
+
+            return (
               <TouchableOpacity
-                style={styles.monthNav}
-                onPress={handlePrevMonth}
+                key={dayObj.date}
+                style={[
+                  styles.calendarDay,
+                  { width: cellSize },
+                  hasEvent && styles.calendarDayWithEvent,
+                  isSelected && styles.calendarDaySelected,
+                  !hasEvent && styles.calendarDayDisabled,
+                ]}
+                onPress={() => dayObj.date && handleDayPress(dayObj.date)}
+                disabled={!hasEvent}
+                activeOpacity={0.7}
               >
-                <MaterialCommunityIcons name="chevron-left" size={20} color={theme.colors.primary} />
-              </TouchableOpacity>
-
-              <Text style={styles.monthLabel}>
-                {MONTHS[month - 1]} {year}
-              </Text>
-
-              <TouchableOpacity
-                style={styles.monthNav}
-                onPress={handleNextMonth}
-              >
-                <MaterialCommunityIcons name="chevron-right" size={20} color={theme.colors.primary} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.weekdayRow}>
-              {WEEKDAYS.map((weekday) => (
-                <Text key={weekday} style={styles.weekday}>
-                  {weekday}
-                </Text>
-              ))}
-            </View>
-
-            <View style={styles.calendarGrid}>
-              {calendarDays.map((dayObj, idx) => {
-                if (dayObj.day === null) {
-                  return <View key={`empty-${idx}`} style={styles.calendarDayEmpty} />;
-                }
-
-                const stat = statsMap.get(dayObj.date!);
-                const hasEvent = stat && stat.count > 0;
-                const isSelected = selectedDate === dayObj.date;
-
-                return (
-                  <TouchableOpacity
-                    key={dayObj.date}
-                    style={[
-                      styles.calendarDay,
-                      hasEvent && styles.calendarDayWithEvent,
-                      isSelected && styles.calendarDaySelected,
-                      !hasEvent && styles.calendarDayDisabled,
-                    ]}
-                    onPress={() => dayObj.date && handleDayPress(dayObj.date)}
-                    disabled={!hasEvent}
-                    activeOpacity={0.7}
-                  >
-                    <Text style={styles.calendarDayNumber}>{dayObj.day}</Text>
-                    {stat && stat.count > 0 && (
-                      <View style={styles.calendarMarker}>
-                        {stat.count === 1 ? (
-                          <View style={styles.calendarDot} />
-                        ) : (
-                          <View style={styles.calendarCount}>
-                            <Text style={styles.calendarCountText}>{stat.count}</Text>
-                          </View>
-                        )}
+                <Text style={styles.calendarDayNumber}>{dayObj.day}</Text>
+                {stat && stat.count > 0 && (
+                  <View style={styles.calendarMarker}>
+                    {stat.count === 1 ? (
+                      <View style={styles.calendarDot} />
+                    ) : (
+                      <View style={styles.calendarCount}>
+                        <Text style={styles.calendarCountText}>{stat.count}</Text>
                       </View>
                     )}
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </View>
+                  </View>
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
 
-          {selectedDate && selectedDayEvents.length > 0 && (
-            <View style={styles.dayEventsCard}>
-              <Text style={styles.dayEventsTitle}>
-                Eventos em {new Date(selectedDate).toLocaleDateString('pt-BR', {
-                  weekday: 'long',
-                  day: '2-digit',
-                  month: 'long',
-                })}
-              </Text>
-              <Text style={styles.dayEventsDescription}>
-                Escolha um evento para ver os detalhes.
-              </Text>
-              <FlatList
-                scrollEnabled={false}
-                data={selectedDayEvents}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <EventListItem event={item} />}
-              />
-            </View>
-          )}
-        </>
+      {selectedDate && selectedDayEvents.length > 0 && (
+        <View style={styles.dayEventsCard}>
+          <Text style={styles.dayEventsTitle}>
+            Eventos em {new Date(selectedDate).toLocaleDateString('pt-BR', {
+              weekday: 'long',
+              day: '2-digit',
+              month: 'long',
+            })}
+          </Text>
+          <Text style={styles.dayEventsDescription}>
+            Escolha um evento para ver os detalhes.
+          </Text>
+          <FlatList
+            scrollEnabled={false}
+            data={selectedDayEvents}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <EventListItem event={item} />}
+          />
+        </View>
       )}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 18,
     backgroundColor: '#f5f5f5',
+  },
+  contentContainer: {
+    padding: 18,
+    paddingBottom: 32,
   },
   title: {
     fontSize: 24,
@@ -303,7 +307,7 @@ const styles = StyleSheet.create({
   calendarCard: {
     backgroundColor: '#fff',
     borderRadius: 22,
-    padding: 18,
+    padding: 14,
     marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -331,7 +335,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: theme.colors.primary,
-    textTransform: 'capitalize',
   },
   weekdayRow: {
     flexDirection: 'row',
@@ -349,22 +352,21 @@ const styles = StyleSheet.create({
   calendarGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-    justifyContent: 'space-between',
+    gap: CELL_GAP,
   },
   calendarDay: {
-    width: '14%',
+    minHeight: 68,
     aspectRatio: 1,
     borderWidth: 1,
     borderColor: '#e4ece9',
     borderRadius: 16,
     backgroundColor: '#fff',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     position: 'relative',
+    paddingTop: 10,
   },
   calendarDayEmpty: {
-    width: '14%',
     aspectRatio: 1,
   },
   calendarDayWithEvent: {
@@ -402,13 +404,13 @@ const styles = StyleSheet.create({
     minWidth: 22,
     height: 18,
     borderRadius: 9,
-    backgroundColor: theme.colors.success,
+    backgroundColor: '#62B55A',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 7,
   },
   calendarCountText: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '700',
     color: '#fff',
   },
@@ -417,36 +419,35 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     padding: 18,
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 3,
+    boxShadow: [{
+      offsetX: 0,
+      offsetY: 10,
+      blurRadius: 24,
+      spreadDistance: 0,
+      color: 'rgba(0, 0, 0, 0.08)',
+    }]
   },
   dayEventsTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: theme.colors.primary,
     marginBottom: 6,
-    textTransform: 'capitalize',
   },
   dayEventsDescription: {
     fontSize: 14,
     color: '#66706c',
-    marginBottom: 14,
     lineHeight: 20,
   },
   dayEventItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
+    padding: 12,
     borderWidth: 1,
     borderColor: '#e2ebe7',
     borderRadius: 18,
     backgroundColor: '#fbfdfc',
-    marginBottom: 12,
+    marginTop: 12,
   },
   dayEventImage: {
     width: 68,
