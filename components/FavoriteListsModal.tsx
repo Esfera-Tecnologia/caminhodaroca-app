@@ -1,8 +1,7 @@
 import Button from '@/components/Button';
-import StyledCheckbox from '@/components/controls/StyledCheckbox';
 import env from "@/config.json";
 import { theme } from '@/theme';
-import { FontAwesome6 } from '@expo/vector-icons';
+import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -178,12 +177,9 @@ export default function FavoriteListsModal({
                               activeOpacity={0.7}
                               style={styles.listCheckboxArea}
                               onPress={() => toggleList(list.id, !isSelected)}>
-                              <StyledCheckbox
-                                value={isSelected}
-                                size="md"
-                                color={isSelected ? '#0d6efd' : undefined}
-                                style={{ marginRight: 14 }}
-                              />
+                              {! isSelected
+                                ? <MaterialCommunityIcons name="checkbox-blank-outline" size={20} color="#dee2e6" />
+                                : <MaterialCommunityIcons name="checkbox-marked" size={20} color="#0d6efd" />}
                               <Text style={styles.listOptionTitle}>{list.name}</Text>
                             </TouchableOpacity>
                             <View style={styles.listOptionMeta}>
@@ -306,6 +302,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#24312d',
     flexShrink: 1,
+    marginStart: 6,
   },
   listOptionMeta: {
     flexDirection: 'row',
