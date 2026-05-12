@@ -9,6 +9,7 @@ import TextPlaceholder from "@/components/TextPlaceholder";
 import { useAuth } from "@/context/AuthContext";
 import { useUserLocation } from "@/context/LocationContext";
 import { HomeEventType, useEvents } from "@/hooks/useEvents";
+import { FavoriteList, useFavoriteLists } from "@/hooks/useFavoriteLists";
 import { PropertyItemType, useProperties } from "@/hooks/useProperties";
 import HomeFilters, { PropertyFilters } from "@/modules/protected/HomeFilters";
 import { globalStyles } from "@/styles/global";
@@ -22,7 +23,7 @@ import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const PropertyItem = ({ property }: { property: PropertyItemType }) => {
+const PropertyItem = ({ property, lists }: { property: PropertyItemType, lists?: FavoriteList[] }) => {
   const { location: userLocation } = useUserLocation();
   return (
     <Pressable style={[styles.card, globalStyles.shadowSm]} onPress={() => router.push({
@@ -47,12 +48,26 @@ const PropertyItem = ({ property }: { property: PropertyItemType }) => {
             </Text>
           </View>
         )}
+        {property.favorite_list_ids && property.favorite_list_ids.length > 0 && lists && lists.length > 0 && (
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
+            {property.favorite_list_ids.map(id => {
+              const listName = lists.find(l => l.id === id)?.name;
+              if (!listName) return null;
+              return (
+                <View key={id} style={styles.listBadgeMini}>
+                  <FontAwesome name="heart" size={12} color="#e25563" />
+                  <Text style={styles.listBadgeMiniText}>{listName}</Text>
+                </View>
+              );
+            })}
+          </View>
+        )}
       </View>
       <FontAwesome6 name="chevron-right" size={16} color={theme.colors.secondary} style={{ marginEnd: 12 }} />
       {property.isFavorited && (
         <View style={styles.favoriteBadge}>
-        <FontAwesome name="heart" size={16} color="#e25563" />
-      </View>
+          <FontAwesome name="heart" size={16} color="#e25563" />
+        </View>
       )}
     </Pressable>
   )
@@ -139,6 +154,7 @@ const EventsCarousel = () => {
 const PropertiesList = ({ filters }: { filters?: PropertyFilters }) => {
   const { data } = useProperties(filters);
   const { loading: userLocationLoading } = useUserLocation();
+  const { lists } = useFavoriteLists();
   return (
     <View style={{ flex: 1 }}>
       {!userLocationLoading ? (
@@ -151,7 +167,7 @@ const PropertiesList = ({ filters }: { filters?: PropertyFilters }) => {
             <EmptyList text="Infelizmente, não pudemos encontrar nenhuma propriedade próxima a sua localização no momento" />
           }
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (<PropertyItem property={item} />)}
+          renderItem={({ item }) => (<PropertyItem property={item} lists={lists} />)}
         />
       ) : (
         <View style={{ marginHorizontal: 16 }}>
@@ -419,5 +435,20 @@ const styles = StyleSheet.create({
       spreadDistance: 0,
       color: 'rgba(0, 0, 0, 0.12)',
     }]
+  },
+  listBadgeMini: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#ffe8ec',
+    borderRadius: 999,
+  },
+  listBadgeMiniText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#b8475b',
   },
 });

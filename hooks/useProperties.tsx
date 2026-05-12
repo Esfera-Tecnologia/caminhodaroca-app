@@ -12,6 +12,9 @@ export type PropertyItemType = {
   logo: string;
   type: string;
   rating: number;
+  isFavorited: boolean;
+  isVisited: boolean;
+  favorite_list_ids: number[] | null;
   distance: number | undefined;
   location: {
     city: string;
