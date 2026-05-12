@@ -2,6 +2,7 @@ import BackButton from "@/components/BackButton";
 import RecordNotFound from "@/components/RecordNotFound";
 import { useEventDetail } from "@/hooks/useEventDetail";
 import { theme } from "@/theme";
+import { formatDatePeriod, formatDatePeriodLong } from "@/util";
 import { FontAwesome6, Octicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -14,45 +15,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-const MONTHS_SHORT = [
-  'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
-  'jul', 'ago', 'set', 'out', 'nov', 'dez',
-];
-
-const MONTHS_LONG = [
-  'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
-  'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro',
-];
-
-const formatBadge = (start?: string | null, end?: string | null): string => {
-  if (!start) return '';
-  const s = new Date(start);
-  const sDay = s.getDate();
-  const sMon = MONTHS_SHORT[s.getMonth()];
-  if (!end) return `${sDay} de ${sMon}`;
-  const e = new Date(end);
-  const eDay = e.getDate();
-  if (s.getMonth() === e.getMonth() && s.getFullYear() === e.getFullYear()) {
-    return `${sDay} a ${eDay} de ${sMon}`;
-  }
-  return `${sDay} de ${sMon} a ${eDay} de ${MONTHS_SHORT[e.getMonth()]}`;
-};
-
-const formatWhen = (start?: string | null, end?: string | null): string => {
-  if (!start) return 'Não informado';
-  const s = new Date(start);
-  const sDay = s.getDate();
-  const sMon = MONTHS_LONG[s.getMonth()];
-  const sYear = s.getFullYear();
-  if (!end) return `${sDay} de ${sMon} de ${sYear}`;
-  const e = new Date(end);
-  const eDay = e.getDate();
-  if (s.getMonth() === e.getMonth() && s.getFullYear() === e.getFullYear()) {
-    return `${sDay} a ${eDay} de ${sMon} de ${sYear}`;
-  }
-  return `${sDay} de ${sMon} a ${eDay} de ${MONTHS_LONG[e.getMonth()]} de ${e.getFullYear()}`;
-};
 
 export default function EventDetailScreen() {
   const { event: eventId } = useLocalSearchParams<{ event: string }>();
@@ -70,8 +32,8 @@ export default function EventDetailScreen() {
       </View>
     );
   }
-  const badge = formatBadge(event.start_date, event.end_date);
-  const when = formatWhen(event.start_date, event.end_date);
+  const badge = formatDatePeriod(event.start_date || '', event.end_date || '');
+  const when = formatDatePeriodLong(event.start_date, event.end_date);
   const hasProperties = Array.isArray(event.properties) && event.properties.length > 0;
   const hasUrl = !!event.url;
 

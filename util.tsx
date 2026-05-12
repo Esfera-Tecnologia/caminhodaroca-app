@@ -290,3 +290,77 @@ export function formatDatePeriod(startDate: string, endDate?: string) {
   // Meses diferentes
   return `${start.getDate()} ${startMonth} a ${end.getDate()} ${endMonth}`;
 }
+
+const MONTHS_LONG = [
+  'janeiro',
+  'fevereiro',
+  'março',
+  'abril',
+  'maio',
+  'junho',
+  'julho',
+  'agosto',
+  'setembro',
+  'outubro',
+  'novembro',
+  'dezembro',
+];
+
+const formatHour = (date: Date) => {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  if (minutes === 0) {
+    return `${hours}h`;
+  }
+
+  return `${hours}h${String(minutes).padStart(2, '0')}`;
+};
+export const formatDatePeriodLong = (start?: string | null, end?: string | null): string => {
+  if (!start) return 'Não informado';
+
+  const s = new Date(start);
+  const e = end ? new Date(end) : null;
+
+  const sameDay =
+    e &&
+    s.getDate() === e.getDate() &&
+    s.getMonth() === e.getMonth() &&
+    s.getFullYear() === e.getFullYear();
+
+  const sDay = s.getDate();
+  const sMon = MONTHS_LONG[s.getMonth()];
+  const sYear = s.getFullYear();
+  const sHour = formatHour(s);
+
+  // Apenas uma data
+  if (!e) {
+    return `${sDay} de ${sMon} de ${sYear} às ${sHour}`;
+  }
+
+  const eDay = e.getDate();
+  const eMon = MONTHS_LONG[e.getMonth()];
+  const eYear = e.getFullYear();
+  const eHour = formatHour(e);
+
+  // Mesmo dia
+  if (sameDay) {
+    return `${sDay} de ${sMon} de ${sYear}, das ${sHour} às ${eHour}`;
+  }
+
+  // Mesmo mês e ano
+  if (
+    s.getMonth() === e.getMonth() &&
+    s.getFullYear() === e.getFullYear()
+  ) {
+    return `${sDay} às ${sHour} a ${eDay} às ${eHour} de ${sMon} de ${sYear}`;
+  }
+
+  // Mesmo ano
+  if (sYear === eYear) {
+    return `${sDay} de ${sMon} às ${sHour} a ${eDay} de ${eMon} às ${eHour} de ${sYear}`;
+  }
+
+  // Anos diferentes
+  return `${sDay} de ${sMon} de ${sYear} às ${sHour} a ${eDay} de ${eMon} de ${eYear} às ${eHour}`;
+};

@@ -115,10 +115,7 @@ const EventCarouselItem = ({ event }: { event: HomeEventType }) => {
   );
 };
 
-
-
 const EventsCarousel = () => {
-
   const { data: events, loading: eventsLoading } = useEvents({ filter: 'upcoming' });
   if (eventsLoading || !events.length) {
     return;
