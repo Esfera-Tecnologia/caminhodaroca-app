@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Toast } from 'toastify-react-native';
+import ToastManager, { Toast } from 'toastify-react-native';
 
 export interface FavoriteList {
   id: number;
@@ -79,6 +79,13 @@ export default function FavoriteListsModal({
       newSelections = selectedListIds.filter(id => id !== listId);
     }
     setSelectedListIds(newSelections);
+
+    setLists(prevLists => prevLists.map(list => 
+      list.id === listId 
+        ? { ...list, properties_count: isSelected ? list.properties_count + 1 : list.properties_count - 1 }
+        : list
+    ));
+
     await syncPropertyFavorites(newSelections);
   };
 
@@ -92,7 +99,7 @@ export default function FavoriteListsModal({
         name: listName
       });
       const newList = response.data.data || response.data;
-      setLists(prev => [...prev, newList]);
+      setLists(prev => [...prev, { ...newList, properties_count: 1 }]);
       setNewListName('');
       
       // Auto toggle the new list
@@ -166,10 +173,7 @@ export default function FavoriteListsModal({
                     <View style={styles.listsContainer}>
                       {lists.map(list => {
                         const isSelected = selectedListIds.includes(list.id);
-                        const wasInitiallySelected = initialSelectedListIds?.includes(list.id);
                         let currentCount = list.properties_count;
-                        if (!wasInitiallySelected && isSelected) currentCount++;
-                        if (wasInitiallySelected && !isSelected) currentCount--;
                         
                         return (
                           <View key={list.id} style={styles.listOptionCard}>
@@ -229,6 +233,7 @@ export default function FavoriteListsModal({
           </View>
         </SafeAreaView>
       </View>
+      <ToastManager useModal={false} />
     </Modal>
    
   );
