@@ -137,7 +137,7 @@ const EventsCarousel = () => {
             id: event.id,
             render: () => <EventCarouselItem event={event} />,
           }))}
-          height={220}
+          height={200}
           autoPlay
           autoPlayInterval={5000}
           loop
@@ -357,13 +357,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   eventSlide: {
-    minHeight: 200,
+    height: 200,
     borderRadius: 20,
     overflow: 'hidden',
-  },
-  eventImage: {
-    width: '100%',
-    height: 140,
   },
   eventContent: {
     height: '100%',
