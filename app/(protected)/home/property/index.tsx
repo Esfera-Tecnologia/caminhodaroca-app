@@ -55,35 +55,43 @@ const PropertyItem = ({ property }: { property: PropertyItemType }) => {
 
 const EventCarouselItem = ({ event }: { event: HomeEventType }) => {
   return (
-    <ImageBackground
-      source={{ uri: event.image_url }}
-      style={styles.eventSlide}
-      contentFit="cover">
-      <LinearGradient
-        colors={[
-          'rgba(0,0,0,0.08)',
-          'rgba(0,0,0,0.78)'
-        ]}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        style={{ height: '100%' }}
-      >
-        <View style={styles.eventContent}>
-          <View style={styles.eventBadges}>
-            <View style={styles.eventBadge}>
-              <Text style={styles.eventLocation} numberOfLines={1}>{formatDatePeriod(event.start_date || '', event.end_date || '')}</Text>
+    <TouchableOpacity
+      activeOpacity={0.9}
+      onPress={() => router.push({
+        pathname: '/(protected)/home/events/[event]',
+        params: { event: event.id },
+      })}
+    >
+      <ImageBackground
+        source={{ uri: event.image_url }}
+        style={styles.eventSlide}
+        contentFit="cover">
+        <LinearGradient
+          colors={[
+            'rgba(0,0,0,0.08)',
+            'rgba(0,0,0,0.78)'
+          ]}
+          start={{ x: 0.5, y: 0 }}
+          end={{ x: 0.5, y: 1 }}
+          style={{ height: '100%' }}
+        >
+          <View style={styles.eventContent}>
+            <View style={styles.eventBadges}>
+              <View style={styles.eventBadge}>
+                <Text style={styles.eventLocation} numberOfLines={1}>{formatDatePeriod(event.start_date || '', event.end_date || '')}</Text>
+              </View>
+              <View style={styles.eventBadge}>
+                <Text style={styles.eventLocation} numberOfLines={1}>{event.location}</Text>
+              </View>
             </View>
-            <View style={styles.eventBadge}>
-              <Text style={styles.eventLocation} numberOfLines={1}>{event.location}</Text>
+            <View>
+              <Text style={styles.eventTitle} numberOfLines={2}>{event.name}</Text>
+              <Text style={styles.eventDescription} numberOfLines={3}>{event.description}</Text>
             </View>
           </View>
-          <View>
-            <Text style={styles.eventTitle} numberOfLines={2}>{event.name}</Text>
-            <Text style={styles.eventDescription} numberOfLines={3}>{event.description}</Text>
-          </View>
-        </View>
-      </LinearGradient>
-    </ImageBackground>
+        </LinearGradient>
+      </ImageBackground>
+    </TouchableOpacity>
   );
 };
 
