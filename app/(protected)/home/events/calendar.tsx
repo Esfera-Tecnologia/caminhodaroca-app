@@ -4,7 +4,7 @@ import { theme } from "@/theme";
 import { Octicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from "react-native";
 
 const WEEKDAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
@@ -75,6 +75,8 @@ export default function EventsCalendarScreen() {
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const [eventsCardY, setEventsCardY] = useState<number | null>(null);
 
   const { stats, loading: calendarLoading } = useCalendarStats(month, year);
   const { data: allEvents } = useEvents({});
@@ -126,17 +128,31 @@ export default function EventsCalendarScreen() {
         params: { event: stat.single_event_id },
       });
     } else if (stat.count > 1) {
-      setSelectedDate(date);
+      setSelectedDate(prev => {
+        if (prev !== date) setEventsCardY(null);
+        return date;
+      });
     }
   };
 
+  // Scroll automático para o card de eventos ao selecionar um dia
+  useEffect(() => {
+    if (selectedDate && eventsCardY !== null) {
+      const timeout = setTimeout(() => {
+        scrollViewRef.current?.scrollTo({ y: eventsCardY, animated: true });
+      }, 80);
+      return () => clearTimeout(timeout);
+    }
+  }, [selectedDate, eventsCardY]);
+
   return (
     <ScrollView
+      ref={scrollViewRef}
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.title}>Calendário</Text>
+      <Text style={styles.title}>Calendário de eventos</Text>
       <Text style={styles.description}>
         Veja os eventos do mês. Dias com programação aparecem marcados no calendário.
       </Text>
@@ -231,7 +247,10 @@ export default function EventsCalendarScreen() {
       </View>
 
       {selectedDate && selectedDayEvents.length > 0 && (
-        <View style={styles.dayEventsCard}>
+        <View
+          style={styles.dayEventsCard}
+          onLayout={(e) => setEventsCardY(e.nativeEvent.layout.y)}
+        >
           <Text style={styles.dayEventsTitle}>
             Eventos em {new Date(selectedDate).toLocaleDateString('pt-BR', {
               weekday: 'long',
@@ -264,21 +283,21 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '700',
     color: theme.colors.success,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   description: {
     fontSize: 14,
-    color: '#4a4a4a',
-    marginBottom: 16,
+    color: '#66706c',
+    marginBottom: 18,
     lineHeight: 20,
   },
   filterRow: {
     flexDirection: 'row',
     gap: 8,
-    marginBottom: 16,
+    marginBottom: 22,
   },
   filterButton: {
     flex: 1,
@@ -309,11 +328,13 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     padding: 14,
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 3,
+    boxShadow: [{
+      offsetX: 0,
+      offsetY: 10,
+      blurRadius: 24,
+      spreadDistance: 0,
+      color: 'rgba(0, 0, 0, 0.08)'
+    }],
   },
   monthHeader: {
     flexDirection: 'row',
