@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useUserLocation } from "@/context/LocationContext";
 import { useCategories } from "@/hooks/useCategories";
 import { useCities } from "@/hooks/useCities";
+import { useFavoriteLists } from "@/hooks/useFavoriteLists";
 import { useSubcategories } from "@/hooks/useSubcategories";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
@@ -17,7 +18,7 @@ export type PropertyFilters = {
   subcategories?: number[];
   propertyLocationId?: number; 
   useCurrentLocation?: boolean;
-  isFavorite?: boolean;
+  favorite_list_id?: number;
 };
 
 interface HomeFiltersProps extends OffcanvasProps {
@@ -35,6 +36,7 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
   const { categories } = useCategories();
   const { subcategories } = useSubcategories(filters.categories);
   const { cities } = useCities('RJ', true);
+  const { lists } = useFavoriteLists();
 
   const handleChange = (key: keyof PropertyFilters, value: any) => {
     const newFilters = {...filters, [key]: value};
@@ -46,7 +48,7 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
       (!newFilters.subcategories || newFilters.subcategories.length === 0) &&
       !newFilters.propertyLocationId &&
       !newFilters.useCurrentLocation &&
-      !newFilters.isFavorite;
+      !newFilters.favorite_list_id;
 
     if (isOpen && noFiltersApplied) {
       setTimeout(() => {
@@ -118,15 +120,15 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
               handleChange("subcategories", Array.isArray(values) ? values?.map(Number) : [Number(values)])
             } />
         </InputGroup>
-        <InputGroup label="Favoritos">
+        <InputGroup label="Lista de Favoritos">
           <Select
             options={user ? [
-              { label: "Sim", value: true },
-              { label: "Não", value: false },
+              { label: "Todos", value: 'all' },
+              ...lists.map(list => ({ label: list.name, value: String(list.id) }))
             ] : []}
             emptyListMessage="Faça login para filtrar por favoritos"
-            selectedValue={filters.isFavorite}
-            onValueChange={(value) => handleChange("isFavorite", value === true || value === 'true')}
+            selectedValue={filters.favorite_list_id ? String(filters.favorite_list_id) : 'all'}
+            onValueChange={(value) => handleChange("favorite_list_id", (value && value !== 'all') ? Number(value) : undefined)}
           />
         </InputGroup>
         <Button
