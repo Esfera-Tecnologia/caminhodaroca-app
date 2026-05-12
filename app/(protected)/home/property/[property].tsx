@@ -14,7 +14,7 @@ import { useUserLocation } from '@/context/LocationContext';
 import { globalStyles } from '@/styles/global';
 import { theme } from '@/theme';
 import { formatter, getDistanceInKm, openInstagram, openLink, openWhatsapp, truncatedJoinedCities } from '@/util';
-import { FontAwesome6, Foundation } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome6, Foundation } from '@expo/vector-icons';
 import axios from 'axios';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
@@ -206,6 +206,11 @@ export default function PropertyDetails() {
         contentFit="cover"
       />
       <View style={[globalStyles.card, {marginBottom: 16, marginTop: -60}]}>
+        {property.isFavorited && (
+          <View style={styles.favoriteBadge}>
+            <FontAwesome name="heart" size={16} color="#e25563" />
+          </View>
+        )}
         <View style={styles.titleRow}>
           <Image source={{ uri: property.logo }} style={styles.logo} contentFit="cover" />
           <View style={{flexShrink: 1}}>
@@ -430,5 +435,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     color: '#6c757d',
-  }
+  },
+  favoriteBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 32,
+    height: 32,
+    borderRadius: 999,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    zIndex: 10,
+    boxShadow: [{
+      offsetX: 0,
+      offsetY: 4,
+      blurRadius: 10,
+      spreadDistance: 0,
+      color: 'rgba(0, 0, 0, 0.12)',
+    }]
+  },
 });

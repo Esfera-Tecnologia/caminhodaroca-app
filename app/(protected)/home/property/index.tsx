@@ -14,7 +14,7 @@ import HomeFilters, { PropertyFilters } from "@/modules/protected/HomeFilters";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { formatDatePeriod, formatter } from "@/util";
-import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { Image, ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Location from 'expo-location';
@@ -49,6 +49,11 @@ const PropertyItem = ({ property }: { property: PropertyItemType }) => {
         )}
       </View>
       <FontAwesome6 name="chevron-right" size={16} color={theme.colors.secondary} style={{ marginEnd: 12 }} />
+      {property.isFavorited && (
+        <View style={styles.favoriteBadge}>
+        <FontAwesome name="heart" size={16} color="#e25563" />
+      </View>
+      )}
     </Pressable>
   )
 }
@@ -394,5 +399,25 @@ const styles = StyleSheet.create({
   welcomeDescription: {
     fontSize: 14,
     marginBottom: 16,
-  }
+  },
+  favoriteBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 32,
+    height: 32,
+    borderRadius: 999,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    zIndex: 10,
+    boxShadow: [{
+      offsetX: 0,
+      offsetY: 4,
+      blurRadius: 10,
+      spreadDistance: 0,
+      color: 'rgba(0, 0, 0, 0.12)',
+    }]
+  },
 });
