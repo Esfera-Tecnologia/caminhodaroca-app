@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   sectionLink: {
     fontSize: 14,
     color: theme.colors.primary,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   carouselContainer: {
     marginBottom: 16,
