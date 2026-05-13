@@ -1,4 +1,5 @@
 import env from "@/config.json";
+import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -12,9 +13,14 @@ export interface FavoriteList {
 export function useFavoriteLists() {
   const [lists, setLists] = useState<FavoriteList[]>([]);
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchLists = async () => {
+      if (!user) {
+        setLists([]);
+        return;
+      }
       setLoading(true);
       try {
         const response = await axios.get(`${env.API_URL}/favorite-lists`);
@@ -27,7 +33,7 @@ export function useFavoriteLists() {
       }
     };
     fetchLists();
-  }, []);
+  }, [user]);
 
   return { lists, loading };
 }
