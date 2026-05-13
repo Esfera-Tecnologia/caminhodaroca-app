@@ -10,7 +10,7 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <AuthProvider>
           <Slot />
-          <ToastManager useModal={false} />
+          <ToastManager useModal={false} duration={6000} />
         </AuthProvider>
       </SafeAreaProvider>
     </KeyboardProvider>

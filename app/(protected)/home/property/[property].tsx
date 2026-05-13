@@ -9,6 +9,7 @@ import Rating from '@/components/Rating';
 import RecordLoading from '@/components/RecordLoading';
 import RecordNotFound from '@/components/RecordNotFound';
 import Review from '@/components/Review';
+import VisitedBadge from '@/components/VisitedBadge';
 import env from "@/config.json";
 import { useAuth } from '@/context/AuthContext';
 import { useUserLocation } from '@/context/LocationContext';
@@ -91,6 +92,7 @@ interface Property {
   instagram: string;
   relatedPartners: Partner[];
   favorite_list_ids?: number[];
+  isVisited?: boolean;
 }
 
 function OpeningDays({openingHours}: {openingHours: OpeningHours}) {
@@ -161,6 +163,7 @@ export default function PropertyDetails() {
   const [loading, setLoading] = useState(true);
   const [favoriteModalVisible, setFavoriteModalVisible] = useState(false);
   const [qrCodeModalVisible, setQRCodeModalVisible] = useState(false);
+  const [isCheckingIn, setIsCheckingIn] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -223,6 +226,43 @@ export default function PropertyDetails() {
     checkPermissions();
   }
 
+  const handleQRCodeSuccess = async (code: string) => {
+    if (isCheckingIn || !property) return;
+    if (code !== property.id.toString()) {
+      Toast.error('QR Code inválido para esta propriedade.');
+      setQRCodeModalVisible(false);
+      return;
+    }
+    setQRCodeModalVisible(false);
+    setIsCheckingIn(true);
+    Toast.info('Aguarde, validando a sua localização...');
+
+    try {
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High
+      });
+      const response = await axios.post(`${env.API_URL}/properties/${property.id}/checkin`, {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+      });
+      Toast.success(response.data.message || 'Visita registrada com sucesso!');
+      
+      setProperty({
+        ...property,
+        isVisited: true
+      });
+    } catch (error: any) {
+      console.log('Erro ao realizar check-in:', error);
+      if (error.response?.data?.message) {
+        Toast.error(error.response.data.message);
+      } else {
+        Toast.error('Não foi possível realizar o check-in.');
+      }
+    } finally {
+      setIsCheckingIn(false);
+    }
+  };
+
   if (loading) {
     return <RecordLoading />;
   }
@@ -245,8 +285,11 @@ export default function PropertyDetails() {
         )}
         <View style={styles.titleRow}>
           <Image source={{ uri: property.logo }} style={styles.logo} contentFit="cover" />
-          <View style={{flexShrink: 1}}>
+          <View style={{flexShrink: 1, alignItems: 'flex-start'}}>
             <Text style={styles.propertyName}>{property.name}</Text>
+            {property.isVisited && (
+              <VisitedBadge />
+            )}
             <Review length={5} review={property.rating} />
           </View>
         </View>
@@ -308,7 +351,9 @@ export default function PropertyDetails() {
           <Button 
             variant="success"
             outline={true}
-            title="Ler QR Code"
+            title={isCheckingIn ? "Validando..." : "Ler QR Code"}
+            loading={isCheckingIn}
+            disabled={isCheckingIn}
             style={{ flex: 1 }}
             onPress={handleQRCodeReaderModal} 
             startIcon={<FontAwesome6 name="qrcode" size={16} color={theme.colors.success} />}
@@ -369,7 +414,7 @@ export default function PropertyDetails() {
       />
       <QRCodeScanner
         storing={false}
-        onSuccess={(code) => console.log(code)}
+        onSuccess={handleQRCodeSuccess}
         visible={qrCodeModalVisible}
         toggleModalVisibility={(visible) =>
           setQRCodeModalVisible(visible)
@@ -494,4 +539,5 @@ const styles = StyleSheet.create({
       color: 'rgba(0, 0, 0, 0.12)',
     }]
   },
+  
 });

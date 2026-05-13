@@ -251,7 +251,7 @@ export default function FavoriteListsModal({
           </View>
         </SafeAreaView>
       </View>
-      <ToastManager useModal={false} />
+      <ToastManager useModal={false} duration={6000} />
     </Modal>
    
   );

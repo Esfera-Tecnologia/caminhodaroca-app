@@ -6,6 +6,7 @@ import { EmptyList } from "@/components/EmptyList";
 import { LoadingList } from "@/components/LoadingList";
 import Review from "@/components/Review";
 import TextPlaceholder from "@/components/TextPlaceholder";
+import VisitedBadge from "@/components/VisitedBadge";
 import { useAuth } from "@/context/AuthContext";
 import { useUserLocation } from "@/context/LocationContext";
 import { HomeEventType, useEvents } from "@/hooks/useEvents";
@@ -48,8 +49,11 @@ const PropertyItem = ({ property, lists }: { property: PropertyItemType, lists?:
             </Text>
           </View>
         )}
+        {property.isVisited && (
+          <VisitedBadge size="sm" />
+        )}
         {property.favorite_list_ids && property.favorite_list_ids.length > 0 && lists && lists.length > 0 && (
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 4 }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 6 }}>
             {property.favorite_list_ids.map(id => {
               const listName = lists.find(l => l.id === id)?.name;
               if (!listName) return null;
@@ -64,6 +68,7 @@ const PropertyItem = ({ property, lists }: { property: PropertyItemType, lists?:
         )}
       </View>
       <FontAwesome6 name="chevron-right" size={16} color={theme.colors.secondary} style={{ marginEnd: 12 }} />
+      
       {property.isFavorited && (
         <View style={styles.favoriteBadge}>
           <FontAwesome name="heart" size={16} color="#e25563" />
