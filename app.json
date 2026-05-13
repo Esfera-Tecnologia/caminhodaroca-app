@@ -29,9 +29,7 @@
           "apiKey": "AIzaSyCaR4-4NQwX0Z-tccbyH8uo4UtC74cnd_8"
         }
       },
-      "permissions": [
-        "android.permission.CAMERA"
-      ],
+      "permissions": ["android.permission.CAMERA"],
       "edgeToEdgeEnabled": true,
       "package": "com.esfera.caminhodaroca"
     },
@@ -41,6 +39,14 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permitir que $(PRODUCT_NAME) use sua câmera",
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": true
+        }
+      ],
       [
         "expo-image-picker",
         {
@@ -57,9 +63,7 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      [
-        "expo-build-properties"
-      ],
+      ["expo-build-properties"],
       "expo-secure-store",
       [
         "expo-location",
