@@ -4,6 +4,7 @@ import { ExpandableText } from '@/components/ExpandableText';
 import FavoriteListsModal from '@/components/FavoriteListsModal';
 import ImageGallery from '@/components/ImageGallery';
 import Logo from '@/components/Logo';
+import { QRCodeScanner } from '@/components/QRCodeReader';
 import Rating from '@/components/Rating';
 import RecordLoading from '@/components/RecordLoading';
 import RecordNotFound from '@/components/RecordNotFound';
@@ -16,7 +17,9 @@ import { theme } from '@/theme';
 import { formatter, getDistanceInKm, openInstagram, openLink, openWhatsapp, truncatedJoinedCities } from '@/util';
 import { FontAwesome, FontAwesome6 } from '@expo/vector-icons';
 import axios from 'axios';
+import { Camera } from 'expo-camera';
 import { Image } from 'expo-image';
+import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router/build/hooks';
 import React, { useEffect, useState } from 'react';
@@ -157,6 +160,7 @@ export default function PropertyDetails() {
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [favoriteModalVisible, setFavoriteModalVisible] = useState(false);
+  const [qrCodeModalVisible, setQRCodeModalVisible] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -190,12 +194,42 @@ export default function PropertyDetails() {
     setFavoriteModalVisible(true);
   };
 
+  const handleQRCodeReaderModal = () => {
+    if (!user) {
+      Toast.warn("Para acessar essa funcionalidade, você precisa estar logado.");
+      return;
+    }
+    async function getLocationPermissions() {
+      let { granted } = await Location.requestForegroundPermissionsAsync();
+      if (! granted ) {
+        Toast.error('Para acessar essa funcionalidade, você precisa fornecer acesso a localização do dispositivo');
+        return false;
+      }
+      return true;
+    }
+    async function getCameraPermissions() {
+      let { granted } = await Camera.requestCameraPermissionsAsync();
+      if (! granted) {
+        Toast.error('Para acessar essa funcionalidade, você precisa fornecer acesso a câmera do dispositivo');
+        return false;
+      }
+      return true;
+    }
+    async function checkPermissions() {
+      if(await getCameraPermissions() && await getLocationPermissions()) {
+        setQRCodeModalVisible(true);
+      }
+    }
+    checkPermissions();
+  }
+
   if (loading) {
     return <RecordLoading />;
   }
   if (!property) {
     return <RecordNotFound />;
   }
+
   return (
     <ScrollView style={styles.container}>
       <Image
@@ -276,7 +310,7 @@ export default function PropertyDetails() {
             outline={true}
             title="Ler QR Code"
             style={{ flex: 1 }}
-            onPress={() => openInstagram(property.instagram)} 
+            onPress={handleQRCodeReaderModal} 
             startIcon={<FontAwesome6 name="qrcode" size={16} color={theme.colors.success} />}
           />
         </View>
@@ -333,6 +367,13 @@ export default function PropertyDetails() {
         onClose={() => setFavoriteModalVisible(false)}
         onUpdateListIds={(newIds) => setProperty({ ...property, favorite_list_ids: newIds, favorite_count: newIds.length })}
       />
+      <QRCodeScanner
+        storing={false}
+        onSuccess={(code) => console.log(code)}
+        visible={qrCodeModalVisible}
+        toggleModalVisibility={(visible) =>
+          setQRCodeModalVisible(visible)
+        }/> 
     </ScrollView>
   );
 }
