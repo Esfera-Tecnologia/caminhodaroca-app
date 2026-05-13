@@ -3,7 +3,8 @@ import { useUserLocation } from "@/context/LocationContext";
 import { PropertyFilters } from "@/modules/protected/HomeFilters";
 import { getDistanceInKm } from "@/util";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import { Toast } from "toastify-react-native";
 
 export type PropertyItemType = {
@@ -28,13 +29,19 @@ export type PropertyItemType = {
 export function useProperties(filters: PropertyFilters | undefined) {
   const [data, setData] = useState<PropertyItemType[]>([]);
   const [loading, setLoading] = useState(false);
-  const {location: userLocation, loading: userLocationLoading} = useUserLocation();
 
-  useEffect(() => {
-    if (userLocationLoading) return;
-    const controller = new AbortController();
-    const fetchData = async () => {
-      setLoading(true);
+  const { location: userLocation, loading: userLocationLoading } = useUserLocation();
+
+  const fetchData = useCallback(async ({showLoading = true, signal}: {showLoading?: boolean; signal?: AbortSignal;} = {}) => {
+      if (userLocationLoading) {
+        return;
+      }
+      if (filters?.useCurrentLocation && !userLocation) {
+        return;
+      }
+      if (showLoading) {
+        setLoading(true);
+      }
       try {
         const response = await axios.get(`${env.API_URL}/properties`, {
           params: filters || {},
@@ -42,40 +49,49 @@ export function useProperties(filters: PropertyFilters | undefined) {
             const searchParams = new URLSearchParams();
             Object.entries(params).forEach(([key, value]) => {
               if (Array.isArray(value)) {
-                value.forEach((v) => searchParams.append(`${key}[]`, String(v)));
+                value.forEach((v) =>
+                  searchParams.append(`${key}[]`, String(v))
+                );
               } else if (value !== undefined && value !== null) {
                 searchParams.append(key, String(value));
               }
             });
             return searchParams.toString();
           },
-          signal: controller.signal,
+          signal,
         });
         let properties = response.data;
-        if(userLocation) {
-          properties = properties.map((p: PropertyItemType) => {
-            const distance = getDistanceInKm(
-              userLocation.latitude,
-              userLocation.longitude,
-              p.location.coordinates.lat,
-              p.location.coordinates.lng
-            );
-            return { ...p, distance };
-          })
-          .sort((a: PropertyItemType, b: PropertyItemType) => {
-            if(a.distance === undefined) return 1;
-            if(b.distance === undefined) return -1;
-            return a.distance - b.distance;
-          });
+
+        if (userLocation) {
+          properties = properties
+            .map((p: PropertyItemType) => {
+              const distance = getDistanceInKm(
+                userLocation.latitude,
+                userLocation.longitude,
+                p.location.coordinates.lat,
+                p.location.coordinates.lng
+              );
+
+              return { ...p, distance };
+            })
+            .sort((a: PropertyItemType, b: PropertyItemType) => {
+              if (a.distance === undefined) return 1;
+              if (b.distance === undefined) return -1;
+              return a.distance - b.distance;
+            });
+
           if (filters?.useCurrentLocation) {
-            properties = properties
-              .filter((p: PropertyItemType & { distance?: number }) => p.distance! <= 100);
+            properties = properties.filter(
+              (p: PropertyItemType & { distance?: number }) =>
+                p.distance! <= 100
+            );
           }
         }
+
         setData(properties);
       } catch (error: unknown) {
         // Verifica se foi um abort (cancelamento da requisição)
-        if (axios.isCancel(error) || (error as any)?.name === 'CanceledError' || (error as any)?.code === 'ERR_CANCELED') {
+        if (axios.isCancel(error) || (error as any)?.name === "CanceledError" || (error as any)?.code === "ERR_CANCELED") {
           // Podemos simplesmente ignorar o cancelamento
           return;
         }
@@ -84,23 +100,43 @@ export function useProperties(filters: PropertyFilters | undefined) {
           if (error.response?.status === 404) {
             setData([]);
           } else {
-            Toast.error('Não foi possível obter a lista de propriedades no momento');
+            Toast.error("Não foi possível obter a lista de propriedades no momento");
           }
         } else {
-          console.error('Erro inesperado:', error);
+          console.error("Erro inesperado:", error);
         }
       } finally {
-        setLoading(false);
+        if (showLoading) {
+          setLoading(false);
+        }
       }
-    };
-    if (filters?.useCurrentLocation && !userLocation) {
-      return;
-    }
-    fetchData();
+    },
+    [filters, userLocation, userLocationLoading]
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchData({
+      showLoading: true,
+      signal: controller.signal,
+    });
     return () => {
       controller.abort();
     };
-  }, [filters, userLocation, userLocationLoading]);
+  }, [fetchData]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const controller = new AbortController();
+      fetchData({
+        showLoading: false,
+        signal: controller.signal,
+      });
+      return () => {
+        controller.abort();
+      };
+    }, [fetchData])
+  );
 
   return { data, loading };
 }
