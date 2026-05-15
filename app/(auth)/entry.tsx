@@ -5,9 +5,17 @@ import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Linking, Pressable, Text, View } from "react-native";
 
 export default function EntryScreen() {
+
+  const openRegisterPage = async () => {
+    const url = 'https://caminhodaroca.senar-rio.com.br/cadastro-propriedade-publica';
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    }
+  };
 
   return (
     <AuthContainer title="Como deseja entrar?" logoMargin={25}>
@@ -20,7 +28,7 @@ export default function EntryScreen() {
         <Text style={authStyles.cardDescription}>
           Descubra destinos, vivências, produtos e roteiros perto de você.
         </Text>
-        <Pressable onPress={() => router.push('/institution')}>
+        <Pressable onPress={() => openRegisterPage()}>
           <View style={[authStyles.cardLoginMethod]}>
             <View style={authStyles.cardLoginBody}>
               <LinearGradient

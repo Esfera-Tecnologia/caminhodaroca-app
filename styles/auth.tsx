@@ -110,6 +110,7 @@ export const authStyles = StyleSheet.create({
     color: '#21403a',
     fontWeight: 700,
     flexShrink: 1,
+    marginBottom: 5,
   },
   cardLoginDescription: {
     fontSize: 14,
