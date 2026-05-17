@@ -74,12 +74,10 @@ export default function EventDetailScreen() {
               <Text style={styles.infoLabel}>Onde</Text>
               <Text style={styles.infoValue}>{event.location || 'Não informado'}</Text>
             </View>
-            {event.organization ? (
-              <View style={styles.infoBox}>
-                <Text style={styles.infoLabel}>Organização</Text>
-                <Text style={styles.infoValue}>{event.organization}</Text>
-              </View>
-            ) : null}
+            <View style={styles.infoBox}>
+              <Text style={styles.infoLabel}>Organização</Text>
+              <Text style={styles.infoValue}>{event.organization || 'Não informado'}</Text>
+            </View>
           </View>
           {event.full_description ? (
             <View style={styles.section}>
