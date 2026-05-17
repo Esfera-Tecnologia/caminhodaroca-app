@@ -17,7 +17,7 @@ export type HomeEventType = {
 
 export type EventFilterType = 'upcoming' | 'expired';
 
-export function useEvents(options?: { filter?: EventFilterType; search?: string }) {
+export function useEvents(options?: { filter?: EventFilterType; search?: string, is_highlight?: boolean }) {
   const [data, setData] = useState<HomeEventType[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -27,14 +27,16 @@ export function useEvents(options?: { filter?: EventFilterType; search?: string 
     const fetchData = async () => {
       setLoading(true);
       try {
-        const params: Record<string, string> = {};
+        const params: Record<string, string | boolean> = {};
         if (options?.filter) {
           params.filter = options.filter;
         }
         if (options?.search) {
           params.search = options.search;
         }
-
+        if(options?.is_highlight) {
+          params.is_highlight = !!options.is_highlight;
+        }
         const response = await axios.get(`${env.API_URL}/events`, {
           params,
           paramsSerializer: (params) => {
