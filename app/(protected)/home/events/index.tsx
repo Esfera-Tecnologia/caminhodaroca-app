@@ -7,8 +7,8 @@ import { theme } from "@/theme";
 import { formatDatePeriod } from "@/util";
 import { FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const filterButtons: { filter: EventFilterType; label: string }[] = [
@@ -60,6 +60,10 @@ const EventItem = ({ event }: { event: HomeEventType }) => (
 );
 
 export default function EventsIndex() {
+  const {filter} = useLocalSearchParams<{filter: 'upcoming' | 'expired'}>();
+  useEffect(() => {
+    setSelectedFilter(filter);
+  }, [filter]);
   const [selectedFilter, setSelectedFilter] = useState<EventFilterType>('upcoming');
   const [searchTerm, setSearchTerm] = useState('');
   const { data, loading } = useEvents({ filter: selectedFilter, search: searchTerm });
