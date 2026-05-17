@@ -62,7 +62,9 @@ const EventItem = ({ event }: { event: HomeEventType }) => (
 export default function EventsIndex() {
   const {filter} = useLocalSearchParams<{filter: 'upcoming' | 'expired'}>();
   useEffect(() => {
-    setSelectedFilter(filter);
+    if(filter) {
+      setSelectedFilter(filter);
+    }
   }, [filter]);
   const [selectedFilter, setSelectedFilter] = useState<EventFilterType>('upcoming');
   const [searchTerm, setSearchTerm] = useState('');
