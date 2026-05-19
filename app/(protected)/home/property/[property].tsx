@@ -380,6 +380,7 @@ export default function PropertyDetails() {
           variant="secondary"
           outline={true}
           style={{width: '100%',  margin: 0}}
+          startIcon={<FontAwesome name="heart" size={16} color="#c94c5b" />}
           title={`Salvar em listas (${property.favorite_list_ids?.length ?? property.favorite_count})`}
           onPress={handleOpenFavoriteModal}
         />
