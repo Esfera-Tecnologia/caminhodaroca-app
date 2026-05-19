@@ -2,7 +2,7 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { LinearGradient } from "expo-linear-gradient"
 import { StyleSheet, Text, ViewStyle } from "react-native"
 
-export default function VisitedBadge ({size = 'md'}: {size: 'sm' | 'md'})
+export default function VisitedBadge ({size = 'md'}: {size?: 'sm' | 'md' })
 {
   const sizes: Record<'sm' | 'md', ViewStyle> = {
     sm: {

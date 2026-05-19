@@ -167,6 +167,12 @@ export default function PropertyDetails() {
   const { user } = useAuth();
 
   useEffect(() => {
+    if (!user) {
+      setFavoriteModalVisible(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
     const fetchProperty = async () => {
       try {
         const response = await axios.get(`${env.API_URL}/properties/${propertyId}`);

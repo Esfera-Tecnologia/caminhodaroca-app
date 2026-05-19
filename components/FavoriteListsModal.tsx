@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ToastManager, { Toast } from 'toastify-react-native';
+import { Toast } from 'toastify-react-native';
 
 export interface FavoriteList {
   id: number;
@@ -52,9 +52,8 @@ export default function FavoriteListsModal({
       // Since it's a resource collection, it might be in response.data.data
       const listsData = response.data.data || response.data;
       setLists(listsData);
-    } catch (error) {
-      console.log('Erro ao buscar listas:', error);
-      Toast.error('Não foi possível carregar as listas de favoritos.');
+    } catch {
+      feedback('Não foi possível carregar as listas de favoritos.', 'error');
     } finally {
       setLoading(false);
     }
@@ -66,9 +65,8 @@ export default function FavoriteListsModal({
         list_ids: currentSelections
       });
       onUpdateListIds(currentSelections);
-    } catch (error) {
-      console.log('Erro ao sincronizar listas:', error);
-      Toast.error('Erro ao salvar favoritos.');
+    } catch {
+      feedback('Erro ao salvar favoritos.', 'error');
     }
   };
 
@@ -108,13 +106,12 @@ export default function FavoriteListsModal({
       setSelectedListIds(newSelections);
       await syncPropertyFavorites(newSelections);
       refetchFavoriteLists();
-      Toast.success('Lista criada com sucesso.');
+      feedback('Lista criada com sucesso.', 'success');
     } catch (error: any) {
-      console.log('Erro ao criar lista:', error);
       if (error.response?.status === 422) {
-        Toast.warn(error.response?.data?.message || 'Nome da lista inválido ou já existente.');
+        feedback(error.response?.data?.message || 'Nome da lista inválido ou já existente.', 'warn');
       } else {
-        Toast.error('Não foi possível criar a lista.');
+        feedback('Não foi possível criar a lista.', 'error');
       }
     } finally {
       setIsCreating(false);
@@ -132,16 +129,27 @@ export default function FavoriteListsModal({
         onUpdateListIds(newSelections);
       }
       refetchFavoriteLists();
-      Toast.success('Lista removida.');
+      feedback('Lista removida.', 'success');
     } catch (error: any) {
-      console.log('Erro ao remover lista:', error);
       if (error.response?.status === 403) {
-        Toast.warn('Você não pode remover a lista padrão.');
+        feedback('Você não pode remover a lista padrão.', 'warn');
       } else {
-        Toast.error('Não foi possível remover a lista.');
+        feedback('Não foi possível remover a lista.', 'error');
       }
     }
   };
+
+  const feedback = (message: string, type: 'success' | 'warn' | 'error') => {
+    if(type === 'success') {
+      Toast.success(message, undefined, undefined, undefined, true);
+    }
+    if(type === 'warn') {
+      Toast.warn(message, undefined, undefined, undefined, true);
+    }
+    if(type === 'error') {
+      Toast.error(message, undefined, undefined, undefined, true);
+    }
+  }
 
   const confirmDeleteList = (listId: number, listName: string) => {
     Alert.alert(
@@ -254,7 +262,6 @@ export default function FavoriteListsModal({
           </View>
         </SafeAreaView>
       </View>
-      <ToastManager useModal={false} duration={6000} />
     </Modal>
    
   );
