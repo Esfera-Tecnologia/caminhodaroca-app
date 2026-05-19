@@ -366,7 +366,7 @@ export default function PropertyDetails() {
             title="Instagram"
             style={{ flex: 1 }}
             onPress={() => openInstagram(property.instagram)} 
-            startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.instagram} />}
+            startIcon={<FontAwesome6 name="instagram" size={16} color={theme.colors.instagram} />}
           />
           <Button
             onPress={() => openWhatsapp(property.phone, 'Olá, eu venho através do app Caminho da Roça!')}
