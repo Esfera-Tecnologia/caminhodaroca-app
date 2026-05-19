@@ -1,5 +1,6 @@
 import Button from '@/components/Button';
 import env from "@/config.json";
+import { refetchFavoriteLists } from '@/hooks/useFavoriteLists';
 import { theme } from '@/theme';
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
@@ -106,6 +107,7 @@ export default function FavoriteListsModal({
       const newSelections = [...selectedListIds, newList.id];
       setSelectedListIds(newSelections);
       await syncPropertyFavorites(newSelections);
+      refetchFavoriteLists();
       Toast.success('Lista criada com sucesso.');
     } catch (error: any) {
       console.log('Erro ao criar lista:', error);
@@ -129,6 +131,7 @@ export default function FavoriteListsModal({
         setSelectedListIds(newSelections);
         onUpdateListIds(newSelections);
       }
+      refetchFavoriteLists();
       Toast.success('Lista removida.');
     } catch (error: any) {
       console.log('Erro ao remover lista:', error);
