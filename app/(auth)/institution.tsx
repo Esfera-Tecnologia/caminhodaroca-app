@@ -18,12 +18,12 @@ export default function InstitutionScreen() {
           <View style={[authStyles.cardLoginMethod]}>
             <View style={authStyles.cardLoginBody}>
               <LinearGradient
-                colors={['#eef7f4', '#e6f3ef']}
+                colors={['#edf8ea', '#edf8ea']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
-                style={authStyles.cardLoginIcon}
+                style={[authStyles.cardLoginIcon]}
               >
-                <FontAwesome6 name="circle-check" size={18} color="#287a6d" />
+                <FontAwesome6 name="circle-check" size={18} color="#4a9744" />
               </LinearGradient>
               <View style={authStyles.cardLoginContent}>
                 <Text style={authStyles.cardLoginTitle}>
@@ -42,12 +42,12 @@ export default function InstitutionScreen() {
           <View style={authStyles.cardLoginMethod}>
             <View style={authStyles.cardLoginBody}>
               <LinearGradient
-                colors={['#eef7f4', '#e6f3ef']}
+                colors={['#edf8ea', '#edf8ea']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 style={authStyles.cardLoginIcon}
               >
-                <FontAwesome6 name="building-columns" size={18} color="#287a6d" />
+                <FontAwesome6 name="building-columns" size={18} color="#4a9744" />
               </LinearGradient>
               <View style={authStyles.cardLoginContent}>
                 <Text style={authStyles.cardLoginTitle}>
@@ -62,11 +62,11 @@ export default function InstitutionScreen() {
           </View>
         </Pressable>
         <View style={authStyles.cardActions}>
-          <Pressable style={({pressed}) => [pressed && authStyles.pressedPrimary, authStyles.button, authStyles.buttonPrimary]} onPress={() => router.push('/login')}>
+          <Pressable style={({pressed}) => [pressed && authStyles.pressedPrimary, authStyles.button, authStyles.buttonPrimary, {backgroundColor: '#4a9744'}]} onPress={() => router.push('/login')}>
             <Text style={[authStyles.buttonText, authStyles.buttonPrimaryText]}>Entrar para divulgar</Text>
           </Pressable>
           <Pressable style={({pressed}) => [pressed && authStyles.pressedAlt, authStyles.button, authStyles.buttonAlt]} onPress={() => router.push('/partner')}>
-            <Text style={[authStyles.buttonText, authStyles.buttonAltText]}>Cadastrar meu espaço</Text>
+            <Text style={[authStyles.buttonText, authStyles.buttonAltText, {color: '#4a9744'}]}>Cadastrar meu espaço</Text>
           </Pressable>
         </View>
       </Card>
