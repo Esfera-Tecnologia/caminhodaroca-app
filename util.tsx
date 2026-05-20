@@ -316,17 +316,12 @@ const formatHour = (date: Date) => {
 
   return `${hours}h${String(minutes).padStart(2, '0')}`;
 };
+
 export const formatDatePeriodLong = (start?: string | null, end?: string | null): string => {
   if (!start) return 'Não informado';
 
   const s = new Date(start);
   const e = end ? new Date(end) : null;
-
-  const sameDay =
-    e &&
-    s.getDate() === e.getDate() &&
-    s.getMonth() === e.getMonth() &&
-    s.getFullYear() === e.getFullYear();
 
   const sDay = s.getDate();
   const sMon = MONTHS_LONG[s.getMonth()];
@@ -343,24 +338,32 @@ export const formatDatePeriodLong = (start?: string | null, end?: string | null)
   const eYear = e.getFullYear();
   const eHour = formatHour(e);
 
+  const sameDay = sDay === eDay && s.getMonth() === e.getMonth() && sYear === eYear;
+  const hourPeriod = `das ${sHour} às ${eHour}`;
+
   // Mesmo dia
   if (sameDay) {
-    return `${sDay} de ${sMon} de ${sYear}, das ${sHour} às ${eHour}`;
+    return `${sDay} de ${sMon} de ${sYear}, ${hourPeriod}`;
   }
 
   // Mesmo mês e ano
-  if (
-    s.getMonth() === e.getMonth() &&
-    s.getFullYear() === e.getFullYear()
-  ) {
-    return `${sDay} às ${sHour} a ${eDay} às ${eHour} de ${sMon} de ${sYear}`;
+  if (s.getMonth() === e.getMonth() && sYear === eYear) {
+    if(sYear === new Date().getFullYear()) {
+      return `${sDay} a ${eDay} de ${sMon}, ${hourPeriod}`;
+    } else {
+      return `${sDay} a ${eDay} de ${sMon} de ${sYear}, ${hourPeriod}`;
+    }
   }
 
   // Mesmo ano
   if (sYear === eYear) {
-    return `${sDay} de ${sMon} às ${sHour} a ${eDay} de ${eMon} às ${eHour} de ${sYear}`;
+    if(sYear === new Date().getFullYear()) {
+      return `${sDay} de ${sMon} a ${eDay} de ${eMon}, ${hourPeriod}`;
+    } else {
+      return `${sDay} de ${sMon} a ${eDay} de ${eMon} de ${sYear}, ${hourPeriod}`;
+    }
   }
 
   // Anos diferentes
-  return `${sDay} de ${sMon} de ${sYear} às ${sHour} a ${eDay} de ${eMon} de ${eYear} às ${eHour}`;
+  return `${sDay} de ${sMon} de ${sYear} a ${eDay} de ${eMon} de ${eYear}, ${hourPeriod}`;
 };
