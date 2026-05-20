@@ -5,7 +5,7 @@ import { theme } from '@/theme';
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Toast } from 'toastify-react-native';
@@ -182,88 +182,89 @@ export default function FavoriteListsModal({
     >
       <SystemBars style="light" />
       <View style={styles.modalOverlay}>
-        <SafeAreaView style={{ flex: 1, justifyContent: "center"}}>
-          <View style={styles.modalContent}>
-            <ScrollView>
-              <View style={styles.header}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.title}>Salvar em listas</Text>
-                  <Text style={styles.subtitle}>Selecione qual lista de favoritos deseja salvar.</Text>
-                </View>
-                <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-                  <FontAwesome6 name="xmark" size={28} color="#666" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.body}>
-                {loading ? (
-                  <ActivityIndicator size="large" color={theme.colors.success} style={{ marginVertical: 32 }} />
-                ) : (
-                  <View>
-                    <View style={styles.listsContainer}>
-                      {lists.map(list => {
-                        const isSelected = selectedListIds.includes(list.id);
-                        let currentCount = list.properties_count;
-                        
-                        return (
-                          <View key={list.id} style={styles.listOptionCard}>
-                            <TouchableOpacity
-                              activeOpacity={0.7}
-                              style={styles.listCheckboxArea}
-                              onPress={() => toggleList(list.id, !isSelected)}>
-                              {! isSelected
-                                ? <MaterialCommunityIcons name="checkbox-blank-outline" size={20} color="#dee2e6" />
-                                : <MaterialCommunityIcons name="checkbox-marked" size={20} color="#0d6efd" />}
-                              <Text style={styles.listOptionTitle}>{list.name}</Text>
-                            </TouchableOpacity>
-                            <View style={styles.listOptionMeta}>
-                              <View style={styles.listBadge}>
-                                <Text style={styles.listBadgeText}>{currentCount}</Text>
-                              </View>
-                              {!list.is_default && (
-                                <TouchableOpacity
-                                  style={styles.removeListButton}
-                                  onPress={() => confirmDeleteList(list.id, list.name)}>
-                                  <FontAwesome6 name="trash" size={16} color="#c94c5b" />
-                                </TouchableOpacity>
-                              )}
-                            </View>
-                          </View>
-                        );
-                      })}
-                    </View>
+        <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }}>
+          <SafeAreaView style={{ flex: 1, justifyContent: "center"}}>
+            <View style={styles.modalContent}>
+              <ScrollView>
+                <View style={styles.header}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.title}>Salvar em listas</Text>
+                    <Text style={styles.subtitle}>Selecione qual lista de favoritos deseja salvar.</Text>
                   </View>
-                )}
-              </View>
-              <View style={styles.createListBox}>
-                <Text style={styles.createListLabel}>Criar nova lista</Text>
-                <View style={styles.createListInputGroup}>
-                  <TextInput
-                    style={styles.createListInput}
-                    placeholder="Ex: Cafés da manhã na roça"
-                    placeholderTextColor="#BCBCBD"
-                    value={newListName}
-                    onChangeText={setNewListName}
-                    onSubmitEditing={createList}
-                  />
-                  <Button
-                    variant="success"
-                    style={styles.createListBtn}
-                    onPress={createList}
-                    loading={isCreating}
-                    disabled={isCreating}
-                    title={isCreating ? '' : 'Criar'}
-                  />
+                  <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+                    <FontAwesome6 name="xmark" size={28} color="#666" />
+                  </TouchableOpacity>
                 </View>
-                <Text style={styles.createListHelper}>
-                  Ao criar sua nova lista ela será adicionada em sua lista de favoritos.
-                </Text>
-              </View>
-            </ScrollView>
-          </View>
-        </SafeAreaView>
+                <View style={styles.body}>
+                  {loading ? (
+                    <ActivityIndicator size="large" color={theme.colors.success} style={{ marginVertical: 32 }} />
+                  ) : (
+                    <View>
+                      <View style={styles.listsContainer}>
+                        {lists.map(list => {
+                          const isSelected = selectedListIds.includes(list.id);
+                          let currentCount = list.properties_count;
+                          
+                          return (
+                            <View key={list.id} style={styles.listOptionCard}>
+                              <TouchableOpacity
+                                activeOpacity={0.7}
+                                style={styles.listCheckboxArea}
+                                onPress={() => toggleList(list.id, !isSelected)}>
+                                {! isSelected
+                                  ? <MaterialCommunityIcons name="checkbox-blank-outline" size={20} color="#dee2e6" />
+                                  : <MaterialCommunityIcons name="checkbox-marked" size={20} color="#0d6efd" />}
+                                <Text style={styles.listOptionTitle}>{list.name}</Text>
+                              </TouchableOpacity>
+                              <View style={styles.listOptionMeta}>
+                                <View style={styles.listBadge}>
+                                  <Text style={styles.listBadgeText}>{currentCount}</Text>
+                                </View>
+                                {!list.is_default && (
+                                  <TouchableOpacity
+                                    style={styles.removeListButton}
+                                    onPress={() => confirmDeleteList(list.id, list.name)}>
+                                    <FontAwesome6 name="trash" size={16} color="#c94c5b" />
+                                  </TouchableOpacity>
+                                )}
+                              </View>
+                            </View>
+                          );
+                        })}
+                      </View>
+                    </View>
+                  )}
+                </View>
+                <View style={styles.createListBox}>
+                  <Text style={styles.createListLabel}>Criar nova lista</Text>
+                  <View style={styles.createListInputGroup}>
+                    <TextInput
+                      style={styles.createListInput}
+                      placeholder="Ex: Cafés da manhã na roça"
+                      placeholderTextColor="#BCBCBD"
+                      value={newListName}
+                      onChangeText={setNewListName}
+                      onSubmitEditing={createList}
+                    />
+                    <Button
+                      variant="success"
+                      style={styles.createListBtn}
+                      onPress={createList}
+                      loading={isCreating}
+                      disabled={isCreating}
+                      title={isCreating ? '' : 'Criar'}
+                    />
+                  </View>
+                  <Text style={styles.createListHelper}>
+                    Ao criar sua nova lista ela será adicionada em sua lista de favoritos.
+                  </Text>
+                </View>
+              </ScrollView>
+            </View>
+          </SafeAreaView>
+        </KeyboardAvoidingView>
       </View>
     </Modal>
-   
   );
 }
 
