@@ -12,6 +12,7 @@ import {
   ViewStyle
 } from "react-native";
 import { SystemBars } from "react-native-edge-to-edge";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 
@@ -38,7 +39,7 @@ const Offcanvas: React.FC<OffcanvasProps> = ({
 
   const offcanvasWidth = width;
   const fromValue = direction === "left" ? -offcanvasWidth : offcanvasWidth;
-
+  const insets = useSafeAreaInsets();
 
   // Atualiza a visibilidade interna
   useEffect(() => {
@@ -77,7 +78,7 @@ const Offcanvas: React.FC<OffcanvasProps> = ({
   return (
     <Modal visible={visible} animationType="none">
       <SystemBars style={{statusBar: 'light', navigationBar: 'dark'}} />
-      <Animated.View style={[styles.offcanvas, offcanvasStyle]}>
+      <Animated.View style={[styles.offcanvas, offcanvasStyle, {paddingTop: insets.top}]}>
         <View style={[globalStyles.row, globalStyles.itemsCenter, globalStyles.spaceBetween, styles.header]}>
           <Text style={styles.title}>{title}</Text>
           <Pressable onPress={onClose}>
