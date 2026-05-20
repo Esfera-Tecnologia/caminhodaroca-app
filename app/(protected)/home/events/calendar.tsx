@@ -79,7 +79,6 @@ export default function EventsCalendarScreen() {
   const [eventsCardY, setEventsCardY] = useState<number | null>(null);
 
   const { stats, loading: calendarLoading } = useCalendarStats(month, year);
-  const { data: allEvents } = useEvents({});
 
   const calendarDays = useMemo(() => getCalendarDays(year, month), [year, month]);
 
@@ -91,12 +90,10 @@ export default function EventsCalendarScreen() {
     return map;
   }, [stats]);
 
-  const selectedDayEvents = useMemo(() => {
-    if (!selectedDate) return [];
-    const stat = statsMap.get(selectedDate);
-    if (!stat) return [];
-    return allEvents.filter(e => e.start_date?.startsWith(selectedDate));
-  }, [selectedDate, statsMap, allEvents]);
+  const { data: selectedDayEvents = [] } = useEvents({
+    date: selectedDate || undefined,
+    enabled: !!selectedDate,
+  });
 
   const handlePrevMonth = () => {
     if (month === 1) {
