@@ -17,11 +17,24 @@ export type HomeEventType = {
 
 export type EventFilterType = 'upcoming' | 'expired';
 
-export function useEvents(options?: { filter?: EventFilterType; search?: string, is_highlight?: boolean }) {
+type UseEventsOptions = {
+  filter?: EventFilterType;
+  search?: string;
+  is_highlight?: boolean;
+  date?: string;
+  enabled?: boolean;
+};
+
+export function useEvents(options?: UseEventsOptions) {
   const [data, setData] = useState<HomeEventType[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // impede a busca
+    if (options?.enabled === false) {
+      setData([]);
+      return;
+    }
     const controller = new AbortController();
 
     const fetchData = async () => {
@@ -34,8 +47,11 @@ export function useEvents(options?: { filter?: EventFilterType; search?: string,
         if (options?.search) {
           params.search = options.search;
         }
-        if(options?.is_highlight) {
-          params.is_highlight = !!options.is_highlight;
+        if (options?.is_highlight) {
+          params.is_highlight = true;
+        }
+        if (options?.date) {
+          params.date = options.date;
         }
         const response = await axios.get(`${env.API_URL}/events`, {
           params,
@@ -70,7 +86,13 @@ export function useEvents(options?: { filter?: EventFilterType; search?: string,
 
     fetchData();
     return () => controller.abort();
-  }, [options?.filter, options?.search]);
+  }, [
+    options?.filter,
+    options?.search,
+    options?.is_highlight,
+    options?.date,
+    options?.enabled,
+  ]);
 
   return { data, loading };
 }
