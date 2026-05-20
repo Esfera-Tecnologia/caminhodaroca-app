@@ -9,7 +9,7 @@ import { Pressable, Text, View } from "react-native";
 
 export default function InstitutionScreen() {
   return (
-    <AuthContainer title="Como deseja entrar?" logoMargin={25}>
+    <AuthContainer title="Como deseja entrar?" logoMargin={25} withBackButton={true}>
       <Card>
         <Text style={authStyles.cardTitle}>
           Entenda a diferença antes de continuar:
