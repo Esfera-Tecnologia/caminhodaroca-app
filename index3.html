@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#287a6d">
-  <title>Acesso | Caminho da Ro&ccedil;a</title>
+  <title>Acesso v3 | Caminho da Ro&ccedil;a</title>
   <link rel="manifest" href="manifest.json">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -50,17 +50,18 @@
       padding: calc(14px + env(safe-area-inset-top)) 18px calc(12px + env(safe-area-inset-bottom));
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     .brand-area {
       text-align: center;
-      padding: 0 6px 12px;
+      padding: 0 6px 10px;
     }
 
     .brand-area img {
-      width: 250px;
+      width: 230px;
       max-width: 100%;
-      margin-bottom: 10px;
+      margin-bottom: 0;
     }
 
     .brand-area h1 {
@@ -101,6 +102,205 @@
       flex: 1;
       min-height: 0;
       flex-direction: column;
+      overflow: hidden;
+    }
+
+    .welcome-card {
+      gap: 12px;
+      background:
+        linear-gradient(180deg, #ffffff 0%, #ffffff 48%, #f6fbf9 48%, #ffffff 100%);
+    }
+
+    .tourist-hero {
+      border-radius: 18px;
+      padding: 15px;
+      background: linear-gradient(180deg, #e9f5f2, #ffffff);
+      border: 1px solid #d5e7e1;
+      display: flex;
+      flex-direction: column;
+      color: var(--ink);
+    }
+
+    .tourist-hero__header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .tourist-hero__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: var(--visitor-green);
+      color: var(--white);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.08rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(40, 122, 109, 0.22);
+    }
+
+    .main-card .tourist-hero h2 {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 700;
+      line-height: 1.16;
+      letter-spacing: -0.02em;
+    }
+
+    .main-card .tourist-hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.36;
+    }
+
+    .tourist-actions {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .account-links {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.25;
+      padding: 0 4px;
+    }
+
+    .account-links__actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .account-links a {
+      color: var(--visitor-green-dark);
+      font-weight: 600;
+      text-decoration: none;
+      min-height: 32px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(40, 122, 109, 0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .account-links a:hover {
+      background: rgba(40, 122, 109, 0.12);
+    }
+
+    .partner-entry {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid #e2eee9;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #f7fbfa, #ffffff);
+      flex-shrink: 0;
+    }
+
+    .main-card .partner-entry h2 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 1.08rem;
+      font-weight: 700;
+      line-height: 1.16;
+      letter-spacing: -0.02em;
+    }
+
+    .partner-entry__list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .partner-entry__item {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      border: 1px solid #dce8e3;
+      border-radius: 14px;
+      padding: 11px;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      font: inherit;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+      appearance: none;
+      width: 100%;
+      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .partner-entry__item:hover,
+    .partner-entry__item:focus-visible {
+      border-color: #bdd7d0;
+      box-shadow: 0 6px 14px rgba(23, 63, 56, 0.07);
+      color: var(--ink);
+    }
+
+    .partner-entry__item:active {
+      transform: scale(0.99);
+    }
+
+    .partner-entry__item > i {
+      width: 32px;
+      height: 32px;
+      border-radius: 11px;
+      background: var(--visitor-green-soft);
+      color: var(--visitor-green);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .partner-entry__copy {
+      display: grid;
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .partner-entry__copy strong {
+      color: var(--ink);
+      font-size: 0.84rem;
+      line-height: 1.24;
+    }
+
+    .partner-entry__copy span {
+      color: var(--muted);
+      font-size: 0.74rem;
+      line-height: 1.34;
+    }
+
+    .partner-entry__arrow {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: rgba(40, 122, 109, 0.09);
+      color: var(--visitor-green-dark);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .partner-entry__arrow i {
+      font-size: 1.2rem;
+    }
+
+    .partner-entry__item:hover .partner-entry__arrow,
+    .partner-entry__item:focus-visible .partner-entry__arrow {
+      background: rgba(40, 122, 109, 0.14);
+      color: var(--visitor-green);
     }
 
     .main-card h2 {
@@ -593,7 +793,7 @@
       }
 
       .brand-area img {
-        width: 220px;
+        width: 200px;
         margin-bottom: 8px;
       }
 
@@ -603,6 +803,94 @@
 
       .main-card {
         padding: 12px;
+      }
+
+      .welcome-card {
+        gap: 9px;
+      }
+
+      .tourist-hero {
+        padding: 12px;
+      }
+
+      .tourist-hero__header {
+        gap: 8px;
+        margin-bottom: 7px;
+      }
+
+      .tourist-hero__icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        font-size: 0.96rem;
+      }
+
+      .main-card .tourist-hero h2 {
+        font-size: 0.96rem;
+      }
+
+      .main-card .tourist-hero p {
+        font-size: 0.78rem;
+      }
+
+      .tourist-actions {
+        gap: 9px;
+        margin-top: 12px;
+      }
+
+      .account-links {
+        font-size: 0.72rem;
+        gap: 5px;
+      }
+
+      .account-links__actions {
+        gap: 7px;
+      }
+
+      .account-links a {
+        min-height: 28px;
+        padding: 5px 10px;
+      }
+
+      .partner-entry {
+        gap: 8px;
+        padding: 10px;
+      }
+
+      .main-card .partner-entry h2 {
+        font-size: 0.96rem;
+      }
+
+      .partner-entry__item {
+        gap: 9px;
+        padding: 9px;
+      }
+
+      .partner-entry__item > i {
+        width: 28px;
+        height: 28px;
+      }
+
+      .partner-entry__copy strong {
+        font-size: 0.76rem;
+        line-height: 1.2;
+      }
+
+      .partner-entry__copy span {
+        font-size: 0.68rem;
+        line-height: 1.28;
+      }
+
+      .partner-entry__arrow,
+      .feature-item__arrow {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+      }
+
+      .partner-entry__arrow i,
+      .feature-item__arrow i {
+        font-size: 1.05rem;
       }
 
       .feature-list {
@@ -618,16 +906,6 @@
       .feature-item__main > i {
         width: 30px;
         height: 30px;
-      }
-
-      .feature-item__arrow {
-        width: 36px;
-        height: 36px;
-        border-radius: 12px;
-      }
-
-      .feature-item__arrow i {
-        font-size: 1.05rem;
       }
 
       .feature-copy strong {
@@ -661,57 +939,55 @@
     <section class="screen active" id="visitanteScreen">
       <div class="brand-area">
         <img src="assets/logo-caminho.png" alt="Logo Caminho da Ro&ccedil;a">
-        <h1>Como deseja entrar?</h1>
       </div>
 
-      <section class="main-card">
-        <div class="feature-list">
-          <a class="feature-item" href="home.html">
-            <div class="feature-item__main">
+      <section class="main-card welcome-card">
+        <div class="tourist-hero">
+          <div class="tourist-hero__header">
+            <span class="tourist-hero__icon" aria-hidden="true">
               <i class="fa-solid fa-person-hiking"></i>
-              <div class="feature-copy">
-                <strong>Sou turista e quero viver experi&ecirc;ncias rurais</strong>
-                <span>Descubra destinos, viv&ecirc;ncias, produtos e roteiros perto de voc&ecirc;.</span>
+            </span>
+            <h2>Sou turista e quero viver experi&ecirc;ncias rurais</h2>
+          </div>
+          <p>Descubra destinos, viv&ecirc;ncias, produtos e roteiros perto de voc&ecirc;.</p>
+
+          <div class="tourist-actions">
+            <a href="home.html" class="btn-main">Explorar agora</a>
+            <div class="account-links">
+              <span>J&aacute; tem conta?</span>
+              <div class="account-links__actions">
+                <a href="login.html?perfil=visitante">Entrar</a>
+                <a href="cadastro.html">Criar conta</a>
               </div>
             </div>
-            <div class="feature-item__footer" aria-hidden="true">
-              <span class="feature-item__arrow"><i class="fa-solid fa-arrow-right"></i></span>
-            </div>
-          </a>
-          <a
-            class="feature-item"
-            href="https://caminhodaroca.senar-rio.com.br/cadastro-propriedade-publica"
-            target="_blank"
-            rel="noopener"
-          >
-            <div class="feature-item__main">
+          </div>
+        </div>
+
+        <div class="partner-entry">
+          <h2>Para divulgar ou apoiar o turismo</h2>
+          <div class="partner-entry__list">
+            <a
+              class="partner-entry__item"
+              href="https://caminhodaroca.senar-rio.com.br/cadastro-propriedade-publica"
+              target="_blank"
+              rel="noopener"
+            >
               <i class="fa-solid fa-store"></i>
-              <div class="feature-copy">
+              <div class="partner-entry__copy">
                 <strong>Divulgue seu neg&oacute;cio</strong>
                 <span>Cadastre sua propriedade, produtos artesanais, servi&ccedil;o, ag&ecirc;ncia de viagem, servi&ccedil;os etc.</span>
               </div>
-            </div>
-            <div class="feature-item__footer" aria-hidden="true">
-              <span class="feature-item__arrow"><i class="fa-solid fa-arrow-right"></i></span>
-            </div>
-          </a>
-          <button class="feature-item" type="button" id="openPartnerScreen">
-            <div class="feature-item__main">
+              <span class="partner-entry__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+            <button class="partner-entry__item" type="button" id="openPartnerScreen">
               <i class="fa-solid fa-building-columns"></i>
-              <div class="feature-copy">
+              <div class="partner-entry__copy">
                 <strong>Sou uma institui&ccedil;&atilde;o e quero apoiar o turismo da minha regi&atilde;o</strong>
                 <span>Cadastre atividades e programa&ccedil;&otilde;es do munic&iacute;pio na sua regi&atilde;o (secretarias de turismo, associa&ccedil;&otilde;es, cons&oacute;rcios regionais etc.)</span>
               </div>
-            </div>
-            <div class="feature-item__footer" aria-hidden="true">
-              <span class="feature-item__arrow"><i class="fa-solid fa-arrow-right"></i></span>
-            </div>
-          </button>
-        </div>
-
-        <div class="actions">
-          <a href="login.html?perfil=visitante" class="btn-main">Entrar</a>
-          <a href="cadastro.html" class="btn-alt">Criar conta</a>
+              <span class="partner-entry__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+            </button>
+          </div>
         </div>
       </section>
     </section>
