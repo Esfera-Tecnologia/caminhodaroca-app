@@ -70,9 +70,7 @@ const PartnerList = ({filters}: {filters?: PartnerFilters}) => {
           style={{ flex: 1 }}
           data={data}
           ListEmptyComponent={
-            <EmptyList text="
-              Infelizmente, não pudemos encontrar nenhum
-              parceiro com base nos filtros aplicados" />
+            <EmptyList text="Infelizmente, não pudemos encontrar nenhum parceiro com base nos filtros aplicados" />
           }
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => ( <PartnerItem partner={item} /> )}
@@ -93,7 +91,7 @@ export default function Index() {
       <Text style={styles.title}>Parceiros em destaque</Text>
       <View style={[globalStyles.row, globalStyles.itemsCenter, {marginBottom: 16, width: '100%'}]}>
         <SearchInput
-          onSearch={(search) => setFilters((old) => ({...old, search: search}))}
+          onSearch={(search) => setFilters((old) => ({...old, keyword: search}))}
           placeholder="Buscar por nome ou município"/> 
         <FilterButton onPress={() => setIsFiltersOpen(true)}/>
       </View>
