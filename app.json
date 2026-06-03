@@ -9,8 +9,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "config": {
-        "usesNonExemptEncryption": false,
-        "googleMapsApiKey": "AIzaSyCaR4-4NQwX0Z-tccbyH8uo4UtC74cnd_8"
+        "usesNonExemptEncryption": false
       },
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Usamos sua localização para mostrar as propriedades próximas a você"
@@ -67,6 +66,13 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Permitir que $(PRODUCT_NAME) use sua localização."
+        }
+      ],
+      [
+        "react-native-maps",
+        {
+          "iosGoogleMapsApiKey": "AIzaSyCaR4-4NQwX0Z-tccbyH8uo4UtC74cnd_8",
+          "androidGoogleMapsApiKey": "AIzaSyCaR4-4NQwX0Z-tccbyH8uo4UtC74cnd_8"
         }
       ],
       [
