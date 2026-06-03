@@ -48,7 +48,7 @@ export function QRCodeScanner({visible, storing, toggleModalVisibility, onSucces
 
   function handleScan({data, bounds, cornerPoints}: BarcodeScanningResult) {
     if (!bounds || !bounds.origin || ! scannableArea) return;
-    
+
     if(data && ! qrCodeReaded && ! storing && isWithinScannableArea(cornerPoints, scannableArea)) {
       setQRCodeReaded(true);
       setTimeout(function(){
@@ -65,10 +65,10 @@ export function QRCodeScanner({visible, storing, toggleModalVisibility, onSucces
   }, [qrCodeReaded])
   return (
     <Modal
-      visible={visible} 
+      visible={visible}
       onRequestClose={() => toggleModalVisibility(false)}
       onShow={() => setQRCodeReaded(false)}
-      style={StyleSheet.absoluteFillObject}>
+      style={StyleSheet.absoluteFill}>
       <CameraView style={{flex: 1}} onBarcodeScanned={handleScan} facing="back" />
       {banner ? (
         <View

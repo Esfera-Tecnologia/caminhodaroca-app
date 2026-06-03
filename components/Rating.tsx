@@ -2,7 +2,7 @@ import env from "@/config.json";
 import { useAuth } from "@/context/AuthContext";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
-import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -73,9 +73,9 @@ export default function Rating({
             onPress={() => !loading && handleRating(star)}
             style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
           >
-            <AntDesign
+            <FontAwesome
               key={star}
-              name={star <= userRating ? "star" : "staro"}
+              name={star <= userRating ? "star" : "star-o"}
               size={20}
               color={theme.colors.warning}
             />

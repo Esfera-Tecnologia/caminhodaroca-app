@@ -1,7 +1,7 @@
 // components/Toast.tsx
 
 import { Ionicons } from "@expo/vector-icons";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -73,12 +73,20 @@ export function Toast({
   duration = 6000,
   onHide,
 }: ToastProps) {
-  const translateY = useRef(new Animated.Value(-120)).current;
-  const opacity = useRef(new Animated.Value(0)).current;
-  const progress = useRef(new Animated.Value(100)).current;
+  const [translateY] = useState(() => new Animated.Value(-120));
+  const [opacity] = useState(() => new Animated.Value(0));
+  const [progress] = useState(() => new Animated.Value(100));
   const isHiding = useRef(false);
 
   const toastConfig = toastByVariant[variant];
+  const progressWidth = useMemo(
+    () =>
+      progress.interpolate({
+        inputRange: [0, 100],
+        outputRange: ["0%", "100%"],
+      }),
+    [progress]
+  );
 
   const hideToast = useCallback(() => {
     if (isHiding.current) return;
@@ -180,10 +188,7 @@ export function Toast({
               styles.progressBar,
               {
                 backgroundColor: toastConfig.color,
-                width: progress.interpolate({
-                  inputRange: [0, 100],
-                  outputRange: ["0%", "100%"],
-                }),
+                width: progressWidth,
               },
             ]}
           />

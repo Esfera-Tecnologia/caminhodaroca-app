@@ -1,6 +1,6 @@
 import { globalStyles } from "@/styles/global";
 import { Feather } from "@expo/vector-icons";
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -34,7 +34,8 @@ const Offcanvas: React.FC<OffcanvasProps> = ({
   children,
   direction = "left",
 }) => {
-  const translateX = useRef(new Animated.Value(0)).current;
+  const initialTranslateX = direction === "left" ? -width : width;
+  const [translateX] = useState(() => new Animated.Value(initialTranslateX));
   const [visible, setVisible] = useState(isOpen);
 
   const offcanvasWidth = width;
@@ -45,7 +46,7 @@ const Offcanvas: React.FC<OffcanvasProps> = ({
   useEffect(() => {
     if (isOpen) {
       // Primeiro torna visível
-      setVisible(true);
+      requestAnimationFrame(() => setVisible(true));
       // Depois anima
       translateX.setValue(fromValue);
       Animated.timing(translateX, {
@@ -64,16 +65,19 @@ const Offcanvas: React.FC<OffcanvasProps> = ({
         setVisible(false);
       });
     }
-  }, [isOpen]);
+  }, [fromValue, isOpen, translateX]);
+
+  const offcanvasStyle: ViewStyle = useMemo(
+    () => ({
+      width: offcanvasWidth,
+      height: Dimensions.get("window").height,
+      transform: [{ translateX }],
+      ...(direction === "right" ? { right: 0 } : { left: 0 }),
+    }),
+    [direction, offcanvasWidth, translateX]
+  );
 
   if (!visible) return null;
-
-  const offcanvasStyle: ViewStyle = {
-    width: offcanvasWidth,
-    height: Dimensions.get("window").height,
-    transform: [{ translateX }],
-    ...(direction === "right" ? { right: 0 } : { left: 0 }),
-  };
 
   return (
     <Modal visible={visible} animationType="none">

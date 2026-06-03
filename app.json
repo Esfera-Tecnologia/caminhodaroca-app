@@ -7,7 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "caminhodaroca",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "config": {
         "usesNonExemptEncryption": false,
@@ -30,7 +29,6 @@
         }
       },
       "permissions": ["android.permission.CAMERA"],
-      "edgeToEdgeEnabled": true,
       "package": "com.esfera.caminhodaroca"
     },
     "web": {
@@ -84,6 +82,7 @@
       ]
     ],
     "experiments": {
+      "reactCompiler": true,
       "typedRoutes": true
     },
     "extra": {

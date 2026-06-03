@@ -8,7 +8,7 @@ import { formatDatePeriod } from "@/util";
 import { FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const filterButtons: { filter: EventFilterType; label: string }[] = [
@@ -61,13 +61,12 @@ const EventItem = ({ event }: { event: HomeEventType }) => (
 
 export default function EventsIndex() {
   const {filter} = useLocalSearchParams<{filter: 'upcoming' | 'expired'}>();
-  useEffect(() => {
-    if(filter) {
-      setSelectedFilter(filter);
-    }
-  }, [filter]);
-  const [selectedFilter, setSelectedFilter] = useState<EventFilterType>('upcoming');
+  const routeFilter: EventFilterType | undefined =
+    filter === 'upcoming' || filter === 'expired' ? filter : undefined;
+  const [manualFilter, setManualFilter] = useState<EventFilterType | null>(null);
+  const selectedFilter = manualFilter ?? routeFilter ?? 'upcoming';
   const [searchTerm, setSearchTerm] = useState('');
+
   const { data, loading } = useEvents({ filter: selectedFilter, search: searchTerm });
 
   return (
@@ -90,7 +89,7 @@ export default function EventsIndex() {
               styles.filterButton,
               selectedFilter === button.filter && styles.filterButtonActive,
             ]}
-            onPress={() => setSelectedFilter(button.filter)}
+            onPress={() => setManualFilter(button.filter)}
           >
             <Text
               style={[

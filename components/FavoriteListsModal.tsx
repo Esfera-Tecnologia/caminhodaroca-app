@@ -4,7 +4,7 @@ import { refetchFavoriteLists } from '@/hooks/useFavoriteLists';
 import { theme } from '@/theme';
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, Alert, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -36,13 +36,21 @@ export default function FavoriteListsModal({
   const [loading, setLoading] = useState(false);
   const [newListName, setNewListName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+  const [notification, setNotification] = useState<{ id: number, visible: boolean; message: string; type: 'success' | 'warn' | 'error' }>({
+    visible: false,
+    message: '',
+    type: 'success',
+    id: 0,
+  });
 
-  useEffect(() => {
-    if (visible) {
-      setSelectedListIds(initialSelectedListIds || []);
-      fetchLists();
-    }
-  }, [visible]);
+  const showNotification = (message: string, type: 'success' | 'warn' | 'error') => {
+    setNotification(prev => ({
+      id: prev.id + 1,
+      visible: true,
+      message,
+      type,
+    }));
+  };
 
   const fetchLists = async () => {
     setLoading(true);
@@ -78,8 +86,8 @@ export default function FavoriteListsModal({
     }
     setSelectedListIds(newSelections);
 
-    setLists(prevLists => prevLists.map(list => 
-      list.id === listId 
+    setLists(prevLists => prevLists.map(list =>
+      list.id === listId
         ? { ...list, properties_count: isSelected ? list.properties_count + 1 : list.properties_count - 1 }
         : list
     ));
@@ -90,7 +98,7 @@ export default function FavoriteListsModal({
   const createList = async () => {
     const listName = newListName.trim();
     if (!listName) return;
-    
+
     setIsCreating(true);
     try {
       const response = await axios.post(`${env.API_URL}/favorite-lists`, {
@@ -99,7 +107,7 @@ export default function FavoriteListsModal({
       const newList = response.data.data || response.data;
       setLists(prev => [...prev, { ...newList, properties_count: 1 }]);
       setNewListName('');
-      
+
       // Auto toggle the new list
       const newSelections = [...selectedListIds, newList.id];
       setSelectedListIds(newSelections);
@@ -121,7 +129,7 @@ export default function FavoriteListsModal({
     try {
       await axios.delete(`${env.API_URL}/favorite-lists/${listId}`);
       setLists(prev => prev.filter(l => l.id !== listId));
-      
+
       const newSelections = selectedListIds.filter(id => id !== listId);
       if (newSelections.length !== selectedListIds.length) {
         setSelectedListIds(newSelections);
@@ -136,21 +144,6 @@ export default function FavoriteListsModal({
         showNotification('Não foi possível remover a lista.', 'error');
       }
     }
-  };
-
-  const [notification, setNotification] = useState<{ id: number, visible: boolean; message: string; type: 'success' | 'warn' | 'error' }>({
-    visible: false,
-    message: '',
-    type: 'success',
-    id: 0,
-  });
-  const showNotification = (message: string, type: 'success' | 'warn' | 'error') => {
-    setNotification({ 
-      id: Date.now(),
-      visible: true,
-      message,
-      type,
-    });
   };
 
   const confirmDeleteList = (listId: number, listName: string) => {
@@ -178,6 +171,10 @@ export default function FavoriteListsModal({
       animationType="slide"
       transparent={true}
       visible={visible}
+      onShow={() => {
+        setSelectedListIds(initialSelectedListIds || []);
+        fetchLists();
+      }}
       onRequestClose={() => {
         onClose && onClose();
       }}
@@ -216,7 +213,7 @@ export default function FavoriteListsModal({
                         {lists.map(list => {
                           const isSelected = selectedListIds.includes(list.id);
                           let currentCount = list.properties_count;
-                          
+
                           return (
                             <View key={list.id} style={styles.listOptionCard}>
                               <TouchableOpacity

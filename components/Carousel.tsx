@@ -1,5 +1,5 @@
 import { Entypo } from "@expo/vector-icons";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -44,7 +44,7 @@ export default function Carousel({
 
 }: Props) {
   const flatListRef = useRef<Animated.FlatList<CarouselItem> | null>(null);
-  const scrollX = useRef(new Animated.Value(0)).current;
+  const [scrollX] = useState(() => new Animated.Value(0));
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const currentIndexRef = useRef(initialIndex);
@@ -95,13 +95,13 @@ export default function Carousel({
     return stop;
   }, [autoPlay, autoPlayInterval, data.length, loop, goToIndex]);
 
-  const onViewRef = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+  const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
     if (viewableItems.length > 0) {
       const idx = viewableItems[0].index ?? 0;
       setCurrentIndex(idx);
     }
-  });
-  const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 50 });
+  }, []);
+  const viewabilityConfig = useMemo(() => ({ viewAreaCoveragePercentThreshold: 50 }), []);
 
   const indicators = () => (
     <View style={[styles.indicatorWrapper, indicatorWrapperStyle]} pointerEvents="none">
@@ -138,8 +138,8 @@ export default function Carousel({
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: false }
         )}
-        onViewableItemsChanged={onViewRef.current}
-        viewabilityConfig={viewConfigRef.current}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
         getItemLayout={(_, index) => ({
           length: containerWidth,
           offset: containerWidth * index,

@@ -1,5 +1,5 @@
 import { theme } from "@/theme";
-import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 
 type ReviewProps = {
@@ -10,9 +10,9 @@ export default function Review({length, review}: ReviewProps) {
   return (
     <View style={styles.stars}>
       {Array.from({ length: length }).map((_, i) => (
-        <AntDesign
+        <FontAwesome
           key={i}
-          name={i < review ? "star" : "staro"}
+          name={i < review ? "star" : "star-o"}
           size={16}
           color={theme.colors.warning}
         />

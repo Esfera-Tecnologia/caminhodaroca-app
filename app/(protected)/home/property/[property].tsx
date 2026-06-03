@@ -23,7 +23,7 @@ import { Image } from 'expo-image';
 import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import { useLocalSearchParams } from 'expo-router/build/hooks';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Toast } from 'toastify-react-native';
 
@@ -167,12 +167,6 @@ export default function PropertyDetails() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (!user) {
-      setFavoriteModalVisible(false);
-    }
-  }, [user]);
-
-  useEffect(() => {
     const fetchProperty = async () => {
       try {
         const response = await axios.get(`${env.API_URL}/properties/${propertyId}`);
@@ -252,7 +246,7 @@ export default function PropertyDetails() {
         longitude: location.coords.longitude
       });
       Toast.success(response.data.message || 'Visita registrada com sucesso!');
-      
+
       setProperty({
         ...property,
         isVisited: true
@@ -346,32 +340,32 @@ export default function PropertyDetails() {
         <Text style={styles.sectionTitle}>Galeria de Fotos</Text>
         <ImageGallery property={property} />
         <View style={[globalStyles.row, { marginBottom: 8, gap: 8}]}>
-          <Button 
+          <Button
             variant="success"
             outline={true}
             title="Ver no mapa"
             style={{ flex: 1 }}
-            onPress={() => openLink(property.link_google_maps)} 
+            onPress={() => openLink(property.link_google_maps)}
             startIcon={<FontAwesome6 name="map-location-dot" size={16} color={theme.colors.success} />}
           />
-          <Button 
+          <Button
             variant="success"
             outline={true}
             title={isCheckingIn ? "Validando..." : "Ler QR Code"}
             loading={isCheckingIn}
             disabled={isCheckingIn}
             style={{ flex: 1 }}
-            onPress={handleQRCodeReaderModal} 
+            onPress={handleQRCodeReaderModal}
             startIcon={<FontAwesome6 name="qrcode" size={16} color={theme.colors.success} />}
           />
         </View>
         <View style={[globalStyles.row, { marginBottom: 8, gap: 8 }]}>
-          <Button 
+          <Button
             variant="instagram"
             outline={true}
             title="Instagram"
             style={{ flex: 1 }}
-            onPress={() => openInstagram(property.instagram)} 
+            onPress={() => openInstagram(property.instagram)}
             startIcon={<FontAwesome6 name="instagram" size={16} color={theme.colors.instagram} />}
           />
           <Button
@@ -413,7 +407,7 @@ export default function PropertyDetails() {
         })}
         propertyId={property.id} />
       <FavoriteListsModal
-        visible={favoriteModalVisible}
+        visible={!!user && favoriteModalVisible}
         propertyId={property.id}
         initialSelectedListIds={property.favorite_list_ids || []}
         onClose={() => setFavoriteModalVisible(false)}
@@ -425,7 +419,7 @@ export default function PropertyDetails() {
         visible={qrCodeModalVisible}
         toggleModalVisibility={(visible) =>
           setQRCodeModalVisible(visible)
-        }/> 
+        }/>
     </ScrollView>
   );
 }
@@ -489,7 +483,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 12,
   },
-  
   openingDay: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -546,5 +539,5 @@ const styles = StyleSheet.create({
       color: 'rgba(0, 0, 0, 0.12)',
     }]
   },
-  
+
 });

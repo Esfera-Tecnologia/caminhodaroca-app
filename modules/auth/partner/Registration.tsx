@@ -249,7 +249,7 @@ export default function PartnerRegistration({partner}: {partner?: PartnerType}) 
         );
       })}
       <Button
-        onPress={() => append({externalLink: '', description: '', images: undefined})}
+        onPress={() => append({eventId: undefined, externalLink: '', description: '', images: undefined})}
         title="Adicionar outro evento"
         variant="success"
         outline={true}

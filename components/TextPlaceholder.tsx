@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Animated, Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -8,7 +8,7 @@ type TextPlaceholderProps = {
   style?: ViewStyle;
 }
 export default function TextPlaceholder({ style }: TextPlaceholderProps) {
-  const shimmerAnim = useRef(new Animated.Value(0)).current;
+  const [shimmerAnim] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     Animated.loop(
@@ -18,12 +18,16 @@ export default function TextPlaceholder({ style }: TextPlaceholderProps) {
         useNativeDriver: true,
       })
     ).start();
-  }, []);
+  }, [shimmerAnim]);
 
-  const translateX = shimmerAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-SCREEN_WIDTH, SCREEN_WIDTH],
-  });
+  const translateX = useMemo(
+    () =>
+      shimmerAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-SCREEN_WIDTH, SCREEN_WIDTH],
+      }),
+    [shimmerAnim]
+  );
 
   return (
     <View style={[styles.placeholder, {width: '80%', height: 16, borderRadius: 4}, style]}>
