@@ -620,7 +620,12 @@
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-soft);
       padding: 20px 18px 18px;
-      margin-bottom: 14px;
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      margin-bottom: 0;
+      overflow: hidden;
     }
 
     .partner-main-card .section-badge {
@@ -636,47 +641,152 @@
       color: var(--ink);
     }
 
-    .difference-list {
-      display: grid;
-      gap: 12px;
-      margin: 18px 0 20px;
+    .partner-hero {
+      border-radius: 18px;
+      padding: 18px 14px;
+      background: linear-gradient(180deg, #e9f5f2, #ffffff);
+      border: 1px solid #d5e7e1;
+      display: flex;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      color: var(--ink);
     }
 
-    .difference-item {
+    .partner-hero__header {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      border-radius: var(--radius-lg);
-      padding: 13px 14px;
-      background: #fbfdfb;
-      border: 1px solid #dcebdd;
+      gap: 10px;
+      margin-bottom: 8px;
     }
 
-    .difference-item i {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      background: var(--partner-green-soft);
-      color: var(--partner-green-dark);
+    .partner-hero__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: var(--partner-green);
+      color: var(--white);
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.08rem;
       flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(98, 181, 90, 0.24);
     }
 
-    .difference-item strong {
-      display: block;
-      font-size: 0.92rem;
-      margin-bottom: 3px;
-      color: var(--ink);
-      font-weight: 600;
+    .partner-main-card .partner-hero h2 {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 700;
+      line-height: 1.16;
+      letter-spacing: -0.02em;
     }
 
-    .difference-item span {
-      display: block;
-      font-size: 0.84rem;
-      line-height: 1.42;
+    .partner-main-card .partner-hero p {
+      margin: 0;
       color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.36;
+    }
+
+    .partner-login-form {
+      display: grid;
+      gap: 13px;
+      margin-top: 22px;
+    }
+
+    .partner-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .partner-field label {
+      color: var(--ink);
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .partner-field input {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid #d5e7e1;
+      border-radius: 13px;
+      background: var(--white);
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.9rem;
+      padding: 0 13px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .partner-field input::placeholder {
+      color: #91a49e;
+    }
+
+    .partner-field input:focus {
+      border-color: var(--partner-green);
+      box-shadow: 0 0 0 3px rgba(98, 181, 90, 0.16);
+    }
+
+    .partner-login-form .btn-main {
+      background: var(--partner-green);
+      border-color: var(--partner-green);
+      color: var(--white);
+    }
+
+    .partner-login-form .btn-main:hover {
+      background: var(--partner-green-dark);
+      border-color: var(--partner-green-dark);
+      color: var(--white);
+    }
+
+    .partner-login-links {
+      display: grid;
+      justify-items: center;
+      gap: 13px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .partner-login-links a {
+      color: var(--partner-green-dark);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .partner-login-links__create {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .partner-login-links__signup {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 14px;
+      border-radius: var(--radius-md);
+      background: var(--white);
+      border: 1px solid var(--partner-green);
+      color: var(--partner-green-dark);
+    }
+
+    .partner-login-links a:hover {
+      color: var(--partner-green);
+    }
+
+    .partner-login-links__signup:hover {
+      background: var(--partner-green-soft);
+      border-color: var(--partner-green-dark);
+      color: var(--partner-green-dark);
     }
 
     .difference-link {
@@ -813,27 +923,32 @@
         padding: 12px;
       }
 
-      .tourist-hero__header {
+      .tourist-hero__header,
+      .partner-hero__header {
         gap: 8px;
         margin-bottom: 7px;
       }
 
-      .tourist-hero__icon {
+      .tourist-hero__icon,
+      .partner-hero__icon {
         width: 34px;
         height: 34px;
         border-radius: 12px;
         font-size: 0.96rem;
       }
 
-      .main-card .tourist-hero h2 {
+      .main-card .tourist-hero h2,
+      .partner-main-card .partner-hero h2 {
         font-size: 0.96rem;
       }
 
-      .main-card .tourist-hero p {
+      .main-card .tourist-hero p,
+      .partner-main-card .partner-hero p {
         font-size: 0.78rem;
       }
 
-      .tourist-actions {
+      .tourist-actions,
+      .partner-actions {
         gap: 9px;
         margin-top: 12px;
       }
@@ -1002,28 +1117,37 @@
       </div>
 
       <section class="partner-main-card">
-        <h2>Entenda a diferen&ccedil;a antes de continuar:</h2>
+        <div class="partner-hero">
+          <div class="partner-hero__header">
+            <span class="partner-hero__icon" aria-hidden="true">
+              <i class="fa-solid fa-building-columns"></i>
+            </span>
+            <h2>Sou institui&ccedil;&atilde;o e quero apoiar o turismo da minha regi&atilde;o</h2>
+          </div>
+          <p>Cadastre atividades e programa&ccedil;&otilde;es do munic&iacute;pio na sua regi&atilde;o.</p>
 
-        <div class="difference-list">
-          <div class="difference-item">
-            <i class="fa-solid fa-circle-check"></i>
-            <div>
-              <strong>Sou neg&oacute;cio rural</strong>
-              <span>Essa op&ccedil;&atilde;o &eacute; para quem tem seu pr&oacute;prio neg&oacute;cio rural e quer divulgar no Caminho da Ro&ccedil;a (hospedagem, day-use, roteiros, atrativos, circuitos, produtos artesanais etc.).</span>
+          <form class="partner-login-form" action="home.html">
+            <input type="hidden" name="perfil" value="parceiro">
+            <div class="partner-field">
+              <label for="partnerEmail">E-mail</label>
+              <input type="email" id="partnerEmail" name="email" placeholder="Digite seu e-mail" autocomplete="email" required>
+            </div>
+
+            <div class="partner-field">
+              <label for="partnerPassword">Senha</label>
+              <input type="password" id="partnerPassword" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required>
+            </div>
+
+            <button type="submit" class="btn-main">Entrar</button>
+          </form>
+
+          <div class="partner-login-links">
+            <a href="login.html?perfil=parceiro">Esqueci minha senha</a>
+            <div class="partner-login-links__create">
+              <span>Ainda n&atilde;o tem conta?</span>
+              <a href="cadastro-parceiro.html" class="partner-login-links__signup">Cadastrar institui&ccedil;&atilde;o</a>
             </div>
           </div>
-          <div class="difference-item">
-            <i class="fa-solid fa-building-columns"></i>
-            <div>
-              <strong>Sou institui&ccedil;&atilde;o</strong>
-              <span>Essa op&ccedil;&atilde;o &eacute; para entidades que desejam apoiar o turismo da regi&atilde;o (secretarias de turismo, associa&ccedil;&otilde;es, cons&oacute;rcios regionais etc.).</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions partner-actions">
-          <a href="login.html?perfil=parceiro" class="btn-main">Entrar para divulgar</a>
-          <a href="cadastro-parceiro.html" class="btn-alt">Cadastrar meu espa&ccedil;o</a>
         </div>
       </section>
     </section>
