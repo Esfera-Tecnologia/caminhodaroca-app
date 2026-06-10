@@ -2,14 +2,12 @@ import CheckboxGroup from "@/components/controls/CheckboxGroup";
 import InputGroup from "@/components/controls/InputGroup";
 import Terms from "@/components/Terms";
 import { globalStyles } from "@/styles/global";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useFormState } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function RegistrationThirdStep() {
-  const {
-    control,
-    formState: { errors }
-  } = useFormContext();
+  const { control } = useFormContext();
+  const { errors } = useFormState({ control });
 
   return (
     <View>

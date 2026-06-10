@@ -17,45 +17,47 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
 function PartnerItem({partner}: {partner: PartnerItemType}) {
   return (
-    <View style={[globalStyles.row, globalStyles.itemsStart, styles.partner]}>
-      <Image
-        source={{uri: partner.logo}}
-        contentFit="cover"
-        style={styles.partnerLogo}
-        transition={1000} />
-      <View style={styles.partnerDetails}>
-        <Text style={styles.partnerName}>
-          {partner.name}
-        </Text>
-        <Text style={styles.partnerLocation}>
-          {truncatedJoinedCities(partner.cities, partner.state)}
-        </Text>
-        {partner.editable && (
-          <Button
-            onPress={() => router.push({
-              pathname: '/home/partners/[partner]/edit',
-              params: {partner: partner.id}
-            })}
-            variant="success"
-            outline={true}
-            size="sm"
-            title="Editar parceiro"
-            startIcon={<FontAwesome name="pencil" size={14} color={theme.colors.success} />}
-            textStyle={{fontWeight: 600}}
-            style={[{marginTop: 4}]}/>
-        )}
-        {partner.pendingApproval && (
-          <Text style={{color: theme.colors.warning, fontSize: 12, marginTop: 4}}>Alterações pendentes</Text>
-        )}
-      </View>
+    <View style={[styles.partner]}>
       <Pressable
         style={styles.partnerShowButton}
         onPress={() => router.push({
           pathname: '/home/partners/[partner]/show',
           params: {partner: partner.id
-        }})}>
-        <Feather name="chevron-right" size={24} color="#bbb" />
+      }})}>
+        <View style={[globalStyles.row, globalStyles.itemsCenter]}>
+          <Image
+            source={{uri: partner.logo}}
+            contentFit="cover"
+            style={styles.partnerLogo}
+            transition={1000} />
+          <View style={styles.partnerDetails}>
+            <Text style={styles.partnerName}>
+              {partner.name}
+            </Text>
+            <Text style={styles.partnerLocation}>
+              {truncatedJoinedCities(partner.cities, partner.state)}
+            </Text>
+          </View>
+          <Feather name="chevron-right" size={24} color="#bbb" />
+        </View>
       </Pressable>
+      {partner.editable && (
+        <Button
+          onPress={() => router.push({
+            pathname: '/home/partners/[partner]/edit',
+            params: {partner: partner.id}
+          })}
+          variant="success"
+          outline={true}
+          size="sm"
+          title="Editar parceiro"
+          startIcon={<FontAwesome name="pencil" size={14} color={theme.colors.success} />}
+          textStyle={{fontWeight: 600}}
+          style={[{marginTop: 8, marginStart: 81, alignSelf: 'flex-start'}]}/>
+      )}
+      {partner.pendingApproval && (
+        <Text style={{color: theme.colors.warning, fontSize: 12, marginTop: 4}}>Alterações pendentes</Text>
+      )}
     </View>
   )
 }
@@ -125,7 +127,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#e0e0e0',
-    alignItems: 'center',
   },
   partnerDetails: {
     marginHorizontal: 12,
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
   },
   partnerShowButton: {
     flexShrink: 0,
-    marginRight: -4
+    flexGrow: 1,
   },
   warning: {
     color: theme.colors.warning,

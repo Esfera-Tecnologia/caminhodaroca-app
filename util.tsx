@@ -70,7 +70,7 @@ export function isValidHour(time: string | undefined) {
 }
 
 export function onValidationFail() {
-  Toast.error(messages.submitFail, "bottom");
+  Toast.error(messages.submitFail, "top");
 }
 
 export function toDate(dateString: string) {

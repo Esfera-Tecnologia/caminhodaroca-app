@@ -5,11 +5,12 @@ import Select from "@/components/controls/Select";
 import { AgeRange, CompanionType } from "@/enums";
 import { useStates } from "@/hooks/useStates";
 import { formatEnumToOptions } from "@/util";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useFormState } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function RegistrationFirstStep()  {
-  const { control, formState: { errors } } = useFormContext();
+  const { control } = useFormContext();
+  const { errors } = useFormState({ control });
   const {states} = useStates();
 
   return (

@@ -80,7 +80,7 @@ const Offcanvas: React.FC<OffcanvasProps> = ({
   if (!visible) return null;
 
   return (
-    <Modal visible={visible} animationType="none">
+    <Modal visible={visible} animationType="none" onRequestClose={onClose}>
       <SystemBars style={{statusBar: 'light', navigationBar: 'dark'}} />
       <Animated.View style={[styles.offcanvas, offcanvasStyle, {paddingTop: insets.top}]}>
         <View style={[globalStyles.row, globalStyles.itemsCenter, globalStyles.spaceBetween, styles.header]}>

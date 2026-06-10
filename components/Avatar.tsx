@@ -2,6 +2,7 @@ import env from "@/config.json";
 import { useAuth } from "@/context/AuthContext";
 import { theme } from "@/theme";
 import { FontAwesome6 } from "@expo/vector-icons";
+import axios from "axios";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
@@ -23,16 +24,18 @@ export default function Avatar({style}: AvatarProps) {
       }
       // Seleciona a imagem
       const pickerResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
         quality: 0.8,
       });
       if (pickerResult.canceled) return;
 
       // Cria o FormData para enviar
       const formData = new FormData();
-      const localUri = pickerResult.assets[0].uri;
-      const filename = localUri.split("/").pop()!;
-      const ext = filename.split(".").pop();
-      const type = ext === "jpg" ? "image/jpeg" : `image/${ext}`;
+      const asset = pickerResult.assets[0];
+      const localUri = asset.uri;
+      const filename = asset.fileName ?? localUri.split("/").pop() ?? "avatar.jpg";
+      const ext = filename.split(".").pop()?.toLowerCase() ?? "jpg";
+      const type = asset.mimeType ?? (ext === "jpg" || ext === "jpeg" ? "image/jpeg" : `image/${ext}`);
 
       formData.append("photo", {
         uri: localUri,
@@ -40,27 +43,28 @@ export default function Avatar({style}: AvatarProps) {
         type,
       } as any);
 
-      // Faz a requisição com fetch
-      const response = await fetch(`${env.API_URL}/profile/photo`, {
-        method: "POST",
-        headers: {
+      const { data: body } = await axios.post(
+        `${env.API_URL}/profile/photo`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${await getToken()}`,
           Accept: "application/json",
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Erro ${response.status}: ${errorText}`);
-      }
-      const data = await response.json();
+          },
+        }
+      );
       // Atualiza o avatar no contexto
-      if (data.filePath) {
-        setUser({ ...user!, avatar: data.filePath });
+      if (body.filePath) {
+        setUser({ ...user!, avatar: body.filePath });
       }
       Toast.success("Foto de perfil atualizada com sucesso!", "top", undefined, undefined, true);
-    } catch {
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status && error.response.status < 500) {
+        const photoError = error.response.data?.errors?.photo;
+        Toast.error(Array.isArray(photoError) ? photoError[0] : photoError, "top", undefined, undefined, true);
+        return;
+      }
       Toast.error("Não foi possível atualizar a foto. Tente novamente mais tarde.", "top", undefined, undefined, true);
     }
   };

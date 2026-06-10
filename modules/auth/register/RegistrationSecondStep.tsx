@@ -8,7 +8,7 @@ import { useSubcategories } from "@/hooks/useSubcategories";
 import { globalStyles } from "@/styles/global";
 import { registrationSchema } from "@/validation/schemas";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext, useFormState } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 import z from "zod";
 
@@ -20,8 +20,8 @@ export default function RegistrationSecondStep()  {
     watch,
     reset,
     setValue,
-    formState: { errors }
   } = useFormContext<FormData>();
+  const { errors } = useFormState({ control });
 
   const category = watch('category');
   const selectedCategories = useMemo(() => category ? [category] : undefined, [category]);
