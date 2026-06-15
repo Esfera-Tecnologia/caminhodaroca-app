@@ -8,8 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, KeyboardAvoidingView, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Toast } from 'toastify-react-native';
-
+import { Toast } from './Toast';
 export interface FavoriteList {
   id: number;
   name: string;
@@ -53,7 +52,7 @@ export default function FavoriteListsModal({
       const listsData = response.data.data || response.data;
       setLists(listsData);
     } catch {
-      feedback('Não foi possível carregar as listas de favoritos.', 'error');
+      showNotification('Não foi possível carregar as listas de favoritos.', 'error');
     } finally {
       setLoading(false);
     }
@@ -66,7 +65,7 @@ export default function FavoriteListsModal({
       });
       onUpdateListIds(currentSelections);
     } catch {
-      feedback('Erro ao salvar favoritos.', 'error');
+      showNotification('Erro ao salvar favoritos.', 'error');
     }
   };
 
@@ -106,12 +105,12 @@ export default function FavoriteListsModal({
       setSelectedListIds(newSelections);
       await syncPropertyFavorites(newSelections);
       refetchFavoriteLists();
-      feedback('Lista criada com sucesso.', 'success');
+      showNotification('Lista criada com sucesso.', 'success');
     } catch (error: any) {
       if (error.response?.status === 422) {
-        feedback(error.response?.data?.message || 'Nome da lista inválido ou já existente.', 'warn');
+        showNotification(error.response?.data?.message || 'Nome da lista inválido ou já existente.', 'warn');
       } else {
-        feedback('Não foi possível criar a lista.', 'error');
+        showNotification('Não foi possível criar a lista.', 'error');
       }
     } finally {
       setIsCreating(false);
@@ -129,27 +128,30 @@ export default function FavoriteListsModal({
         onUpdateListIds(newSelections);
       }
       refetchFavoriteLists();
-      feedback('Lista removida.', 'success');
+      showNotification('Lista removida.', 'success');
     } catch (error: any) {
       if (error.response?.status === 403) {
-        feedback('Você não pode remover a lista padrão.', 'warn');
+        showNotification('Você não pode remover a lista padrão.', 'warn');
       } else {
-        feedback('Não foi possível remover a lista.', 'error');
+        showNotification('Não foi possível remover a lista.', 'error');
       }
     }
   };
 
-  const feedback = (message: string, type: 'success' | 'warn' | 'error') => {
-    if(type === 'success') {
-      Toast.success(message, undefined, undefined, undefined, true);
-    }
-    if(type === 'warn') {
-      Toast.warn(message, undefined, undefined, undefined, true);
-    }
-    if(type === 'error') {
-      Toast.error(message, undefined, undefined, undefined, true);
-    }
-  }
+  const [notification, setNotification] = useState<{ id: number, visible: boolean; message: string; type: 'success' | 'warn' | 'error' }>({
+    visible: false,
+    message: '',
+    type: 'success',
+    id: 0,
+  });
+  const showNotification = (message: string, type: 'success' | 'warn' | 'error') => {
+    setNotification({ 
+      id: Date.now(),
+      visible: true,
+      message,
+      type,
+    });
+  };
 
   const confirmDeleteList = (listId: number, listName: string) => {
     Alert.alert(
@@ -180,6 +182,16 @@ export default function FavoriteListsModal({
         onClose && onClose();
       }}
     >
+      <Toast
+        visible={notification.visible}
+        message={notification.message}
+        variant={notification.type}
+        onHide={() =>
+          setNotification(prev => ({
+            ...prev,
+            visible: false
+          }))
+      } />
       <SystemBars style="light" />
       <View style={styles.modalOverlay}>
         <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1 }}>
