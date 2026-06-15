@@ -2,7 +2,7 @@
   "expo": {
     "name": "Caminho da Roça",
     "slug": "caminhodaroca",
-    "version": "1.0.35",
+    "version": "1.0.36",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "caminhodaroca",
@@ -27,7 +27,9 @@
           "apiKey": "AIzaSyCaR4-4NQwX0Z-tccbyH8uo4UtC74cnd_8"
         }
       },
-      "permissions": ["android.permission.CAMERA"],
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
       "package": "com.esfera.caminhodaroca"
     },
     "web": {
@@ -60,7 +62,9 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      ["expo-build-properties"],
+      [
+        "expo-build-properties"
+      ],
       "expo-secure-store",
       [
         "expo-location",
@@ -85,7 +89,8 @@
             "enforceNavigationBarContrast": false
           }
         }
-      ]
+      ],
+      "expo-image"
     ],
     "experiments": {
       "reactCompiler": true,
