@@ -27,7 +27,9 @@
           "apiKey": "AIzaSyCaR4-4NQwX0Z-tccbyH8uo4UtC74cnd_8"
         }
       },
-      "permissions": ["android.permission.CAMERA"],
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
       "package": "com.esfera.caminhodaroca"
     },
     "web": {
@@ -60,7 +62,9 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      ["expo-build-properties"],
+      [
+        "expo-build-properties"
+      ],
       "expo-secure-store",
       [
         "expo-location",
@@ -85,7 +89,8 @@
             "enforceNavigationBarContrast": false
           }
         }
-      ]
+      ],
+      "expo-image"
     ],
     "experiments": {
       "reactCompiler": true,
