@@ -2,7 +2,6 @@ import AppVersion from '@/components/AppVersion';
 import { FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import React from "react";
 import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -87,7 +86,7 @@ export default function EntryScreen() {
                 icon="store"
                 iconFamily="FontAwesome5"
                 title="Divulgue seu negócio"
-                description="Cadastre sua propriedade, produtos artesanais, serviço, agência de viagem, serviços etc."
+                description="Cadastre sua propriedade, produtos artesanais, serviços, agência de viagem, etc."
                 onPress={openRegisterPage}
               />
               <PartnerEntryButton
