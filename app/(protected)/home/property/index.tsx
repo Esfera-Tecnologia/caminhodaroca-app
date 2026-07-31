@@ -184,6 +184,7 @@ const PropertiesList = ({ filters }: { filters?: PropertyFilters }) => {
 export default function Home() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<PropertyFilters>();
+  const [keyword, setKeyword] = useState("");
   const [userCity, setUserCity] = useState<string | null>('Rio de Janeiro');
   const { user, showWelcomeModal, setShowWelcomeModal } = useAuth();
   const { location, loading: userLocationLoading } = useUserLocation();
@@ -232,7 +233,13 @@ export default function Home() {
       </View>
       <View style={styles.content}>
         <View style={[globalStyles.row, globalStyles.itemsCenter, { marginBottom: 16 }]}>
-          <SearchProperties onSearch={(search) => setFilters((filters) => ({ ...filters, keyword: search }))} />
+          <SearchProperties
+            value={keyword}
+            onChangeText={setKeyword}
+            onSearch={(search) =>
+              setFilters((filters) => ({ ...filters, keyword: search }))
+            }
+          />
           <TouchableOpacity style={styles.filters} onPress={() => setIsFiltersOpen(true)}>
             <Ionicons name="options-outline" size={22} color="#00796B" />
           </TouchableOpacity>
@@ -240,6 +247,8 @@ export default function Home() {
       </View>
       <PropertiesList filters={filters} />
       <HomeFilters
+        keyword={keyword}
+        onKeywordChange={setKeyword}
         isOpen={isFiltersOpen}
         onClose={() => setIsFiltersOpen(false)}
         onApply={setFilters}

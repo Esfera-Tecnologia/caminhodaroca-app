@@ -24,10 +24,19 @@ export type PropertyFilters = {
 };
 
 interface HomeFiltersProps extends OffcanvasProps {
+  keyword: string;
+  onKeywordChange: (keyword: string) => void;
   onApply: (filters: PropertyFilters) => void;
 }
 
-export default function HomeFilters({ onApply, onClose, isOpen, ...props }: HomeFiltersProps) {
+export default function HomeFilters({
+  keyword,
+  onKeywordChange,
+  onApply,
+  onClose,
+  isOpen,
+  ...props
+}: HomeFiltersProps) {
   const { user } = useAuth();
   const {location: userLocation} = useUserLocation();
   const [filters, setFilters] = useState<PropertyFilters>({
@@ -40,17 +49,22 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
   const { subcategories } = useSubcategories(filters.categories);
   const { cities } = useCities('RJ', true);
   const { lists } = useFavoriteLists();
-  const { options: keywordOptions } = useAutocompleteProperties(filters.keyword ?? "");
+  const { options: keywordOptions } = useAutocompleteProperties(keyword);
 
   const handleChange = (key: keyof PropertyFilters, value: any) => {
     const newFilters = {
       ...filters,
+      keyword,
       [key]: value,
       ...(key === "useCurrentLocation" && value
         ? { propertyLocationId: undefined }
         : {}),
     };
     setFilters(newFilters);
+
+    if (key === "keyword") {
+      onKeywordChange(value);
+    }
 
     const noFiltersApplied =
       !newFilters.keyword &&
@@ -69,7 +83,7 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
   };
 
   const handleApply = () => {
-    onApply(filters);
+    onApply({ ...filters, keyword });
     onClose();
   }
 
@@ -105,7 +119,7 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
           >
             <Input
               placeholder="Ex: queijos, passeios..."
-              value={filters.keyword}
+              value={keyword}
               autoCorrect={false}
               onEndEditing={() => setHideKeywordResults(true)}
               onChangeText={(text) => {
@@ -116,7 +130,7 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
             {!hideKeywordResults &&
               keywordOptions.length > 0 &&
               !(keywordOptions.length === 1 &&
-                keywordOptions[0].label === filters.keyword) && (
+                keywordOptions[0].label === keyword) && (
                 <FlatList
                   data={keywordOptions}
                   keyboardShouldPersistTaps="always"

@@ -7,14 +7,19 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AutocompleteInput from "react-native-autocomplete-input";
 
 type SearchPropertiesProps = {
+  value: string;
+  onChangeText: (search: string) => void;
   onSearch: (search: string) => void;
 };
 
-export default function SearchProperties({ onSearch }: SearchPropertiesProps) {
+export default function SearchProperties({
+  value,
+  onChangeText,
+  onSearch,
+}: SearchPropertiesProps) {
   const debounceTimeout = useRef<number | null>(null);
-  const [ query, setQuery ] = useState('');
   const [ hideResults, setHideResults ] = useState(false);
-  const { options } = useAutocompleteProperties(query);
+  const { options } = useAutocompleteProperties(value);
 
   const handleChange = (text: string) => {
     if (debounceTimeout.current) {
@@ -35,7 +40,7 @@ export default function SearchProperties({ onSearch }: SearchPropertiesProps) {
           style={styles.searchIcon}
         />
         <AutocompleteInput
-          hideResults={hideResults || options.length === 1 && options[0].label === query}
+          hideResults={hideResults || options.length === 1 && options[0].label === value}
           placeholder="Buscar por palavra-chave..."
           placeholderTextColor="#BCBCBD"
           onBlur={() => setHideResults(true)}
@@ -44,9 +49,9 @@ export default function SearchProperties({ onSearch }: SearchPropertiesProps) {
           data={options}
           inputContainerStyle={styles.searchInputContainer}
           style={styles.searchInput}
-          value={query}
+          value={value}
           onChangeText={(text) => {
-            setQuery(text)
+            onChangeText(text);
             handleChange(text);
           }}
           flatListProps={{
@@ -55,7 +60,7 @@ export default function SearchProperties({ onSearch }: SearchPropertiesProps) {
             keyExtractor: (item) => `P_${item.value}`,
             renderItem: ({item}) => (
               <TouchableOpacity onPress={() => {
-                setQuery(item.label)
+                onChangeText(item.label);
                 handleChange(item.label)
               }}>
                 <Text style={styles.itemText}>{item.label}</Text>
