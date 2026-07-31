@@ -8,9 +8,11 @@ import { useUserLocation } from "@/context/LocationContext";
 import { useCategories } from "@/hooks/useCategories";
 import { useCities } from "@/hooks/useCities";
 import { useFavoriteLists } from "@/hooks/useFavoriteLists";
+import { useAutocompleteProperties } from "@/hooks/useAutocompleteProperties";
 import { useSubcategories } from "@/hooks/useSubcategories";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { globalStyles } from "@/styles/global";
+import { useState } from "react";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export type PropertyFilters = {
   keyword?: string;
@@ -32,14 +34,22 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
     categories: [],
     subcategories: [],
   });
+  const [hideKeywordResults, setHideKeywordResults] = useState(false);
 
   const { categories } = useCategories();
   const { subcategories } = useSubcategories(filters.categories);
   const { cities } = useCities('RJ', true);
   const { lists } = useFavoriteLists();
+  const { options: keywordOptions } = useAutocompleteProperties(filters.keyword ?? "");
 
   const handleChange = (key: keyof PropertyFilters, value: any) => {
-    const newFilters = {...filters, [key]: value};
+    const newFilters = {
+      ...filters,
+      [key]: value,
+      ...(key === "useCurrentLocation" && value
+        ? { propertyLocationId: undefined }
+        : {}),
+    };
     setFilters(newFilters);
 
     const noFiltersApplied =
@@ -62,12 +72,6 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
     onApply(filters);
     onClose();
   }
-
-  useEffect(() => {
-    if(filters.useCurrentLocation && filters.propertyLocationId !== undefined) {
-      setFilters((prev) => ({ ...prev, propertyLocationId: undefined }));
-    }
-  }, [filters]);
 
   return (
     <Offcanvas {...props} onClose={onClose} isOpen={isOpen}>
@@ -94,12 +98,43 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
             onValueChange={(value) => handleChange("propertyLocationId", value)}
           />
         </InputGroup>
-        <InputGroup label="Palavra-chave">
-          <Input
-            placeholder="Ex: queijos, passeios..."
-            value={filters.keyword}
-            onChangeText={(text) => handleChange("keyword", text)}
-          />
+        <InputGroup label="Palavra-chave" style={{ zIndex: 2 }}>
+          <View
+            style={styles.keywordAutocomplete}
+            onTouchStart={() => setHideKeywordResults(false)}
+          >
+            <Input
+              placeholder="Ex: queijos, passeios..."
+              value={filters.keyword}
+              autoCorrect={false}
+              onEndEditing={() => setHideKeywordResults(true)}
+              onChangeText={(text) => {
+                setHideKeywordResults(false);
+                handleChange("keyword", text);
+              }}
+            />
+            {!hideKeywordResults &&
+              keywordOptions.length > 0 &&
+              !(keywordOptions.length === 1 &&
+                keywordOptions[0].label === filters.keyword) && (
+                <FlatList
+                  data={keywordOptions}
+                  keyboardShouldPersistTaps="always"
+                  style={[styles.keywordList, globalStyles.shadowSm]}
+                  keyExtractor={(item) => `P_${item.value}`}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setHideKeywordResults(true);
+                        handleChange("keyword", item.label);
+                      }}
+                    >
+                      <Text style={styles.keywordItem}>{item.label}</Text>
+                    </TouchableOpacity>
+                  )}
+                />
+              )}
+          </View>
         </InputGroup>
         <InputGroup label="Categoria">
           <Select
@@ -140,3 +175,30 @@ export default function HomeFilters({ onApply, onClose, isOpen, ...props }: Home
     </Offcanvas>
   );
 }
+
+const styles = StyleSheet.create({
+  keywordAutocomplete: {
+    position: "relative",
+    width: "100%",
+    zIndex: 2,
+  },
+  keywordList: {
+    backgroundColor: "#fff",
+    borderColor: "#f2f2f2",
+    borderRadius: 6,
+    borderTopWidth: 1,
+    left: 0,
+    margin: 0,
+    marginTop: 5,
+    maxHeight: 150,
+    position: "absolute",
+    right: 0,
+    top: 40,
+    width: "100%",
+    zIndex: 3,
+  },
+  keywordItem: {
+    fontSize: 14,
+    margin: 3,
+  },
+});
