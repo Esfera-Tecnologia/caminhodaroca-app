@@ -37,6 +37,7 @@ export default function PropertyDetails() {
         setPartner(partnerData);
         methods.reset({
           ...cleanObject(partnerData),
+          partner_category_requires_experiences: false,
           events: partnerData.events.length > 0 
             ? partnerData.events
             : [{description: undefined, images: undefined, externalLink: ''}],

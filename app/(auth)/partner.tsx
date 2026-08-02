@@ -29,6 +29,7 @@ export default function Register() {
     resolver: zodResolver(partnerSchema),
     mode: "onChange",
     defaultValues: {
+      partner_category_requires_experiences: false,
       events: [
         {
           description: undefined,

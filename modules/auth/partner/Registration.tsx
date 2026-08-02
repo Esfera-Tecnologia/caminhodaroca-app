@@ -8,18 +8,38 @@ import Select from "@/components/controls/Select";
 import HelperText from "@/components/HelperText";
 import HorizontalLine from "@/components/HorizontalLine";
 import { useCities } from "@/hooks/useCities";
+import { usePartnerCategories } from "@/hooks/usePartnerCategories";
 import { PartnerType } from "@/interfaces";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
+import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function PartnerRegistration({partner}: {partner?: PartnerType})  {
   const {cities} = useCities('RJ');
+  const {categories: partnerCategories, loading: partnerCategoriesLoading} = usePartnerCategories();
   const {
     control,
-    formState: { errors }
+    formState: { errors },
+    setValue,
+    trigger,
+    watch,
   } = useFormContext<PartnerFormData>();
+  const partnerCategoryId = watch("partner_category_id");
+  const partnerCategory = partnerCategories.find(
+    category => category.value === Number(partnerCategoryId)
+  );
+  const experiencesRequired = partnerCategory?.experiencias_oferecidas ?? false;
+
+  useEffect(() => {
+    setValue(
+      "partner_category_requires_experiences",
+      experiencesRequired,
+      { shouldDirty: false }
+    );
+    void trigger(["routes", "circuits", "attractions"]);
+  }, [experiencesRequired, setValue, trigger]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -35,6 +55,21 @@ export default function PartnerRegistration({partner}: {partner?: PartnerType}) 
         render={({ field: { onChange, value } }) => (
           <InputGroup label="Nome da instituição*" error={errors.name}>
             <Input placeholder="Nome da instituição" value={value} onChangeText={onChange} />
+          </InputGroup>
+        )}
+      />
+      <Controller
+        control={control}
+        name="partner_category_id"
+        render={({ field: { onChange, value } }) => (
+          <InputGroup label="Categoria*" error={errors.partner_category_id}>
+            <Select
+              placeholder="Selecione uma categoria"
+              options={partnerCategories}
+              selectedValue={value || ""}
+              disabled={partnerCategoriesLoading}
+              onValueChange={(selectedValue) => onChange(Number(selectedValue))}
+            />
           </InputGroup>
         )}
       />
@@ -134,7 +169,7 @@ export default function PartnerRegistration({partner}: {partner?: PartnerType}) 
         control={control}
         name="routes"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Rotas*" error={errors.routes}>
+          <InputGroup label={`Rotas${experiencesRequired ? "*" : ""}`} error={errors.routes}>
             <Input 
               placeholder="Descreva as rotas sugeridas para os visitantes"
               multiline={true}
@@ -148,7 +183,7 @@ export default function PartnerRegistration({partner}: {partner?: PartnerType}) 
         control={control}
         name="circuits"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Circuitos*" error={errors.circuits}>
+          <InputGroup label={`Circuitos${experiencesRequired ? "*" : ""}`} error={errors.circuits}>
             <Input 
               placeholder="Detalhe os circuitos e caminhos disponíveis"
               multiline={true}
@@ -162,7 +197,7 @@ export default function PartnerRegistration({partner}: {partner?: PartnerType}) 
         control={control}
         name="attractions"
         render={({ field: { onChange, value } }) => (
-          <InputGroup label="Atrativos*" error={errors.attractions}>
+          <InputGroup label={`Atrativos${experiencesRequired ? "*" : ""}`} error={errors.attractions}>
             <Input 
               placeholder="Liste os principais atrativos do parceiro"
               multiline={true}
@@ -267,12 +302,13 @@ export const preparePartnerDataForSubmission = (data: PartnerFormData | PartnerU
     return hasData;
   });
   const formData = new FormData();
+  formData.append("partner_category_id", String(data.partner_category_id));
   formData.append("name", data.name);
   formData.append("email", data.email);
   formData.append("description", data.description);
-  formData.append("routes", data.routes);
-  formData.append("circuits", data.circuits);
-  formData.append("attractions", data.attractions);
+  formData.append("routes", data.routes ?? "");
+  formData.append("circuits", data.circuits ?? "");
+  formData.append("attractions", data.attractions ?? "");
 
   if (data.instagram) 
     formData.append("instagram", data.instagram);

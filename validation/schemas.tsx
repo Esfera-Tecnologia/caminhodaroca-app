@@ -198,7 +198,14 @@ export const eventSchema = z
     }
   });
 
+const partnerExperienceSchema = z
+  .string()
+  .max(1000, "Deve ter no máximo 1000 caracteres")
+  .optional();
+
 export const partnerSchema = z.object({
+  partner_category_id: naturalNumberSchema,
+  partner_category_requires_experiences: z.boolean(),
   name: stringSchema,
   email: emailSchema,
   description: stringSchema,
@@ -208,11 +215,29 @@ export const partnerSchema = z.object({
   cities: z.array(naturalNumberSchema, {
     error: 'Selecione uma opção'
   }).min(1, 'Selecione ao menos uma opção'),
-  routes: stringSchema,
-  circuits: stringSchema,
-  attractions: stringSchema,
+  routes: partnerExperienceSchema,
+  circuits: partnerExperienceSchema,
+  attractions: partnerExperienceSchema,
   events: z.array(eventSchema).optional(),
   termsAccepted: z.literal(true, {
     message: 'Voce precisa aceitar os termos de uso para continuar'
   })
+}).superRefine((data, ctx) => {
+  if (!data.partner_category_requires_experiences) {
+    return;
+  }
+
+  ([
+    ["routes", data.routes],
+    ["circuits", data.circuits],
+    ["attractions", data.attractions],
+  ] as const).forEach(([field, value]) => {
+    if (!value || value.trim() === "") {
+      ctx.addIssue({
+        path: [field],
+        code: z.ZodIssueCode.custom,
+        message: messages.required,
+      });
+    }
+  });
 });
