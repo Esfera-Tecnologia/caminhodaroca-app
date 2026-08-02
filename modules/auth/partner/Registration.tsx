@@ -12,8 +12,8 @@ import { usePartnerCategories } from "@/hooks/usePartnerCategories";
 import { PartnerType } from "@/interfaces";
 import { globalStyles } from "@/styles/global";
 import { theme } from "@/theme";
-import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { useEffect } from "react";
+import { Controller, useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function PartnerRegistration({partner}: {partner?: PartnerType})  {
@@ -24,23 +24,31 @@ export default function PartnerRegistration({partner}: {partner?: PartnerType}) 
     formState: { errors },
     setValue,
     trigger,
-    watch,
   } = useFormContext<PartnerFormData>();
-  const partnerCategoryId = watch("partner_category_id");
+  const partnerCategoryId = useWatch({
+    control,
+    name: "partner_category_id",
+  });
   const partnerCategory = partnerCategories.find(
-    category => category.value === Number(partnerCategoryId)
+    category => Number(category.value) === Number(partnerCategoryId)
   );
   const experiencesRequired = partnerCategory?.experiencias_oferecidas ?? false;
 
   useEffect(() => {
+    if (!partnerCategory) return;
+
     setValue(
       "partner_category_requires_experiences",
       experiencesRequired,
-      { shouldDirty: false }
+      {
+        shouldDirty: false,
+        shouldValidate: false,
+      }
     );
     void trigger(["routes", "circuits", "attractions"]);
-  }, [experiencesRequired, setValue, trigger]);
+  }, [experiencesRequired, partnerCategory, setValue, trigger]);
 
+  console.log(experiencesRequired, partnerCategoryId, partnerCategory);
   const { fields, append, remove } = useFieldArray({
     control,
     name: "events",
@@ -68,7 +76,23 @@ export default function PartnerRegistration({partner}: {partner?: PartnerType}) 
               options={partnerCategories}
               selectedValue={value || ""}
               disabled={partnerCategoriesLoading}
-              onValueChange={(selectedValue) => onChange(Number(selectedValue))}
+              onValueChange={(selectedValue) => {
+                const categoryId = Number(selectedValue);
+                const category = partnerCategories.find(
+                  item => Number(item.value) === categoryId
+                );
+
+                onChange(categoryId);
+                setValue(
+                  "partner_category_requires_experiences",
+                  category?.experiencias_oferecidas ?? false,
+                  {
+                    shouldDirty: false,
+                    shouldValidate: false,
+                  }
+                );
+                void trigger(["routes", "circuits", "attractions"]);
+              }}
             />
           </InputGroup>
         )}
