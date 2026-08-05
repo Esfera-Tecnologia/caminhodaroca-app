@@ -11,8 +11,9 @@ import { useFavoriteLists } from "@/hooks/useFavoriteLists";
 import { useAutocompleteProperties } from "@/hooks/useAutocompleteProperties";
 import { useSubcategories } from "@/hooks/useSubcategories";
 import { globalStyles } from "@/styles/global";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useKeyboardState } from "react-native-keyboard-controller";
 
 export type PropertyFilters = {
   keyword?: string;
@@ -44,6 +45,8 @@ export default function HomeFilters({
     subcategories: [],
   });
   const [hideKeywordResults, setHideKeywordResults] = useState(false);
+  const isKeyboardVisible = useKeyboardState((state) => state.isVisible);
+  const applyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { categories } = useCategories();
   const { subcategories } = useSubcategories(filters.categories);
@@ -51,7 +54,27 @@ export default function HomeFilters({
   const { lists } = useFavoriteLists();
   const { options: keywordOptions } = useAutocompleteProperties(keyword);
 
+  useEffect(() => {
+    if (isKeyboardVisible && applyTimeoutRef.current) {
+      clearTimeout(applyTimeoutRef.current);
+      applyTimeoutRef.current = null;
+    }
+  }, [isKeyboardVisible]);
+
+  useEffect(() => {
+    return () => {
+      if (applyTimeoutRef.current) {
+        clearTimeout(applyTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleChange = (key: keyof PropertyFilters, value: any) => {
+    if (applyTimeoutRef.current) {
+      clearTimeout(applyTimeoutRef.current);
+      applyTimeoutRef.current = null;
+    }
+
     const newFilters = {
       ...filters,
       keyword,
@@ -74,10 +97,16 @@ export default function HomeFilters({
       !newFilters.useCurrentLocation &&
       !newFilters.favorite_list_id;
 
-    if (isOpen && noFiltersApplied) {
-      setTimeout(() => {
+    const shouldApplyEmptyFilters =
+      isOpen &&
+      noFiltersApplied &&
+      (key !== "keyword" || !isKeyboardVisible);
+
+    if (shouldApplyEmptyFilters) {
+      applyTimeoutRef.current = setTimeout(() => {
         onApply(newFilters);
         onClose();
+        applyTimeoutRef.current = null;
       }, 500);
     }
   };
