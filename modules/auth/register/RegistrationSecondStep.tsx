@@ -7,7 +7,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { useSubcategories } from "@/hooks/useSubcategories";
 import { globalStyles } from "@/styles/global";
 import { registrationSchema } from "@/validation/schemas";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { Controller, useFieldArray, useFormContext, useFormState } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 import z from "zod";
@@ -18,29 +18,20 @@ export default function RegistrationSecondStep()  {
   const {
     control,
     watch,
-    reset,
-    setValue,
+    resetField,
   } = useFormContext<FormData>();
   const { errors } = useFormState({ control });
 
   const category = watch('category');
-  const selectedCategories = useMemo(() => category ? [category] : undefined, [category]);
+  const selectedCategories = useMemo(() => category ? [Number(category)] : undefined, [category]);
   const {categories} = useCategories();
   const {subcategories} = useSubcategories(selectedCategories);
-  const prevCategoryRef = useRef<number | undefined>(undefined);
   const [key, setKey] = useState(0);
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: "subcategories",
   });
-
-  useEffect(() => {
-    if (prevCategoryRef.current !== undefined && prevCategoryRef.current !== category) {
-      setValue("subcategories", [], { shouldValidate: false, shouldDirty: false });
-    }
-    prevCategoryRef.current = category;
-  }, [category, setValue]);
 
   return (
     <View>
@@ -53,7 +44,11 @@ export default function RegistrationSecondStep()  {
             <Select
               key={key}
               placeholder="Selecione uma categoria"
-              onValueChange={onChange} 
+              onValueChange={(selectedValue) => {
+                const categoryId = selectedValue ? Number(selectedValue) : undefined;
+                onChange(categoryId);
+                if (categoryId !== value) replace([]);
+              }}
               selectedValue={value || ''}
               options={categories} />
         )} />
@@ -71,7 +66,8 @@ export default function RegistrationSecondStep()  {
               style={{paddingVertical: 2}}
               textStyle={{fontSize: 12}}
               onPress={() => {
-                reset({category: undefined, subcategories: []})
+                resetField("category");
+                replace([]);
                 setKey(prev => prev + 1);
               }} />
           </View>

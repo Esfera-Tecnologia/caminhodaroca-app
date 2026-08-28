@@ -12,32 +12,40 @@ type SubcategoryOption = {
 export function useSubcategories(categoryIds: number[] | undefined) {
   const [subcategories, setSubcategories] = useState<SubcategoryOption[]>([]);
   const [loading, setLoading] = useState(true);
+  const categoryIdsKey = categoryIds?.map(Number).filter(Boolean).join(",") ?? "";
 
   useEffect(() => {
+    let active = true;
+
     async function fetchSubcategories() {
       setLoading(true);
       try {
-        if (!categoryIds || categoryIds.length === 0) {
-          setSubcategories([]);
+        const ids = categoryIdsKey.split(",").filter(Boolean).map(Number);
+
+        if (ids.length === 0) {
+          if (active) setSubcategories([]);
           return;
         };
         const params = new URLSearchParams();
-        categoryIds.forEach((id) => params.append("categories[]", id.toString()));
+        ids.forEach((id) => params.append("categories[]", id.toString()));
 
         const response = await axios.get(
           `${env.API_URL}/subcategories?${params.toString()}`
         );
-        setSubcategories(response.data);
+        if (active) setSubcategories(response.data);
       } catch (error) {
         console.log(error);
-        Toast.error("Não foi possível obter a lista de subcategorias no momento");
+        if (active) Toast.error("Não foi possível obter a lista de subcategorias no momento");
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     }
 
     fetchSubcategories();
-  }, [categoryIds]);
+    return () => {
+      active = false;
+    };
+  }, [categoryIdsKey]);
 
   return { subcategories, loading };
 }
