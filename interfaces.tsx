@@ -9,6 +9,7 @@ export type EventType = {
 export interface PartnerType {
   id: number;
   partner_category_id: number | null;
+  partner_category_name: string | null;
   name: string;
   logo: string;
   cities: Record<number, string>;

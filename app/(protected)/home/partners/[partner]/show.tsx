@@ -86,6 +86,16 @@ export default function PropertyDetails() {
           <Text style={styles.sectionDescription}>
             {partner.description}
           </Text>
+          {partner.partner_category_name && (
+            <View style={styles.category}>
+              <Text style={styles.sectionTitle}>
+                Categoria
+              </Text>
+              <Text style={styles.sectionDescription}>
+                {partner.partner_category_name}
+              </Text>
+            </View>
+          )}
         </View>
         <Text style={styles.title}>
           Contato e Presença Digital
@@ -201,6 +211,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 400,
     color: theme.colors.body
+  },
+  category: {
+    marginTop: 12,
   },
   event: {
     borderRadius: 14,
